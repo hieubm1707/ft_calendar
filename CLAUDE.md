@@ -143,7 +143,7 @@ Hiển thị lịch + sự kiện ra widget. **Kiến trúc: render UI bằng Da
 ## Feature Tasks (`features/tasks/`) + điều hướng tab
 
 Tab "Tasks" quản lý công việc theo ngày, tách biệt với sự kiện lịch.
-- **Mô hình**: `TaskScheduleTable` (loại `dates` = 1/nhiều ngày cụ thể qua `datesCsv`; loại `weekly` = lặp theo `weekdaysMask` từ `startDate`, cờ `active` để huỷ lặp) + `TaskCompletionTable` (đánh dấu hoàn thành theo từng ngày). DB **schemaVersion 3** (migration tạo 2 bảng).
+- **Mô hình**: `TaskScheduleTable` (loại `dates` = 1/nhiều ngày cụ thể qua `datesCsv`; loại `weekly` = lặp theo `weekdaysMask` từ `startDate`, cờ `active` để huỷ lặp; `note` = mô tả, `minutesOfDay` = giờ tuỳ chọn, `color` = cờ ưu tiên) + `TaskCompletionTable` (đánh dấu hoàn thành theo từng ngày). DB **schemaVersion 4** (v3 tạo 2 bảng; v4 thêm `note` + `minutesOfDay`). Event cũng có `description` (nhập ở add_event_sheet, hiện ở DayDetailPage).
 - **Instance sinh ảo**: `expandTaskInstances()` (hàm thuần ở `features/tasks/domain/task_recurrence.dart`, có unit test) sinh task cho từng ngày trong khoảng — task lặp tự "xuất hiện" đến khi huỷ, KHÔNG lưu sẵn từng ngày.
 - **Tầng**: nhân theo pattern `events` (data/domain/presentation); entity + `TaskRepository` đặt ở `features/tasks/domain` (feature độc lập, không dùng chung).
 - **Điều hướng**: `features/shell/presentation/main_shell.dart` (IndexedStack + `AppBottomNav` chuyển tab Discover/Calendar/Tasks/Notes). `app.dart` → `MainShell`. Các page (CalendarPage, TasksPage) là Scaffold riêng, KHÔNG tự chứa bottom nav.

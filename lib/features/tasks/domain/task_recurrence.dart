@@ -45,7 +45,16 @@ List<TaskInstance> expandTaskInstances({
     }
   }
 
-  out.sort((a, b) => a.date.compareTo(b.date));
+  out.sort((a, b) {
+    final byDate = a.date.compareTo(b.date);
+    if (byDate != 0) return byDate;
+    // Cùng ngày: có giờ lên trước (theo giờ), rồi tới không giờ.
+    final at = a.timeMinutes, bt = b.timeMinutes;
+    if (at != null && bt != null) return at.compareTo(bt);
+    if (at != null) return -1;
+    if (bt != null) return 1;
+    return a.title.compareTo(b.title);
+  });
   return out;
 }
 
@@ -58,5 +67,7 @@ TaskInstance _instance(
     color: s.color,
     done: doneKeys.contains(taskDoneKey(id, day)),
     isRecurring: s.isRecurring,
+    description: s.description,
+    timeMinutes: s.timeMinutes,
   );
 }

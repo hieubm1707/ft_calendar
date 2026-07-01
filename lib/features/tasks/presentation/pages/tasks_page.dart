@@ -189,12 +189,54 @@ class _TaskRow extends StatelessWidget {
               color: task.done ? const Color(0xFF9E9E9E) : null,
             ),
           ),
-          trailing: task.isRecurring
-              ? const Icon(Icons.repeat, size: 18, color: Color(0xFF8E8E93))
-              : null,
+          subtitle: _subtitle(),
+          isThreeLine: _hasDescription && task.timeMinutes != null,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Cờ ưu tiên (màu người dùng chọn)
+              Icon(Icons.flag, size: 18, color: color),
+              if (task.isRecurring) ...[
+                const SizedBox(width: 6),
+                const Icon(Icons.repeat, size: 18, color: Color(0xFF8E8E93)),
+              ],
+            ],
+          ),
           onTap: onToggle,
         ),
       ),
+    );
+  }
+
+  bool get _hasDescription =>
+      task.description != null && task.description!.trim().isNotEmpty;
+
+  String? get _timeLabel {
+    final m = task.timeMinutes;
+    if (m == null) return null;
+    final h = (m ~/ 60).toString().padLeft(2, '0');
+    final mm = (m % 60).toString().padLeft(2, '0');
+    return '$h:$mm';
+  }
+
+  Widget? _subtitle() {
+    final time = _timeLabel;
+    if (time == null && !_hasDescription) return null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (time != null)
+          Text(time,
+              style: const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF00B3A6),
+                  fontWeight: FontWeight.w600)),
+        if (_hasDescription)
+          Text(task.description!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12, color: Color(0xFF8E8E93))),
+      ],
     );
   }
 }
