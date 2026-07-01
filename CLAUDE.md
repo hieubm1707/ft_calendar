@@ -39,6 +39,8 @@ git add -A && git commit -m "<type>: <mô tả ngắn>"   # feat/fix/refactor/ch
 ```
 Commit message viết theo Conventional Commits; một task = một nhánh.
 
+**Sau khi merge vào master:** LUÔN xoá nhánh vừa merge (`git branch -d <branch>`).
+
 ## Code generation
 
 ⚠️ **Luôn dùng `--force-jit`**. `build_runner` bản mới AOT-compile builders và crash vì `sqlite3_flutter_libs` khai báo native build-hook.
