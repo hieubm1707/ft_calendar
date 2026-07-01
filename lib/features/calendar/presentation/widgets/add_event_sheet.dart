@@ -41,14 +41,16 @@ class _AddEventSheetState extends State<_AddEventSheet> {
       TextEditingController(text: widget.event?.title ?? '');
   late DateTime _date = widget.initialDate;
   late int _color = widget.event?.color ?? kEventColors.first;
-  late TimeOfDay _time = widget.event != null
-      ? TimeOfDay(
-          hour: widget.event!.startTime.hour,
-          minute: widget.event!.startTime.minute,
-        )
+  late TimeOfDay _startTime = widget.event != null
+      ? TimeOfDay.fromDateTime(widget.event!.startTime)
       : const TimeOfDay(hour: 9, minute: 0);
+  late TimeOfDay _endTime = widget.event != null
+      ? TimeOfDay.fromDateTime(widget.event!.endTime)
+      : const TimeOfDay(hour: 10, minute: 0);
 
   bool get _isEditing => widget.event != null;
+
+  static int _mins(TimeOfDay t) => t.hour * 60 + t.minute;
 
   @override
   void dispose() {
@@ -66,38 +68,50 @@ class _AddEventSheetState extends State<_AddEventSheet> {
     if (picked != null) setState(() => _date = picked);
   }
 
-  Future<void> _pickTime() async {
-    final picked = await showTimePicker(context: context, initialTime: _time);
-    if (picked != null) setState(() => _time = picked);
+  Future<void> _pickStartTime() async {
+    final picked =
+        await showTimePicker(context: context, initialTime: _startTime);
+    if (picked == null) return;
+    setState(() {
+      _startTime = picked;
+      // Giữ giờ kết thúc luôn sau giờ bắt đầu.
+      if (_mins(_endTime) <= _mins(_startTime)) {
+        _endTime = TimeOfDay(
+          hour: (picked.hour + 1) % 24,
+          minute: picked.minute,
+        );
+      }
+    });
+  }
+
+  Future<void> _pickEndTime() async {
+    final picked =
+        await showTimePicker(context: context, initialTime: _endTime);
+    if (picked != null) setState(() => _endTime = picked);
   }
 
   void _save() {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
-    final start =
-        DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
+    final start = DateTime(_date.year, _date.month, _date.day, _startTime.hour,
+        _startTime.minute);
+    var end = DateTime(
+        _date.year, _date.month, _date.day, _endTime.hour, _endTime.minute);
+    // Chốt: giờ kết thúc phải sau giờ bắt đầu.
+    if (!end.isAfter(start)) end = start.add(const Duration(hours: 1));
+
     final existing = widget.event;
-    if (existing != null) {
-      // Sửa: giữ id, giữ độ dài sự kiện, áp ngày + giờ mới đã chọn.
-      final duration = existing.endTime.difference(existing.startTime);
-      Navigator.of(context).pop(existing.copyWith(
-        title: title,
-        startTime: start,
-        endTime: start.add(duration),
-        color: _color,
-      ));
-    } else {
-      Navigator.of(context).pop(Event(
-        title: title,
-        startTime: start,
-        endTime: start.add(const Duration(hours: 1)),
-        color: _color,
-      ));
-    }
+    Navigator.of(context).pop(
+      existing != null
+          ? existing.copyWith(
+              title: title, startTime: start, endTime: end, color: _color)
+          : Event(
+              title: title, startTime: start, endTime: end, color: _color),
+    );
   }
 
-  String get _timeLabel =>
-      '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+  static String _fmt(TimeOfDay t) =>
+      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
   @override
   Widget build(BuildContext context) {
@@ -122,35 +136,30 @@ class _AddEventSheetState extends State<_AddEventSheet> {
             onSubmitted: (_) => _save(),
           ),
           const SizedBox(height: 16),
+          InkWell(
+            onTap: _pickDate,
+            child: Row(
+              children: [
+                const Icon(Icons.event, size: 20, color: Color(0xFF8E8E93)),
+                const SizedBox(width: 8),
+                Text(
+                  '${_date.day}/${_date.month}/${_date.year}',
+                  style: const TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
           Row(
             children: [
-              Expanded(
-                child: InkWell(
-                  onTap: _pickDate,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.event,
-                          size: 20, color: Color(0xFF8E8E93)),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${_date.day}/${_date.month}/${_date.year}',
-                        style: const TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                ),
+              const Icon(Icons.schedule, size: 20, color: Color(0xFF8E8E93)),
+              const SizedBox(width: 8),
+              _TimeChip(label: 'Bắt đầu', time: _fmt(_startTime), onTap: _pickStartTime),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text('–', style: TextStyle(color: Color(0xFF8E8E93))),
               ),
-              InkWell(
-                onTap: _pickTime,
-                child: Row(
-                  children: [
-                    const Icon(Icons.schedule,
-                        size: 20, color: Color(0xFF8E8E93)),
-                    const SizedBox(width: 8),
-                    Text(_timeLabel, style: const TextStyle(fontSize: 15)),
-                  ],
-                ),
-              ),
+              _TimeChip(label: 'Kết thúc', time: _fmt(_endTime), onTap: _pickEndTime),
             ],
           ),
           const SizedBox(height: 16),
@@ -189,6 +198,41 @@ class _AddEventSheetState extends State<_AddEventSheet> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Ô chọn giờ nhỏ: nhãn (Bắt đầu/Kết thúc) + giờ, bấm để mở time picker.
+class _TimeChip extends StatelessWidget {
+  final String label;
+  final String time;
+  final VoidCallback onTap;
+
+  const _TimeChip({required this.label, required this.time, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEDE9E4),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(label,
+                style: const TextStyle(fontSize: 10, color: Color(0xFF8E8E93))),
+            Text(time,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+          ],
+        ),
       ),
     );
   }
