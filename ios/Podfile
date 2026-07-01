@@ -1,5 +1,5 @@
-# flutter_local_notifications yêu cầu iOS 12+.
-platform :ios, '13.0'
+# WidgetKit lock screen accessory cần iOS 16+.
+platform :ios, '16.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
