@@ -5,8 +5,32 @@ import '../domain/index.dart';
 /// 3 cỡ widget: day = 1 ngày (agenda), week = 1 tuần, month = 1 tháng.
 enum WidgetMode { day, week, month }
 
+/// Cỡ chữ/dòng theo mode (ảnh render ở kích thước point thật của từng family
+/// nên các trị số này là "điểm thật" → chữ hiển thị đúng cỡ, không bị co nhỏ).
+class _GridStyle {
+  final double monthTitle, weekday, dayNum, circle, chipFont, chipPadV;
+  final int maxChips;
+  const _GridStyle({
+    required this.monthTitle,
+    required this.weekday,
+    required this.dayNum,
+    required this.circle,
+    required this.chipFont,
+    required this.chipPadV,
+    required this.maxChips,
+  });
+
+  static const week = _GridStyle(
+    monthTitle: 15, weekday: 11, dayNum: 14, circle: 20,
+    chipFont: 10, chipPadV: 2.5, maxChips: 3,
+  );
+  static const month = _GridStyle(
+    monthTitle: 15, weekday: 9, dayNum: 11, circle: 16,
+    chipFont: 8, chipPadV: 1, maxChips: 2,
+  );
+}
+
 /// UI lịch dựng bằng Dart để render ra ảnh cho native widget (home/lock screen).
-/// Hiển thị TÊN sự kiện giống trong app.
 class WidgetCalendarView extends StatelessWidget {
   final WidgetMode mode;
   final DateTime today;
@@ -41,8 +65,6 @@ class WidgetCalendarView extends StatelessWidget {
     return d.subtract(Duration(days: d.weekday - 1));
   }
 
-  int get _maxChips => mode == WidgetMode.month ? 2 : 3;
-
   Map<DateTime, List<Event>> get _byDay {
     final map = <DateTime, List<Event>>{};
     for (final e in events) {
@@ -63,7 +85,8 @@ class WidgetCalendarView extends StatelessWidget {
             color: _bg,
             borderRadius: BorderRadius.circular(20),
           ),
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+          padding: EdgeInsets.fromLTRB(
+              11, 11, 11, mode == WidgetMode.month ? 9 : 11),
           child: mode == WidgetMode.day ? _buildDay() : _buildGrid(),
         ),
       ),
@@ -76,28 +99,23 @@ class WidgetCalendarView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${_weekdaysFull[today.weekday - 1]}, ${today.day}',
-          style: const TextStyle(
-              color: _white, fontSize: 15, fontWeight: FontWeight.w700),
-        ),
-        Text(
-          '${_monthNames[today.month - 1]} ${today.year}',
-          style: const TextStyle(color: _faint, fontSize: 11),
-        ),
+        Text('${_weekdaysFull[today.weekday - 1]}, ${today.day}',
+            style: const TextStyle(
+                color: _white, fontSize: 15, fontWeight: FontWeight.w700)),
+        Text('${_monthNames[today.month - 1]} ${today.year}',
+            style: const TextStyle(color: _faint, fontSize: 10.5)),
         const SizedBox(height: 8),
         if (list.isEmpty)
           const Expanded(
             child: Center(
-              child: Text('Không có sự kiện',
-                  style: TextStyle(color: _faint, fontSize: 12)),
-            ),
+                child: Text('Không có sự kiện',
+                    style: TextStyle(color: _faint, fontSize: 12))),
           )
         else
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: list.take(5).map(_agendaRow).toList(),
+              children: list.take(4).map(_agendaRow).toList(),
             ),
           ),
       ],
@@ -109,18 +127,16 @@ class WidgetCalendarView extends StatelessWidget {
     final hhmm =
         '${e.startTime.hour.toString().padLeft(2, '0')}:${e.startTime.minute.toString().padLeft(2, '0')}';
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 7),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 3,
-            height: 26,
-            margin: const EdgeInsets.only(right: 6, top: 1),
+            width: 3.5,
+            height: 30,
+            margin: const EdgeInsets.only(right: 7, top: 1),
             decoration: BoxDecoration(
-              color: base,
-              borderRadius: BorderRadius.circular(2),
-            ),
+                color: base, borderRadius: BorderRadius.circular(2)),
           ),
           Expanded(
             child: Column(
@@ -131,10 +147,10 @@ class WidgetCalendarView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                         color: _white,
-                        fontSize: 12,
+                        fontSize: 13.5,
                         fontWeight: FontWeight.w600)),
                 Text(e.isAllDay ? 'Cả ngày' : hhmm,
-                    style: const TextStyle(color: _faint, fontSize: 10)),
+                    style: const TextStyle(color: _faint, fontSize: 11)),
               ],
             ),
           ),
@@ -145,6 +161,7 @@ class WidgetCalendarView extends StatelessWidget {
 
   // ---- Week / Month: lưới ----
   Widget _buildGrid() {
+    final s = mode == WidgetMode.week ? _GridStyle.week : _GridStyle.month;
     final cells = _gridCells();
     final byDay = _byDay;
 
@@ -162,7 +179,7 @@ class WidgetCalendarView extends StatelessWidget {
                       date: date,
                       isToday: _dayOnly(date) == _dayOnly(today),
                       events: byDay[_dayOnly(date)] ?? const [],
-                      maxChips: _maxChips,
+                      style: s,
                     ),
             );
           }),
@@ -174,9 +191,11 @@ class WidgetCalendarView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${_monthNames[today.month - 1]} ${today.year}',
-            style: const TextStyle(
-                color: _white, fontSize: 16, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 6),
+            style: TextStyle(
+                color: _white,
+                fontSize: s.monthTitle,
+                fontWeight: FontWeight.w700)),
+        SizedBox(height: mode == WidgetMode.week ? 8 : 6),
         Row(
           children: List.generate(
             7,
@@ -185,12 +204,12 @@ class WidgetCalendarView extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: i == today.weekday - 1 ? _accent : _faint,
-                      fontSize: 10,
+                      fontSize: s.weekday,
                       fontWeight: FontWeight.w600)),
             ),
           ),
         ),
-        const SizedBox(height: 3),
+        SizedBox(height: mode == WidgetMode.week ? 6 : 3),
         ...rows,
       ],
     );
@@ -200,7 +219,6 @@ class WidgetCalendarView extends StatelessWidget {
     if (mode == WidgetMode.week) {
       return List.generate(7, (i) => _startOfWeek.add(Duration(days: i)));
     }
-    // month
     final first = DateTime(today.year, today.month, 1);
     final leading = first.weekday - 1;
     final days = DateUtils.getDaysInMonth(today.year, today.month);
@@ -218,18 +236,20 @@ class _DayCell extends StatelessWidget {
   final DateTime date;
   final bool isToday;
   final List<Event> events;
-  final int maxChips;
+  final _GridStyle style;
 
   const _DayCell({
     required this.date,
     required this.isToday,
     required this.events,
-    required this.maxChips,
+    required this.style,
   });
+
+  static const _accent = Color(0xFF00B3A6);
 
   @override
   Widget build(BuildContext context) {
-    final chips = events.take(maxChips).toList();
+    final chips = events.take(style.maxChips).toList();
     final extra = events.length - chips.length;
 
     return Container(
@@ -240,28 +260,28 @@ class _DayCell extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              width: 18,
-              height: 18,
+              width: style.circle,
+              height: style.circle,
               alignment: Alignment.center,
               decoration: isToday
-                  ? const BoxDecoration(
-                      color: WidgetCalendarView._accent, shape: BoxShape.circle)
+                  ? const BoxDecoration(color: _accent, shape: BoxShape.circle)
                   : null,
               child: Text('${date.day}',
                   style: TextStyle(
                       color: isToday ? Colors.white : const Color(0xFFEDEDED),
-                      fontSize: 11,
+                      fontSize: style.dayNum,
                       fontWeight:
                           isToday ? FontWeight.w700 : FontWeight.w500)),
             ),
           ),
-          const SizedBox(height: 1),
-          ...chips.map((e) => _EventChip(event: e)),
+          SizedBox(height: style.chipPadV),
+          ...chips.map((e) => _EventChip(event: e, style: style)),
           if (extra > 0)
             Padding(
               padding: const EdgeInsets.only(left: 2, top: 1),
               child: Text('+$extra',
-                  style: const TextStyle(fontSize: 7, color: Color(0x99FFFFFF))),
+                  style: TextStyle(
+                      fontSize: style.chipFont - 1, color: const Color(0x99FFFFFF))),
             ),
         ],
       ),
@@ -271,15 +291,16 @@ class _DayCell extends StatelessWidget {
 
 class _EventChip extends StatelessWidget {
   final Event event;
+  final _GridStyle style;
 
-  const _EventChip({required this.event});
+  const _EventChip({required this.event, required this.style});
 
   @override
   Widget build(BuildContext context) {
     final base = Color(event.color);
     return Container(
-      margin: const EdgeInsets.only(bottom: 1.5),
-      padding: const EdgeInsets.fromLTRB(3, 1, 2, 1),
+      margin: const EdgeInsets.only(bottom: 2),
+      padding: EdgeInsets.fromLTRB(3, style.chipPadV, 2, style.chipPadV),
       decoration: BoxDecoration(
         color: base.withValues(alpha: 0.32),
         borderRadius: BorderRadius.circular(3),
@@ -288,9 +309,9 @@ class _EventChip extends StatelessWidget {
       child: Text(event.title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-              color: Color(0xFFFFFFFF),
-              fontSize: 8,
+          style: TextStyle(
+              color: const Color(0xFFFFFFFF),
+              fontSize: style.chipFont,
               height: 1.15,
               fontWeight: FontWeight.w500)),
     );
