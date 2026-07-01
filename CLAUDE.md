@@ -21,13 +21,14 @@ dart run build_runner build --force-jit
 flutter analyze        # phải "No issues found!"
 flutter test           # tất cả test pass
 ```
-Rồi **giả lập máy ảo** để kiểm tra hành vi thật, không chỉ tin vào test:
+Rồi **kiểm thử trên máy ảo iOS — iPhone 16e (KHÔNG dùng Android để verify)**:
 ```bash
-flutter emulators                       # liệt kê emulator/simulator
-flutter emulators --launch <id>         # hoặc: open -a Simulator (iOS)
-flutter run                             # build & chạy trên máy ảo, quan sát UI/luồng
+flutter run -d 3E46A6BE-AF54-4F4A-8530-A908B29B6E33   # iPhone 16e simulator
 ```
-Xác nhận feature chạy đúng trên máy ảo (tạo/sửa/xoá event hiển thị đúng, không crash) rồi mới sang bước 5.
+Thao tác/chụp màn hình bằng **idb** (xem cách dùng ở memory `ios-ui-testing-with-idb`):
+`idb ui tap X Y` (X,Y là point = pixel/3), `idb screenshot`, `idb launch com.example.exampleApp`.
+Xác nhận feature chạy đúng trên iPhone 16e (không crash) rồi mới sang bước 5.
+> ⚠️ Yêu cầu của người dùng: **luôn verify trên iOS (iPhone 16e)**, không kiểm thử trên Android nữa.
 
 **5. Commit** — chỉ commit khi bước 4 đã pass.
 ```bash
