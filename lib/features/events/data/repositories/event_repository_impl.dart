@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/domain/entities/event.dart';
-import '../../../../core/domain/repositories/event_repository.dart';
-import '../../../../core/error/exceptions.dart';
-import '../../../../core/error/failures.dart';
+import '../../../../core/domain/index.dart';
+import '../../../../core/error/index.dart';
 import '../datasources/event_local_datasource.dart';
 import '../models/event_mapper.dart';
 

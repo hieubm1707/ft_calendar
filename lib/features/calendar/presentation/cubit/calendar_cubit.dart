@@ -2,9 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/domain/entities/event.dart';
-// ⭐ Tái sử dụng usecase THUỘC feature `events` — chỉ import từ lớp domain.
-import '../../../events/domain/usecases/get_scheduled_events.dart';
+import '../../../../core/domain/index.dart';
+// ⭐ Tái sử dụng usecase THUỘC feature `events` — chỉ import barrel domain của nó.
+import '../../../events/domain/index.dart';
 
 part 'calendar_state.dart';
 

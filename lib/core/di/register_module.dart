@@ -1,7 +1,6 @@
 import 'package:injectable/injectable.dart';
 
-import '../database/drift/app_database.dart';
-import '../database/drift/daos/event_dao.dart';
+import '../database/drift/index.dart';
 
 /// Đăng ký các object không có annotation @injectable (thư viện bên thứ 3).
 @module

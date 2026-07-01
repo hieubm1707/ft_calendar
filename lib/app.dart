@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'features/events/presentation/pages/events_page.dart';
+import 'features/events/presentation/index.dart';
 
 class FtCalendarApp extends StatelessWidget {
   const FtCalendarApp({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/di/injection.dart';
-import '../../../../core/domain/entities/event.dart';
+import '../../../../core/di/index.dart';
+import '../../../../core/domain/index.dart';
 import '../bloc/events_bloc.dart';
 
 class EventsPage extends StatelessWidget {
@@ -38,7 +38,7 @@ class _EventsView extends StatelessWidget {
               }
               return ListView.separated(
                 itemCount: state.events.length,
-                separatorBuilder: (_, __) => const Divider(height: 1),
+                separatorBuilder: (context, index) => const Divider(height: 1),
                 itemBuilder: (context, index) {
                   final e = state.events[index];
                   return ListTile(
