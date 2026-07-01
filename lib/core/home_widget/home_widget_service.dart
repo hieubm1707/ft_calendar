@@ -26,11 +26,11 @@ class HomeWidgetService {
   Future<void> refreshAll() async {
     final today = DateTime.now();
     try {
-      // Kích thước theo tỉ lệ từng family iOS để ảnh lấp đầy widget:
-      // day/small ~1:1, week/medium ~2.14:1, month/large ~0.95:1.
-      await _render(WidgetMode.day, today, _WidgetSpec(const Size(340, 340)));
-      await _render(WidgetMode.week, today, _WidgetSpec(const Size(360, 168)));
-      await _render(WidgetMode.month, today, _WidgetSpec(const Size(340, 356)));
+      // Render ĐÚNG kích thước point thật của từng family iOS (không scale
+      // → chữ hiển thị đúng cỡ). small ~158², medium ~338x158, large ~338x354.
+      await _render(WidgetMode.day, today, _WidgetSpec(const Size(158, 158)));
+      await _render(WidgetMode.week, today, _WidgetSpec(const Size(338, 158)));
+      await _render(WidgetMode.month, today, _WidgetSpec(const Size(338, 354)));
       await HomeWidget.updateWidget(
         iOSName: _iOSWidgetName,
         qualifiedAndroidName: _androidProvider,
@@ -51,6 +51,7 @@ class HomeWidgetService {
           mode: mode, today: today, events: events, size: spec.size),
       key: 'cal_${mode.name}',
       logicalSize: spec.size,
+      pixelRatio: 3.0, // render ở 3x cho nét trên màn hình Retina/hi-dpi
     );
   }
 
