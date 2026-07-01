@@ -39,6 +39,8 @@ class _AddEventSheet extends StatefulWidget {
 class _AddEventSheetState extends State<_AddEventSheet> {
   late final _titleController =
       TextEditingController(text: widget.event?.title ?? '');
+  late final _descController =
+      TextEditingController(text: widget.event?.description ?? '');
   late DateTime _date = widget.initialDate;
   late int _color = widget.event?.color ?? kEventColors.first;
   late TimeOfDay _startTime = widget.event != null
@@ -55,6 +57,7 @@ class _AddEventSheetState extends State<_AddEventSheet> {
   @override
   void dispose() {
     _titleController.dispose();
+    _descController.dispose();
     super.dispose();
   }
 
@@ -100,13 +103,24 @@ class _AddEventSheetState extends State<_AddEventSheet> {
     // Chốt: giờ kết thúc phải sau giờ bắt đầu.
     if (!end.isAfter(start)) end = start.add(const Duration(hours: 1));
 
+    final desc = _descController.text.trim();
+    final description = desc.isEmpty ? null : desc;
+
     final existing = widget.event;
     Navigator.of(context).pop(
       existing != null
           ? existing.copyWith(
-              title: title, startTime: start, endTime: end, color: _color)
+              title: title,
+              description: description,
+              startTime: start,
+              endTime: end,
+              color: _color)
           : Event(
-              title: title, startTime: start, endTime: end, color: _color),
+              title: title,
+              description: description,
+              startTime: start,
+              endTime: end,
+              color: _color),
     );
   }
 
@@ -134,6 +148,17 @@ class _AddEventSheetState extends State<_AddEventSheet> {
               isDense: true,
             ),
             onSubmitted: (_) => _save(),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _descController,
+            maxLines: 3,
+            minLines: 1,
+            decoration: const InputDecoration(
+              hintText: 'Mô tả (tuỳ chọn)',
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
           ),
           const SizedBox(height: 16),
           InkWell(

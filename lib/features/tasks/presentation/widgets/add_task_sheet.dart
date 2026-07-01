@@ -38,6 +38,8 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
   final Set<int> _weekdays = {};
   DateTime _weeklyStart = _today();
   int _color = kTaskColors.first;
+  final _descController = TextEditingController();
+  TimeOfDay? _time; // giờ tuỳ chọn
 
   static DateTime _today() {
     final n = DateTime.now();
@@ -47,10 +49,13 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
   @override
   void dispose() {
     _titleController.dispose();
+    _descController.dispose();
     super.dispose();
   }
 
   String _fmt(DateTime d) => '${d.day}/${d.month}/${d.year}';
+  String _fmtTime(TimeOfDay t) =>
+      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
   Future<DateTime?> _pickDate(DateTime initial) => showDatePicker(
         context: context,
@@ -63,6 +68,11 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
 
+    final desc = _descController.text.trim();
+    final description = desc.isEmpty ? null : desc;
+    final timeMinutes =
+        _time == null ? null : _time!.hour * 60 + _time!.minute;
+
     TaskSchedule? schedule;
     switch (_mode) {
       case _Mode.one:
@@ -72,6 +82,8 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
           dates: [_oneDate],
           startDate: _oneDate,
           color: _color,
+          description: description,
+          timeMinutes: timeMinutes,
         );
       case _Mode.many:
         if (_manyDates.isEmpty) return;
@@ -82,6 +94,8 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
           dates: sorted,
           startDate: sorted.first,
           color: _color,
+          description: description,
+          timeMinutes: timeMinutes,
         );
       case _Mode.weekly:
         if (_weekdays.isEmpty) return;
@@ -91,6 +105,8 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
           weekdays: _weekdays,
           startDate: _weeklyStart,
           color: _color,
+          description: description,
+          timeMinutes: timeMinutes,
         );
     }
     Navigator.of(context).pop(schedule);
@@ -119,6 +135,17 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
               ),
               onSubmitted: (_) => _save(),
             ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _descController,
+              maxLines: 3,
+              minLines: 1,
+              decoration: const InputDecoration(
+                hintText: 'Mô tả (tuỳ chọn)',
+                border: OutlineInputBorder(),
+                isDense: true,
+              ),
+            ),
             const SizedBox(height: 16),
             SegmentedButton<_Mode>(
               segments: const [
@@ -132,8 +159,49 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
             ),
             const SizedBox(height: 16),
             _modeSection(),
+            const SizedBox(height: 12),
+            // Giờ tuỳ chọn
+            Row(
+              children: [
+                const Icon(Icons.schedule, size: 20, color: Color(0xFF8E8E93)),
+                const SizedBox(width: 8),
+                if (_time == null)
+                  ActionChip(
+                    label: const Text('Thêm giờ'),
+                    onPressed: () async {
+                      final t = await showTimePicker(
+                          context: context,
+                          initialTime: const TimeOfDay(hour: 9, minute: 0));
+                      if (t != null) setState(() => _time = t);
+                    },
+                  )
+                else ...[
+                  InkWell(
+                    onTap: () async {
+                      final t = await showTimePicker(
+                          context: context, initialTime: _time!);
+                      if (t != null) setState(() => _time = t);
+                    },
+                    child: Text(_fmtTime(_time!),
+                        style: const TextStyle(fontSize: 15)),
+                  ),
+                  const SizedBox(width: 6),
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () => setState(() => _time = null),
+                  ),
+                ],
+              ],
+            ),
             const SizedBox(height: 16),
-            const Text('Màu', style: TextStyle(color: Color(0xFF8E8E93))),
+            const Row(
+              children: [
+                Icon(Icons.flag, size: 16, color: Color(0xFF8E8E93)),
+                SizedBox(width: 6),
+                Text('Cờ ưu tiên', style: TextStyle(color: Color(0xFF8E8E93))),
+              ],
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 12,

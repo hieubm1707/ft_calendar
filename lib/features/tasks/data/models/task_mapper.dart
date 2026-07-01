@@ -30,6 +30,8 @@ extension TaskScheduleRowMapper on TaskScheduleTableData {
         startDate: startDate,
         active: active,
         color: color,
+        description: note,
+        timeMinutes: minutesOfDay,
       );
 }
 
@@ -45,5 +47,7 @@ extension TaskScheduleEntityMapper on TaskSchedule {
         weekdaysMask: Value(weekdaysToMask(weekdays)),
         color: Value(color),
         active: Value(active),
+        note: Value(description),
+        minutesOfDay: Value(timeMinutes),
       );
 }

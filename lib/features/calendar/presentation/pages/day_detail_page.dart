@@ -121,11 +121,30 @@ class DayDetailPage extends StatelessWidget {
                     ),
                   ),
                   title: Text(e.title),
-                  subtitle: Text(
-                    e.isAllDay
-                        ? 'Cả ngày'
-                        : '${_hhmm(e.startTime)} - ${_hhmm(e.endTime)}',
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        e.isAllDay
+                            ? 'Cả ngày'
+                            : '${_hhmm(e.startTime)} - ${_hhmm(e.endTime)}',
+                      ),
+                      if (e.description != null &&
+                          e.description!.trim().isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            e.description!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 12, color: Color(0xFF8E8E93)),
+                          ),
+                        ),
+                    ],
                   ),
+                  isThreeLine: e.description != null &&
+                      e.description!.trim().isNotEmpty,
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
                     onPressed: () => _delete(context, e),

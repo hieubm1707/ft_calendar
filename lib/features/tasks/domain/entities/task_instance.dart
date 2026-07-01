@@ -8,6 +8,8 @@ class TaskInstance extends Equatable {
   final int color;
   final bool done;
   final bool isRecurring;
+  final String? description;
+  final int? timeMinutes;
 
   const TaskInstance({
     required this.scheduleId,
@@ -16,8 +18,19 @@ class TaskInstance extends Equatable {
     required this.color,
     required this.done,
     required this.isRecurring,
+    this.description,
+    this.timeMinutes,
   });
 
   @override
-  List<Object?> get props => [scheduleId, date, title, color, done, isRecurring];
+  List<Object?> get props => [
+        scheduleId,
+        date,
+        title,
+        color,
+        done,
+        isRecurring,
+        description,
+        timeMinutes,
+      ];
 }

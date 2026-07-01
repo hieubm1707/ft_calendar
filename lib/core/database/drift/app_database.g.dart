@@ -564,6 +564,26 @@ class $TaskScheduleTableTable extends TaskScheduleTable
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _minutesOfDayMeta = const VerificationMeta(
+    'minutesOfDay',
+  );
+  @override
+  late final GeneratedColumn<int> minutesOfDay = GeneratedColumn<int>(
+    'minutes_of_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -575,6 +595,8 @@ class $TaskScheduleTableTable extends TaskScheduleTable
     active,
     color,
     createdAt,
+    note,
+    minutesOfDay,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -650,6 +672,21 @@ class $TaskScheduleTableTable extends TaskScheduleTable
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('minutes_of_day')) {
+      context.handle(
+        _minutesOfDayMeta,
+        minutesOfDay.isAcceptableOrUnknown(
+          data['minutes_of_day']!,
+          _minutesOfDayMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -695,6 +732,14 @@ class $TaskScheduleTableTable extends TaskScheduleTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      minutesOfDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}minutes_of_day'],
+      ),
     );
   }
 
@@ -715,6 +760,12 @@ class TaskScheduleTableData extends DataClass
   final bool active;
   final int color;
   final DateTime createdAt;
+
+  /// Mô tả (tuỳ chọn).
+  final String? note;
+
+  /// Giờ trong ngày (phút từ 0h) — tuỳ chọn, null = không đặt giờ.
+  final int? minutesOfDay;
   const TaskScheduleTableData({
     required this.id,
     required this.title,
@@ -725,6 +776,8 @@ class TaskScheduleTableData extends DataClass
     required this.active,
     required this.color,
     required this.createdAt,
+    this.note,
+    this.minutesOfDay,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -740,6 +793,12 @@ class TaskScheduleTableData extends DataClass
     map['active'] = Variable<bool>(active);
     map['color'] = Variable<int>(color);
     map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    if (!nullToAbsent || minutesOfDay != null) {
+      map['minutes_of_day'] = Variable<int>(minutesOfDay);
+    }
     return map;
   }
 
@@ -756,6 +815,10 @@ class TaskScheduleTableData extends DataClass
       active: Value(active),
       color: Value(color),
       createdAt: Value(createdAt),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      minutesOfDay: minutesOfDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(minutesOfDay),
     );
   }
 
@@ -774,6 +837,8 @@ class TaskScheduleTableData extends DataClass
       active: serializer.fromJson<bool>(json['active']),
       color: serializer.fromJson<int>(json['color']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      note: serializer.fromJson<String?>(json['note']),
+      minutesOfDay: serializer.fromJson<int?>(json['minutesOfDay']),
     );
   }
   @override
@@ -789,6 +854,8 @@ class TaskScheduleTableData extends DataClass
       'active': serializer.toJson<bool>(active),
       'color': serializer.toJson<int>(color),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'note': serializer.toJson<String?>(note),
+      'minutesOfDay': serializer.toJson<int?>(minutesOfDay),
     };
   }
 
@@ -802,6 +869,8 @@ class TaskScheduleTableData extends DataClass
     bool? active,
     int? color,
     DateTime? createdAt,
+    Value<String?> note = const Value.absent(),
+    Value<int?> minutesOfDay = const Value.absent(),
   }) => TaskScheduleTableData(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -812,6 +881,8 @@ class TaskScheduleTableData extends DataClass
     active: active ?? this.active,
     color: color ?? this.color,
     createdAt: createdAt ?? this.createdAt,
+    note: note.present ? note.value : this.note,
+    minutesOfDay: minutesOfDay.present ? minutesOfDay.value : this.minutesOfDay,
   );
   TaskScheduleTableData copyWithCompanion(TaskScheduleTableCompanion data) {
     return TaskScheduleTableData(
@@ -826,6 +897,10 @@ class TaskScheduleTableData extends DataClass
       active: data.active.present ? data.active.value : this.active,
       color: data.color.present ? data.color.value : this.color,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      note: data.note.present ? data.note.value : this.note,
+      minutesOfDay: data.minutesOfDay.present
+          ? data.minutesOfDay.value
+          : this.minutesOfDay,
     );
   }
 
@@ -840,7 +915,9 @@ class TaskScheduleTableData extends DataClass
           ..write('startDate: $startDate, ')
           ..write('active: $active, ')
           ..write('color: $color, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('note: $note, ')
+          ..write('minutesOfDay: $minutesOfDay')
           ..write(')'))
         .toString();
   }
@@ -856,6 +933,8 @@ class TaskScheduleTableData extends DataClass
     active,
     color,
     createdAt,
+    note,
+    minutesOfDay,
   );
   @override
   bool operator ==(Object other) =>
@@ -869,7 +948,9 @@ class TaskScheduleTableData extends DataClass
           other.startDate == this.startDate &&
           other.active == this.active &&
           other.color == this.color &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.note == this.note &&
+          other.minutesOfDay == this.minutesOfDay);
 }
 
 class TaskScheduleTableCompanion
@@ -883,6 +964,8 @@ class TaskScheduleTableCompanion
   final Value<bool> active;
   final Value<int> color;
   final Value<DateTime> createdAt;
+  final Value<String?> note;
+  final Value<int?> minutesOfDay;
   const TaskScheduleTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -893,6 +976,8 @@ class TaskScheduleTableCompanion
     this.active = const Value.absent(),
     this.color = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.note = const Value.absent(),
+    this.minutesOfDay = const Value.absent(),
   });
   TaskScheduleTableCompanion.insert({
     this.id = const Value.absent(),
@@ -904,6 +989,8 @@ class TaskScheduleTableCompanion
     this.active = const Value.absent(),
     this.color = const Value.absent(),
     required DateTime createdAt,
+    this.note = const Value.absent(),
+    this.minutesOfDay = const Value.absent(),
   }) : title = Value(title),
        type = Value(type),
        startDate = Value(startDate),
@@ -918,6 +1005,8 @@ class TaskScheduleTableCompanion
     Expression<bool>? active,
     Expression<int>? color,
     Expression<DateTime>? createdAt,
+    Expression<String>? note,
+    Expression<int>? minutesOfDay,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -929,6 +1018,8 @@ class TaskScheduleTableCompanion
       if (active != null) 'active': active,
       if (color != null) 'color': color,
       if (createdAt != null) 'created_at': createdAt,
+      if (note != null) 'note': note,
+      if (minutesOfDay != null) 'minutes_of_day': minutesOfDay,
     });
   }
 
@@ -942,6 +1033,8 @@ class TaskScheduleTableCompanion
     Value<bool>? active,
     Value<int>? color,
     Value<DateTime>? createdAt,
+    Value<String?>? note,
+    Value<int?>? minutesOfDay,
   }) {
     return TaskScheduleTableCompanion(
       id: id ?? this.id,
@@ -953,6 +1046,8 @@ class TaskScheduleTableCompanion
       active: active ?? this.active,
       color: color ?? this.color,
       createdAt: createdAt ?? this.createdAt,
+      note: note ?? this.note,
+      minutesOfDay: minutesOfDay ?? this.minutesOfDay,
     );
   }
 
@@ -986,6 +1081,12 @@ class TaskScheduleTableCompanion
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (minutesOfDay.present) {
+      map['minutes_of_day'] = Variable<int>(minutesOfDay.value);
+    }
     return map;
   }
 
@@ -1000,7 +1101,9 @@ class TaskScheduleTableCompanion
           ..write('startDate: $startDate, ')
           ..write('active: $active, ')
           ..write('color: $color, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('note: $note, ')
+          ..write('minutesOfDay: $minutesOfDay')
           ..write(')'))
         .toString();
   }
@@ -1576,6 +1679,8 @@ typedef $$TaskScheduleTableTableCreateCompanionBuilder =
       Value<bool> active,
       Value<int> color,
       required DateTime createdAt,
+      Value<String?> note,
+      Value<int?> minutesOfDay,
     });
 typedef $$TaskScheduleTableTableUpdateCompanionBuilder =
     TaskScheduleTableCompanion Function({
@@ -1588,6 +1693,8 @@ typedef $$TaskScheduleTableTableUpdateCompanionBuilder =
       Value<bool> active,
       Value<int> color,
       Value<DateTime> createdAt,
+      Value<String?> note,
+      Value<int?> minutesOfDay,
     });
 
 class $$TaskScheduleTableTableFilterComposer
@@ -1641,6 +1748,16 @@ class $$TaskScheduleTableTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get minutesOfDay => $composableBuilder(
+    column: $table.minutesOfDay,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1698,6 +1815,16 @@ class $$TaskScheduleTableTableOrderingComposer
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get minutesOfDay => $composableBuilder(
+    column: $table.minutesOfDay,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TaskScheduleTableTableAnnotationComposer
@@ -1737,6 +1864,14 @@ class $$TaskScheduleTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<int> get minutesOfDay => $composableBuilder(
+    column: $table.minutesOfDay,
+    builder: (column) => column,
+  );
 }
 
 class $$TaskScheduleTableTableTableManager
@@ -1788,6 +1923,8 @@ class $$TaskScheduleTableTableTableManager
                 Value<bool> active = const Value.absent(),
                 Value<int> color = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int?> minutesOfDay = const Value.absent(),
               }) => TaskScheduleTableCompanion(
                 id: id,
                 title: title,
@@ -1798,6 +1935,8 @@ class $$TaskScheduleTableTableTableManager
                 active: active,
                 color: color,
                 createdAt: createdAt,
+                note: note,
+                minutesOfDay: minutesOfDay,
               ),
           createCompanionCallback:
               ({
@@ -1810,6 +1949,8 @@ class $$TaskScheduleTableTableTableManager
                 Value<bool> active = const Value.absent(),
                 Value<int> color = const Value.absent(),
                 required DateTime createdAt,
+                Value<String?> note = const Value.absent(),
+                Value<int?> minutesOfDay = const Value.absent(),
               }) => TaskScheduleTableCompanion.insert(
                 id: id,
                 title: title,
@@ -1820,6 +1961,8 @@ class $$TaskScheduleTableTableTableManager
                 active: active,
                 color: color,
                 createdAt: createdAt,
+                note: note,
+                minutesOfDay: minutesOfDay,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

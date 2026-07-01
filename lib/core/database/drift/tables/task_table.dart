@@ -12,6 +12,12 @@ class TaskScheduleTable extends Table {
   BoolColumn get active => boolean().withDefault(const Constant(true))();
   IntColumn get color => integer().withDefault(const Constant(0xFF00B3A6))();
   DateTimeColumn get createdAt => dateTime()();
+
+  /// Mô tả (tuỳ chọn).
+  TextColumn get note => text().nullable()();
+
+  /// Giờ trong ngày (phút từ 0h) — tuỳ chọn, null = không đặt giờ.
+  IntColumn get minutesOfDay => integer().nullable()();
 }
 
 /// Trạng thái hoàn thành theo từng ngày (áp cho cả instance lặp).
