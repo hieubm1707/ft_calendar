@@ -1,5 +1,5 @@
 # WidgetKit lock screen accessory cần iOS 16+.
-platform :ios, '16.0'
+platform :ios, '17.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'

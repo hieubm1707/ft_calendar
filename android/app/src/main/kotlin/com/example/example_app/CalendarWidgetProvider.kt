@@ -54,8 +54,8 @@ class CalendarWidgetProvider : HomeWidgetProvider() {
         val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0)
         val key = when {
             minHeight >= 220 -> "cal_month"
-            minHeight >= 130 -> "cal_twoWeeks"
-            else -> "cal_week"
+            minHeight >= 130 -> "cal_week"
+            else -> "cal_day"
         }
 
         val views = RemoteViews(context.packageName, R.layout.widget_calendar)
