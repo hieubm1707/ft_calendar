@@ -34,6 +34,23 @@ import 'package:example_app/features/events/domain/usecases/update_event.dart'
     as _i466;
 import 'package:example_app/features/events/presentation/bloc/events_bloc.dart'
     as _i753;
+import 'package:example_app/features/tasks/data/datasources/task_local_datasource.dart'
+    as _i725;
+import 'package:example_app/features/tasks/data/repositories/task_repository_impl.dart'
+    as _i444;
+import 'package:example_app/features/tasks/domain/index.dart' as _i904;
+import 'package:example_app/features/tasks/domain/repositories/task_repository.dart'
+    as _i721;
+import 'package:example_app/features/tasks/domain/usecases/create_task_schedule.dart'
+    as _i176;
+import 'package:example_app/features/tasks/domain/usecases/get_task_instances.dart'
+    as _i82;
+import 'package:example_app/features/tasks/domain/usecases/remove_task_schedule.dart'
+    as _i69;
+import 'package:example_app/features/tasks/domain/usecases/set_task_done.dart'
+    as _i1029;
+import 'package:example_app/features/tasks/presentation/cubit/task_cubit.dart'
+    as _i553;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -52,11 +69,32 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i413.EventDao>(
       () => registerModule.eventDao(gh<_i413.AppDatabase>()),
     );
+    gh.lazySingleton<_i413.TaskDao>(
+      () => registerModule.taskDao(gh<_i413.AppDatabase>()),
+    );
+    gh.lazySingleton<_i725.TaskLocalDataSource>(
+      () => _i725.TaskDriftDataSource(gh<_i413.TaskDao>()),
+    );
     gh.lazySingleton<_i630.EventLocalDataSource>(
       () => _i630.EventDriftDataSource(gh<_i413.EventDao>()),
     );
+    gh.lazySingleton<_i904.TaskRepository>(
+      () => _i444.TaskRepositoryImpl(gh<_i725.TaskLocalDataSource>()),
+    );
     gh.lazySingleton<_i714.EventRepository>(
       () => _i356.EventRepositoryImpl(gh<_i630.EventLocalDataSource>()),
+    );
+    gh.lazySingleton<_i176.CreateTaskSchedule>(
+      () => _i176.CreateTaskSchedule(gh<_i721.TaskRepository>()),
+    );
+    gh.lazySingleton<_i82.GetTaskInstances>(
+      () => _i82.GetTaskInstances(gh<_i721.TaskRepository>()),
+    );
+    gh.lazySingleton<_i69.RemoveTaskSchedule>(
+      () => _i69.RemoveTaskSchedule(gh<_i721.TaskRepository>()),
+    );
+    gh.lazySingleton<_i1029.SetTaskDone>(
+      () => _i1029.SetTaskDone(gh<_i721.TaskRepository>()),
     );
     gh.lazySingleton<_i424.HomeWidgetService>(
       () => _i424.HomeWidgetService(gh<_i714.EventRepository>()),
@@ -72,6 +110,14 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i466.UpdateEvent>(
       () => _i466.UpdateEvent(gh<_i714.EventRepository>()),
+    );
+    gh.factory<_i553.TaskCubit>(
+      () => _i553.TaskCubit(
+        gh<_i904.GetTaskInstances>(),
+        gh<_i904.CreateTaskSchedule>(),
+        gh<_i904.SetTaskDone>(),
+        gh<_i904.RemoveTaskSchedule>(),
+      ),
     );
     gh.factory<_i753.EventsBloc>(
       () => _i753.EventsBloc(
