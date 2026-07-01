@@ -26,10 +26,11 @@ class HomeWidgetService {
   Future<void> refreshAll() async {
     final today = DateTime.now();
     try {
-      await _render(WidgetMode.week, today, _WidgetSpec(const Size(360, 200)));
-      await _render(
-          WidgetMode.twoWeeks, today, _WidgetSpec(const Size(360, 300)));
-      await _render(WidgetMode.month, today, _WidgetSpec(const Size(360, 430)));
+      // Kích thước theo tỉ lệ từng family iOS để ảnh lấp đầy widget:
+      // day/small ~1:1, week/medium ~2.14:1, month/large ~0.95:1.
+      await _render(WidgetMode.day, today, _WidgetSpec(const Size(340, 340)));
+      await _render(WidgetMode.week, today, _WidgetSpec(const Size(360, 168)));
+      await _render(WidgetMode.month, today, _WidgetSpec(const Size(340, 356)));
       await HomeWidget.updateWidget(
         iOSName: _iOSWidgetName,
         qualifiedAndroidName: _androidProvider,
@@ -57,10 +58,10 @@ class HomeWidgetService {
     final d = DateTime(today.year, today.month, today.day);
     final startOfWeek = d.subtract(Duration(days: d.weekday - 1));
     switch (mode) {
+      case WidgetMode.day:
+        return (d, d.add(const Duration(days: 1)));
       case WidgetMode.week:
         return (startOfWeek, startOfWeek.add(const Duration(days: 7)));
-      case WidgetMode.twoWeeks:
-        return (startOfWeek, startOfWeek.add(const Duration(days: 14)));
       case WidgetMode.month:
         final first = DateTime(today.year, today.month, 1);
         final last = DateTime(today.year, today.month,

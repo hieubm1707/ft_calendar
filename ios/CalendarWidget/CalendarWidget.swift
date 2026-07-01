@@ -4,15 +4,15 @@ import SwiftUI
 private let appGroupId = "group.com.example.exampleApp"
 
 /// Chọn ảnh (do Flutter render) theo cỡ widget:
-/// small / lock accessory = 1 tuần, medium = 2 tuần, large = tháng.
+/// small / lock accessory = 1 ngày, medium = 1 tuần, large = 1 tháng.
 private func imageKey(for family: WidgetFamily) -> String {
     switch family {
     case .systemMedium:
-        return "cal_twoWeeks"
+        return "cal_week"
     case .systemLarge, .systemExtraLarge:
         return "cal_month"
     default:
-        return "cal_week"
+        return "cal_day"
     }
 }
 
@@ -56,7 +56,7 @@ struct CalendarWidgetEntryView: View {
         if let ui = loadImage(imageKey(for: family)) {
             Image(uiImage: ui)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .aspectRatio(contentMode: .fill)
         } else {
             Text("Mở app để đồng bộ lịch")
                 .font(.footnote)
@@ -69,13 +69,8 @@ struct CalendarWidgetEntryView: View {
 
 extension View {
     /// iOS 17 yêu cầu containerBackground; giữ trong suốt để dùng nền của ảnh.
-    @ViewBuilder
     func widgetContainerBackground() -> some View {
-        if #available(iOS 17.0, *) {
-            self.containerBackground(.clear, for: .widget)
-        } else {
-            self
-        }
+        self.containerBackground(.clear, for: .widget)
     }
 }
 
@@ -87,11 +82,12 @@ struct CalendarWidget: Widget {
             CalendarWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Lịch")
-        .description("Lịch + sự kiện theo tuần/tháng")
+        .description("Lịch + sự kiện (ngày/tuần/tháng)")
         .supportedFamilies([
             .systemSmall, .systemMedium, .systemLarge,
             .accessoryRectangular, .accessoryCircular,
         ])
+        .contentMarginsDisabled() // ảnh lấp đầy toàn widget (bỏ margin mặc định)
     }
 }
 
