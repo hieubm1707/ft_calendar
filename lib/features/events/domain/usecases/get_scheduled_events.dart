@@ -2,10 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/domain/entities/event.dart';
-import '../../../../core/domain/repositories/event_repository.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/usecase/usecase.dart';
+import '../../../../core/domain/index.dart';
+import '../../../../core/error/index.dart';
+import '../../../../core/usecase/index.dart';
 
 /// Lấy danh sách sự kiện đã lên lịch (tùy chọn lọc theo khoảng thời gian).
 /// Được feature `events` VÀ feature `calendar` cùng dùng lại.

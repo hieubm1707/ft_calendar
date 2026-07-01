@@ -2,10 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/domain/entities/event.dart';
-import '../../domain/usecases/create_event.dart';
-import '../../domain/usecases/delete_event.dart';
-import '../../domain/usecases/get_scheduled_events.dart';
+import '../../../../core/domain/index.dart';
+import '../../domain/index.dart';
 
 part 'events_event.dart';
 part 'events_state.dart';

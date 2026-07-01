@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-/// Domain-level error. Trả về trong Either<Failure, T> để presentation xử lý.
+/// Domain-level error. Trả về trong `Either<Failure, T>` để presentation xử lý.
 abstract class Failure extends Equatable {
   final String message;
   const Failure(this.message);

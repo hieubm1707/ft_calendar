@@ -1,9 +1,7 @@
-import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/database/drift/app_database.dart';
-import '../../../../core/database/drift/daos/event_dao.dart';
-import '../../../../core/error/exceptions.dart';
+import '../../../../core/database/drift/index.dart';
+import '../../../../core/error/index.dart';
 
 /// Lớp truy cập DB cục bộ (Drift). Đây là chỗ DUY NHẤT biết về Drift.
 /// Đổi sang DB khác sau này = viết implementation khác của interface này.

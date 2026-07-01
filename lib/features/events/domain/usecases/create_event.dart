@@ -1,10 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/domain/entities/event.dart';
-import '../../../../core/domain/repositories/event_repository.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/usecase/usecase.dart';
+import '../../../../core/domain/index.dart';
+import '../../../../core/error/index.dart';
+import '../../../../core/usecase/index.dart';
 
 @lazySingleton
 class CreateEvent implements UseCase<Event, Event> {
