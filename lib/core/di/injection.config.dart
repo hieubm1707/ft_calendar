@@ -12,6 +12,9 @@
 import 'package:example_app/core/database/drift/index.dart' as _i413;
 import 'package:example_app/core/di/register_module.dart' as _i255;
 import 'package:example_app/core/domain/index.dart' as _i714;
+import 'package:example_app/core/notifications/index.dart' as _i272;
+import 'package:example_app/core/notifications/notification_service.dart'
+    as _i815;
 import 'package:example_app/features/calendar/presentation/cubit/calendar_cubit.dart'
     as _i915;
 import 'package:example_app/features/events/data/datasources/event_local_datasource.dart'
@@ -41,6 +44,9 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.lazySingleton<_i413.AppDatabase>(() => registerModule.appDatabase);
+    gh.lazySingleton<_i815.NotificationService>(
+      () => _i815.NotificationService(),
+    );
     gh.lazySingleton<_i413.EventDao>(
       () => registerModule.eventDao(gh<_i413.AppDatabase>()),
     );
@@ -75,6 +81,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i451.CreateEvent>(),
         gh<_i451.UpdateEvent>(),
         gh<_i451.DeleteEvent>(),
+        gh<_i272.NotificationService>(),
       ),
     );
     return this;

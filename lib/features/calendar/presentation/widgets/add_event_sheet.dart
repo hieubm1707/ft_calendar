@@ -41,6 +41,12 @@ class _AddEventSheetState extends State<_AddEventSheet> {
       TextEditingController(text: widget.event?.title ?? '');
   late DateTime _date = widget.initialDate;
   late int _color = widget.event?.color ?? kEventColors.first;
+  late TimeOfDay _time = widget.event != null
+      ? TimeOfDay(
+          hour: widget.event!.startTime.hour,
+          minute: widget.event!.startTime.minute,
+        )
+      : const TimeOfDay(hour: 9, minute: 0);
 
   bool get _isEditing => widget.event != null;
 
@@ -60,14 +66,19 @@ class _AddEventSheetState extends State<_AddEventSheet> {
     if (picked != null) setState(() => _date = picked);
   }
 
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(context: context, initialTime: _time);
+    if (picked != null) setState(() => _time = picked);
+  }
+
   void _save() {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
+    final start =
+        DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
     final existing = widget.event;
     if (existing != null) {
-      // Sửa: giữ id, giữ giờ bắt đầu cũ, đổi sang ngày mới đã chọn.
-      final start = DateTime(_date.year, _date.month, _date.day,
-          existing.startTime.hour, existing.startTime.minute);
+      // Sửa: giữ id, giữ độ dài sự kiện, áp ngày + giờ mới đã chọn.
       final duration = existing.endTime.difference(existing.startTime);
       Navigator.of(context).pop(existing.copyWith(
         title: title,
@@ -76,7 +87,6 @@ class _AddEventSheetState extends State<_AddEventSheet> {
         color: _color,
       ));
     } else {
-      final start = DateTime(_date.year, _date.month, _date.day, 9);
       Navigator.of(context).pop(Event(
         title: title,
         startTime: start,
@@ -85,6 +95,9 @@ class _AddEventSheetState extends State<_AddEventSheet> {
       ));
     }
   }
+
+  String get _timeLabel =>
+      '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
 
   @override
   Widget build(BuildContext context) {
@@ -109,18 +122,36 @@ class _AddEventSheetState extends State<_AddEventSheet> {
             onSubmitted: (_) => _save(),
           ),
           const SizedBox(height: 16),
-          InkWell(
-            onTap: _pickDate,
-            child: Row(
-              children: [
-                const Icon(Icons.event, size: 20, color: Color(0xFF8E8E93)),
-                const SizedBox(width: 8),
-                Text(
-                  '${_date.day}/${_date.month}/${_date.year}',
-                  style: const TextStyle(fontSize: 15),
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: _pickDate,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.event,
+                          size: 20, color: Color(0xFF8E8E93)),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${_date.day}/${_date.month}/${_date.year}',
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+              InkWell(
+                onTap: _pickTime,
+                child: Row(
+                  children: [
+                    const Icon(Icons.schedule,
+                        size: 20, color: Color(0xFF8E8E93)),
+                    const SizedBox(width: 8),
+                    Text(_timeLabel, style: const TextStyle(fontSize: 15)),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           const Text('Màu', style: TextStyle(color: Color(0xFF8E8E93))),
