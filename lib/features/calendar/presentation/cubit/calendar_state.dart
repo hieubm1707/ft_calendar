@@ -4,31 +4,32 @@ enum CalendarStatus { initial, loading, success, failure }
 
 class CalendarState extends Equatable {
   final CalendarStatus status;
-  final DateTime? month;
-  final List<Event> events;
+
+  /// Sự kiện gom theo ngày (key = DateTime(year, month, day)).
+  final Map<DateTime, List<Event>> eventsByDay;
   final String? errorMessage;
 
   const CalendarState({
     this.status = CalendarStatus.initial,
-    this.month,
-    this.events = const [],
+    this.eventsByDay = const {},
     this.errorMessage,
   });
 
+  List<Event> eventsOf(DateTime day) =>
+      eventsByDay[DateTime(day.year, day.month, day.day)] ?? const [];
+
   CalendarState copyWith({
     CalendarStatus? status,
-    DateTime? month,
-    List<Event>? events,
+    Map<DateTime, List<Event>>? eventsByDay,
     String? errorMessage,
   }) {
     return CalendarState(
       status: status ?? this.status,
-      month: month ?? this.month,
-      events: events ?? this.events,
+      eventsByDay: eventsByDay ?? this.eventsByDay,
       errorMessage: errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [status, month, events, errorMessage];
+  List<Object?> get props => [status, eventsByDay, errorMessage];
 }

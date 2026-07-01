@@ -10,6 +10,9 @@ class Event extends Equatable {
   final DateTime endTime;
   final bool isAllDay;
 
+  /// Màu sự kiện dạng ARGB (vd: 0xFF2196F3) — dùng để phân biệt trên lịch.
+  final int color;
+
   const Event({
     this.id,
     required this.title,
@@ -17,6 +20,7 @@ class Event extends Equatable {
     required this.startTime,
     required this.endTime,
     this.isAllDay = false,
+    this.color = 0xFF2196F3,
   });
 
   Event copyWith({
@@ -26,6 +30,7 @@ class Event extends Equatable {
     DateTime? startTime,
     DateTime? endTime,
     bool? isAllDay,
+    int? color,
   }) {
     return Event(
       id: id ?? this.id,
@@ -34,10 +39,11 @@ class Event extends Equatable {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       isAllDay: isAllDay ?? this.isAllDay,
+      color: color ?? this.color,
     );
   }
 
   @override
   List<Object?> get props =>
-      [id, title, description, startTime, endTime, isAllDay];
+      [id, title, description, startTime, endTime, isAllDay, color];
 }
