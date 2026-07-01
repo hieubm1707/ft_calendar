@@ -26,10 +26,10 @@ class HomeWidgetService {
   Future<void> refreshAll() async {
     final today = DateTime.now();
     try {
-      await _render(WidgetMode.week, today, _WidgetSpec(const Size(360, 170)));
+      await _render(WidgetMode.week, today, _WidgetSpec(const Size(360, 200)));
       await _render(
-          WidgetMode.twoWeeks, today, _WidgetSpec(const Size(360, 230)));
-      await _render(WidgetMode.month, today, _WidgetSpec(const Size(360, 360)));
+          WidgetMode.twoWeeks, today, _WidgetSpec(const Size(360, 300)));
+      await _render(WidgetMode.month, today, _WidgetSpec(const Size(360, 430)));
       await HomeWidget.updateWidget(
         iOSName: _iOSWidgetName,
         qualifiedAndroidName: _androidProvider,
