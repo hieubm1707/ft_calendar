@@ -38,6 +38,19 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- App Widget lịch (home screen) -->
+        <receiver
+            android:name=".CalendarWidgetProvider"
+            android:exported="true"
+            android:label="@string/calendar_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calendar_widget_info" />
+        </receiver>
+
         <!-- Receiver cho flutter_local_notifications (thông báo đã lên lịch + khởi động lại máy) -->
         <receiver android:exported="false"
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />

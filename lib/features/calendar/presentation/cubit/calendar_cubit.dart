@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/domain/index.dart';
+import '../../../../core/home_widget/index.dart';
 import '../../../../core/notifications/index.dart';
 // ⭐ Tái sử dụng usecase THUỘC feature `events` — chỉ import barrel domain của nó.
 import '../../../events/domain/index.dart';
@@ -18,6 +19,7 @@ class CalendarCubit extends Cubit<CalendarState> {
   final UpdateEvent _updateEvent;
   final DeleteEvent _deleteEvent;
   final NotificationService _notifications;
+  final HomeWidgetService _homeWidget;
 
   CalendarCubit(
     this._getScheduledEvents,
@@ -25,6 +27,7 @@ class CalendarCubit extends Cubit<CalendarState> {
     this._updateEvent,
     this._deleteEvent,
     this._notifications,
+    this._homeWidget,
   ) : super(const CalendarState());
 
   DateTime? _from;
@@ -110,6 +113,7 @@ class CalendarCubit extends Cubit<CalendarState> {
 
   Future<void> _reload() async {
     if (_from != null && _to != null) await loadRange(_from!, _to!);
+    await _homeWidget.refreshAll(); // đồng bộ widget home/lock screen
   }
 
   Map<DateTime, List<Event>> _groupByDay(List<Event> events) {

@@ -58,6 +58,10 @@ dependencies:
   timezone: ^0.9.4
   flutter_timezone: ^3.0.1
 
+  # Widget home/lock screen (render UI Dart → ảnh, hiển thị ở native widget)
+  home_widget: ^0.7.0
+  shared_preferences: ^2.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

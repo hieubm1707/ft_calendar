@@ -12,6 +12,8 @@
 import 'package:example_app/core/database/drift/index.dart' as _i413;
 import 'package:example_app/core/di/register_module.dart' as _i255;
 import 'package:example_app/core/domain/index.dart' as _i714;
+import 'package:example_app/core/home_widget/home_widget_service.dart' as _i424;
+import 'package:example_app/core/home_widget/index.dart' as _i1008;
 import 'package:example_app/core/notifications/index.dart' as _i272;
 import 'package:example_app/core/notifications/notification_service.dart'
     as _i815;
@@ -56,6 +58,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i714.EventRepository>(
       () => _i356.EventRepositoryImpl(gh<_i630.EventLocalDataSource>()),
     );
+    gh.lazySingleton<_i424.HomeWidgetService>(
+      () => _i424.HomeWidgetService(gh<_i714.EventRepository>()),
+    );
     gh.lazySingleton<_i1065.CreateEvent>(
       () => _i1065.CreateEvent(gh<_i714.EventRepository>()),
     );
@@ -82,6 +87,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i451.UpdateEvent>(),
         gh<_i451.DeleteEvent>(),
         gh<_i272.NotificationService>(),
+        gh<_i1008.HomeWidgetService>(),
       ),
     );
     return this;

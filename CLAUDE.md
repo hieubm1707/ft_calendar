@@ -131,6 +131,14 @@ result.fold(
 - `copyWith` của state để `errorMessage` **không** null-coalesce (`errorMessage: errorMessage`) → cho phép xoá lỗi cũ khi chuyển sang success/loading.
 - Mapping Drift ↔ entity chỉ đặt ở `data/models/*_mapper.dart` dưới dạng extension (`toEntity()` / `toCompanion()`); KHÔNG map rải rác trong repository hay bloc.
 
+## Widget home/lock screen (`core/home_widget/`)
+
+Hiển thị lịch + sự kiện ra widget. **Kiến trúc: render UI bằng Dart → ảnh PNG** (`HomeWidget.renderFlutterWidget`), native chỉ hiện ảnh → 1 codebase UI cho cả 2 nền tảng.
+- `WidgetCalendarView` dựng lịch theo `WidgetMode` (week/twoWeeks/month); `HomeWidgetService.refreshAll()` render 3 ảnh (`cal_week/cal_twoWeeks/cal_month`) qua `EventRepository` rồi `updateWidget`.
+- Gọi `refreshAll()` sau frame đầu (`main.dart`) và trong `CalendarCubit._reload()` (sau CRUD). ⚠️ `renderFlutterWidget` cần có frame → KHÔNG gọi trước `runApp`.
+- **iOS**: App Group `group.com.example.exampleApp`; widget extension target `CalendarWidget` (`ios/CalendarWidget/`, bundle `com.example.exampleApp.CalendarWidget`) đọc ảnh từ App Group theo `WidgetFamily` (home: small/medium/large; lock: accessoryRectangular/Circular). Deployment target 16.0. Thêm/sửa target bằng gem `xcodeproj` (script), KHÔNG sửa tay pbxproj. Lưu ý: phase **"Embed App Extensions" phải đứng trước "Thin Binary"** (nếu không sẽ lỗi "Cycle inside Runner"); Info.plist extension dùng `$(MARKETING_VERSION)`/`$(CURRENT_PROJECT_VERSION)` (KHÔNG dùng `$(FLUTTER_BUILD_*)` vì target extension không có biến đó).
+- **Android**: `CalendarWidgetProvider` (HomeWidgetProvider) hiện ảnh vào `ImageView`, chọn ảnh theo chiều cao widget (resize = đổi mode). **Android KHÔNG có widget màn hình khóa** (OS bỏ từ Android 5.0) — chỉ home screen.
+
 ## Thêm feature mới
 
 1. Table + DAO vào `core/database/drift/` → `--force-jit` để sinh code.
