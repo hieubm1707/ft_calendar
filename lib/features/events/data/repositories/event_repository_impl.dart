@@ -40,6 +40,18 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
+  Future<Either<Failure, Event>> updateEvent(Event event) async {
+    try {
+      await _local.updateEvent(event.toCompanion());
+      return Right(event);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (_) {
+      return const Left(UnexpectedFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, Unit>> deleteEvent(int id) async {
     try {
       await _local.deleteEvent(id);

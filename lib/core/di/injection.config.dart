@@ -25,6 +25,8 @@ import 'package:example_app/features/events/domain/usecases/delete_event.dart'
     as _i970;
 import 'package:example_app/features/events/domain/usecases/get_scheduled_events.dart'
     as _i817;
+import 'package:example_app/features/events/domain/usecases/update_event.dart'
+    as _i466;
 import 'package:example_app/features/events/presentation/bloc/events_bloc.dart'
     as _i753;
 import 'package:get_it/get_it.dart' as _i174;
@@ -57,16 +59,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i817.GetScheduledEvents>(
       () => _i817.GetScheduledEvents(gh<_i714.EventRepository>()),
     );
-    gh.factory<_i915.CalendarCubit>(
-      () => _i915.CalendarCubit(
-        gh<_i451.GetScheduledEvents>(),
-        gh<_i451.CreateEvent>(),
-      ),
+    gh.lazySingleton<_i466.UpdateEvent>(
+      () => _i466.UpdateEvent(gh<_i714.EventRepository>()),
     );
     gh.factory<_i753.EventsBloc>(
       () => _i753.EventsBloc(
         gh<_i451.GetScheduledEvents>(),
         gh<_i451.CreateEvent>(),
+        gh<_i451.DeleteEvent>(),
+      ),
+    );
+    gh.factory<_i915.CalendarCubit>(
+      () => _i915.CalendarCubit(
+        gh<_i451.GetScheduledEvents>(),
+        gh<_i451.CreateEvent>(),
+        gh<_i451.UpdateEvent>(),
         gh<_i451.DeleteEvent>(),
       ),
     );

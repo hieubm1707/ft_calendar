@@ -23,6 +23,13 @@ class _FakeEventRepository implements EventRepository {
   }
 
   @override
+  Future<Either<Failure, Event>> updateEvent(Event event) async {
+    final i = stored.indexWhere((e) => e.id == event.id);
+    if (i != -1) stored[i] = event;
+    return Right(event);
+  }
+
+  @override
   Future<Either<Failure, Unit>> deleteEvent(int id) async {
     stored.removeWhere((e) => e.id == id);
     return const Right(unit);

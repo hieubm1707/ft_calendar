@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../core/domain/index.dart';
 import 'event_colors.dart';
 
-/// Mở bottom sheet thêm sự kiện. Trả về Event mới (chưa có id) hoặc null nếu huỷ.
+/// Mở bottom sheet thêm/sửa sự kiện.
+/// - Thêm: truyền [initialDate], trả về Event mới (chưa có id).
+/// - Sửa: truyền [event], trả về Event đã cập nhật (giữ nguyên id).
+/// Trả về null nếu huỷ.
 Future<Event?> showAddEventSheet(
   BuildContext context, {
-  required DateTime initialDate,
+  DateTime? initialDate,
+  Event? event,
 }) {
   return showModalBottomSheet<Event>(
     context: context,
@@ -15,23 +19,30 @@ Future<Event?> showAddEventSheet(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    builder: (_) => _AddEventSheet(initialDate: initialDate),
+    builder: (_) => _AddEventSheet(
+      initialDate: initialDate ?? event?.startTime ?? DateTime.now(),
+      event: event,
+    ),
   );
 }
 
 class _AddEventSheet extends StatefulWidget {
   final DateTime initialDate;
+  final Event? event;
 
-  const _AddEventSheet({required this.initialDate});
+  const _AddEventSheet({required this.initialDate, this.event});
 
   @override
   State<_AddEventSheet> createState() => _AddEventSheetState();
 }
 
 class _AddEventSheetState extends State<_AddEventSheet> {
-  final _titleController = TextEditingController();
+  late final _titleController =
+      TextEditingController(text: widget.event?.title ?? '');
   late DateTime _date = widget.initialDate;
-  int _color = kEventColors.first;
+  late int _color = widget.event?.color ?? kEventColors.first;
+
+  bool get _isEditing => widget.event != null;
 
   @override
   void dispose() {
@@ -52,15 +63,27 @@ class _AddEventSheetState extends State<_AddEventSheet> {
   void _save() {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
-    final start = DateTime(_date.year, _date.month, _date.day, 9);
-    Navigator.of(context).pop(
-      Event(
+    final existing = widget.event;
+    if (existing != null) {
+      // Sửa: giữ id, giữ giờ bắt đầu cũ, đổi sang ngày mới đã chọn.
+      final start = DateTime(_date.year, _date.month, _date.day,
+          existing.startTime.hour, existing.startTime.minute);
+      final duration = existing.endTime.difference(existing.startTime);
+      Navigator.of(context).pop(existing.copyWith(
+        title: title,
+        startTime: start,
+        endTime: start.add(duration),
+        color: _color,
+      ));
+    } else {
+      final start = DateTime(_date.year, _date.month, _date.day, 9);
+      Navigator.of(context).pop(Event(
         title: title,
         startTime: start,
         endTime: start.add(const Duration(hours: 1)),
         color: _color,
-      ),
-    );
+      ));
+    }
   }
 
   @override
@@ -72,8 +95,8 @@ class _AddEventSheetState extends State<_AddEventSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Sự kiện mới',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          Text(_isEditing ? 'Sửa sự kiện' : 'Sự kiện mới',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           const SizedBox(height: 16),
           TextField(
             controller: _titleController,

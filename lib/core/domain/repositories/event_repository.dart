@@ -13,5 +13,7 @@ abstract class EventRepository {
 
   Future<Either<Failure, Event>> createEvent(Event event);
 
+  Future<Either<Failure, Event>> updateEvent(Event event);
+
   Future<Either<Failure, Unit>> deleteEvent(int id);
 }

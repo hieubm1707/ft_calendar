@@ -6,6 +6,7 @@ import '../cubit/calendar_cubit.dart';
 import '../widgets/add_event_sheet.dart';
 import '../widgets/calendar_bottom_nav.dart';
 import '../widgets/month_view.dart';
+import 'day_detail_page.dart';
 
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
@@ -71,6 +72,19 @@ class _CalendarViewState extends State<_CalendarView> {
     }
   }
 
+  /// Mở chi tiết ngày, chia sẻ cùng CalendarCubit để thay đổi phản ánh về lịch.
+  void _openDay(DateTime date) {
+    final cubit = context.read<CalendarCubit>();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: cubit,
+          child: DayDetailPage(day: date),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +112,7 @@ class _CalendarViewState extends State<_CalendarView> {
                       month: widget.months[i],
                       today: widget.today,
                       eventsOf: state.eventsOf,
-                      onTapDay: _addEvent,
+                      onTapDay: _openDay,
                     ),
                   );
                 },

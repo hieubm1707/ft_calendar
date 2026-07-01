@@ -2,3 +2,4 @@
 export 'usecases/create_event.dart';
 export 'usecases/delete_event.dart';
 export 'usecases/get_scheduled_events.dart';
+export 'usecases/update_event.dart';
