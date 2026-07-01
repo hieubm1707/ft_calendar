@@ -10,4 +10,7 @@ abstract class RegisterModule {
 
   @lazySingleton
   EventDao eventDao(AppDatabase db) => db.eventDao;
+
+  @lazySingleton
+  TaskDao taskDao(AppDatabase db) => db.taskDao;
 }

@@ -6,7 +6,6 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../../../core/di/index.dart';
 import '../cubit/calendar_cubit.dart';
 import '../widgets/add_event_sheet.dart';
-import '../widgets/calendar_bottom_nav.dart';
 import '../widgets/color_filter_sheet.dart';
 import '../widgets/month_view.dart';
 import 'day_detail_page.dart';
@@ -170,7 +169,6 @@ class _CalendarViewState extends State<_CalendarView> {
         onPressed: _addToday,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      bottomNavigationBar: const CalendarBottomNav(),
     );
   }
 }

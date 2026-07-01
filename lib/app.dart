@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'features/calendar/presentation/index.dart';
+import 'features/shell/presentation/main_shell.dart';
 
 class FtCalendarApp extends StatelessWidget {
   const FtCalendarApp({super.key});
@@ -14,7 +14,7 @@ class FtCalendarApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00B3A6)),
         useMaterial3: true,
       ),
-      home: const CalendarPage(),
+      home: const MainShell(),
     );
   }
 }
