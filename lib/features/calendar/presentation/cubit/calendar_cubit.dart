@@ -8,19 +8,24 @@ import '../../../events/domain/index.dart';
 
 part 'calendar_state.dart';
 
-/// Feature `calendar` không có repository/data riêng cho sự kiện —
-/// nó dùng lại usecase của `events`. Đây là ví dụ tái sử dụng hợp lệ:
-/// chỉ phụ thuộc `events/domain`, không đụng `events/data`.
+/// Feature `calendar` không có repository/data riêng — dùng lại usecase của `events`.
+/// Đây là ví dụ tái sử dụng hợp lệ: chỉ phụ thuộc `events/domain`.
 @injectable
 class CalendarCubit extends Cubit<CalendarState> {
   final GetScheduledEvents _getScheduledEvents;
+  final CreateEvent _createEvent;
 
-  CalendarCubit(this._getScheduledEvents) : super(const CalendarState());
+  CalendarCubit(this._getScheduledEvents, this._createEvent)
+      : super(const CalendarState());
 
-  Future<void> loadMonth(DateTime month) async {
+  DateTime? _from;
+  DateTime? _to;
+
+  /// Nạp toàn bộ sự kiện trong dải [from, to] (nhiều tháng) và gom theo ngày.
+  Future<void> loadRange(DateTime from, DateTime to) async {
+    _from = from;
+    _to = to;
     emit(state.copyWith(status: CalendarStatus.loading));
-    final from = DateTime(month.year, month.month, 1);
-    final to = DateTime(month.year, month.month + 1, 0, 23, 59, 59);
 
     final result =
         await _getScheduledEvents(GetScheduledEventsParams(from: from, to: to));
@@ -32,9 +37,33 @@ class CalendarCubit extends Cubit<CalendarState> {
       )),
       (events) => emit(state.copyWith(
         status: CalendarStatus.success,
-        month: month,
-        events: events,
+        eventsByDay: _groupByDay(events),
       )),
     );
+  }
+
+  /// Tạo sự kiện mới rồi nạp lại dải hiện tại.
+  Future<void> addEvent(Event event) async {
+    final result = await _createEvent(event);
+    await result.fold(
+      (failure) async => emit(state.copyWith(
+        status: CalendarStatus.failure,
+        errorMessage: failure.message,
+      )),
+      (_) async {
+        if (_from != null && _to != null) {
+          await loadRange(_from!, _to!);
+        }
+      },
+    );
+  }
+
+  Map<DateTime, List<Event>> _groupByDay(List<Event> events) {
+    final map = <DateTime, List<Event>>{};
+    for (final e in events) {
+      final key = DateTime(e.startTime.year, e.startTime.month, e.startTime.day);
+      (map[key] ??= []).add(e);
+    }
+    return map;
   }
 }

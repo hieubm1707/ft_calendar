@@ -12,6 +12,7 @@ extension EventTableDataMapper on EventTableData {
     startTime: startTime,
     endTime: endTime,
     isAllDay: isAllDay,
+    color: color,
   );
 }
 
@@ -23,5 +24,6 @@ extension EventEntityMapper on Event {
     startTime: Value(startTime),
     endTime: Value(endTime),
     isAllDay: Value(isAllDay),
+    color: Value(color),
   );
 }

@@ -8,4 +8,5 @@ class EventTable extends Table {
   DateTimeColumn get startTime => dateTime()();
   DateTimeColumn get endTime => dateTime()();
   BoolColumn get isAllDay => boolean().withDefault(const Constant(false))();
+  IntColumn get color => integer().withDefault(const Constant(0xFF2196F3))();
 }
