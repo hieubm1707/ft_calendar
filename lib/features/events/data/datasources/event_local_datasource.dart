@@ -8,6 +8,7 @@ import '../../../../core/error/index.dart';
 abstract class EventLocalDataSource {
   Future<List<EventTableData>> getScheduledEvents({DateTime? from, DateTime? to});
   Future<EventTableData> createEvent(EventTableCompanion event);
+  Future<void> updateEvent(EventTableCompanion event);
   Future<void> deleteEvent(int id);
 }
 
@@ -33,6 +34,15 @@ class EventDriftDataSource implements EventLocalDataSource {
   Future<EventTableData> createEvent(EventTableCompanion event) async {
     try {
       return await _dao.createEvent(event);
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> updateEvent(EventTableCompanion event) async {
+    try {
+      await _dao.updateEvent(event);
     } catch (e) {
       throw DatabaseException(e.toString());
     }
