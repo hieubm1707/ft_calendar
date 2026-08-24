@@ -40,6 +40,12 @@ class NotificationService {
     final ios = _plugin.resolvePlatformSpecificImplementation<
         IOSFlutterLocalNotificationsPlugin>();
     await ios?.requestPermissions(alert: true, badge: true, sound: true);
+
+    // macOS có implementation riêng — resolve theo IOSFlutterLocal... trả null,
+    // nên nếu thiếu dòng này thông báo pomodoro trên macOS sẽ im lặng.
+    final macos = _plugin.resolvePlatformSpecificImplementation<
+        MacOSFlutterLocalNotificationsPlugin>();
+    await macos?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
   /// Đặt nhắc cho sự kiện tại thời điểm bắt đầu (bỏ qua nếu ở quá khứ).

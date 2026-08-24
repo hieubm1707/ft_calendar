@@ -10,6 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:example_app/core/database/drift/index.dart' as _i413;
+import 'package:example_app/core/desktop/desktop_window_service.dart' as _i1036;
+import 'package:example_app/core/desktop/index.dart' as _i1055;
 import 'package:example_app/core/di/register_module.dart' as _i255;
 import 'package:example_app/core/domain/index.dart' as _i714;
 import 'package:example_app/core/home_widget/home_widget_service.dart' as _i424;
@@ -51,6 +53,8 @@ import 'package:example_app/features/pomodoro/presentation/cubit/pomodoro_cubit.
     as _i709;
 import 'package:example_app/features/pomodoro/presentation/cubit/pomodoro_report_cubit.dart'
     as _i697;
+import 'package:example_app/features/pomodoro/presentation/desktop/pomodoro_tray_controller.dart'
+    as _i610;
 import 'package:example_app/features/tasks/data/datasources/task_local_datasource.dart'
     as _i725;
 import 'package:example_app/features/tasks/data/repositories/task_repository_impl.dart'
@@ -79,6 +83,9 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
+    gh.lazySingleton<_i1036.DesktopWindowService>(
+      () => _i1036.DesktopWindowService(),
+    );
     gh.lazySingleton<_i413.AppDatabase>(() => registerModule.appDatabase);
     gh.lazySingleton<_i815.NotificationService>(
       () => _i815.NotificationService(),
@@ -154,7 +161,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i904.RemoveTaskSchedule>(),
       ),
     );
-    gh.factory<_i709.PomodoroCubit>(
+    gh.lazySingleton<_i709.PomodoroCubit>(
       () => _i709.PomodoroCubit(
         gh<_i228.SavePomodoroSession>(),
         gh<_i228.GetPomodoroSessions>(),
@@ -183,6 +190,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i451.DeleteEvent>(),
         gh<_i272.NotificationService>(),
         gh<_i1008.HomeWidgetService>(),
+      ),
+    );
+    gh.lazySingleton<_i610.PomodoroTrayController>(
+      () => _i610.PomodoroTrayController(
+        gh<_i709.PomodoroCubit>(),
+        gh<_i1055.DesktopWindowService>(),
       ),
     );
     return this;

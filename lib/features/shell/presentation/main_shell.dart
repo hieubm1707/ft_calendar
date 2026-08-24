@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/desktop/index.dart';
+import '../../../core/di/index.dart';
 import '../../calendar/presentation/index.dart';
 import '../../pomodoro/presentation/index.dart';
 import '../../tasks/presentation/index.dart';
@@ -26,12 +28,19 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: _index, children: _pages),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _index,
-        onTap: (i) => setState(() => _index = i),
-      ),
+    // macOS: khi bật cửa sổ nổi nhỏ thì thu về đúng đồng hồ, bỏ bottom nav.
+    return ValueListenableBuilder<bool>(
+      valueListenable: getIt<DesktopWindowService>().miniMode,
+      builder: (context, mini, _) {
+        if (mini) return const PomodoroMiniView();
+        return Scaffold(
+          body: IndexedStack(index: _index, children: _pages),
+          bottomNavigationBar: AppBottomNav(
+            currentIndex: _index,
+            onTap: (i) => setState(() => _index = i),
+          ),
+        );
+      },
     );
   }
 }

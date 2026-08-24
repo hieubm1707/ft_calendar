@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/desktop/index.dart';
 import '../../../../core/di/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 import '../widgets/duration_format.dart';
@@ -12,16 +13,13 @@ const _kFocusColor = Color(0xFF00B3A6);
 const _kBreakColor = Color(0xFF5C6BC0);
 const _kBackground = Color(0xFFFDF7F2);
 
+/// Trang "Focus". Cubit là singleton do `app.dart` cung cấp — trang chỉ hiển thị,
+/// không tạo/đóng đồng hồ (đổi tab hay ẩn cửa sổ không được reset phiên).
 class PomodoroPage extends StatelessWidget {
   const PomodoroPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<PomodoroCubit>()..load(),
-      child: const _PomodoroView(),
-    );
-  }
+  Widget build(BuildContext context) => const _PomodoroView();
 }
 
 class _PomodoroView extends StatelessWidget {
@@ -81,6 +79,15 @@ class _PomodoroView extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                                 color: Color(0xFF1C1C1E))),
                       ),
+                      if (getIt<DesktopWindowService>().isSupported)
+                        IconButton(
+                          tooltip: 'Cửa sổ nổi nhỏ',
+                          onPressed: () =>
+                              getIt<DesktopWindowService>().setMiniMode(true),
+                          icon: const Icon(
+                              Icons.picture_in_picture_alt_outlined,
+                              color: Color(0xFF1C1C1E)),
+                        ),
                       IconButton(
                         tooltip: 'Báo cáo',
                         onPressed: () => _openReport(context),

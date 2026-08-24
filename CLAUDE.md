@@ -156,6 +156,16 @@ Tab "Tasks" quản lý công việc theo ngày, tách biệt với sự kiện l
 - **Thống kê**: `summarizePomodoro()` (hàm thuần ở `features/pomodoro/domain/pomodoro_stats.dart`, có unit test) gom phiên → tổng/ngày/theo việc/streak; mọi ngày trong khoảng đều có mặt (kể cả ngày 0) để vẽ biểu đồ. Range "Tất cả" lấy mốc đầu = phiên sớm nhất (tránh phình dải ngày).
 - **Trang**: `PomodoroPage` (ring tiến độ + chọn việc + preset 15/25/45/60 + Dừng/Bắt đầu/Bỏ qua) và `PomodoroReportPage` (4 thẻ tổng quan, cột theo ngày, phân bổ theo việc, danh sách phiên gần đây + xoá). Chọn việc lấy task hôm nay qua `features/tasks/domain` (import xuyên feature hợp lệ vì chỉ qua barrel domain).
 
+## macOS: menu bar + cửa sổ nổi (`core/desktop/`)
+
+Trên macOS pomodoro chạy như một app menu bar, đồng hồ không phụ thuộc cửa sổ.
+- **`PomodoroCubit` là `@lazySingleton`**, cung cấp ở gốc `app.dart` bằng `BlocProvider.value` → đổi tab / ẩn cửa sổ không reset phiên. Trang Focus chỉ hiển thị, KHÔNG tự tạo cubit.
+- **`DesktopWindowService`** (`core/desktop/`, dùng `window_manager`): `init()` phải gọi **trước `runApp`**; đặt cỡ cửa sổ (thường 520×780, mini 280×330), ghim trên cùng, ẩn/hiện. Bấm nút đóng chỉ ẩn (`setPreventClose(true)` + `AppDelegate.applicationShouldTerminateAfterLastWindowClosed = false`) → thoát hẳn bằng menu "Thoát" ở menu bar. Mọi hàm no-op trên iOS/Android nên UI gọi thẳng, không rải `Platform.isMacOS`.
+- **`PomodoroTrayController`** (`features/pomodoro/presentation/desktop/`, dùng `tray_manager`): nghe `PomodoroCubit.stream`, `setTitle` mm:ss mỗi giây; **menu chỉ dựng lại khi phase/runStatus/label/miniMode đổi**, không dựng mỗi tick. `start()` gọi sau frame đầu vì `setIcon` đọc asset qua rootBundle. `tray_manager` chỉ tạo status item khi `setIcon` được gọi → luôn setIcon trước setTitle. Icon: `assets/tray/tray_icon.png` (template đơn sắc, macOS tự tô màu).
+- **Cửa sổ nổi nhỏ**: `DesktopWindowService.miniMode` → `MainShell` đổi sang `PomodoroMiniView` (bỏ bottom nav) + cửa sổ thu nhỏ và ghim trên cùng.
+- **Thông báo**: macOS có implementation riêng — phải xin quyền qua `MacOSFlutterLocalNotificationsPlugin` (resolve theo `IOSFlutterLocalNotificationsPlugin` trả null → thông báo im lặng).
+- **Verify trên macOS**: terminal thường không có quyền Screen Recording nên `screencapture` chỉ chụp được hình nền. Kiểm tra bằng `CGWindowListCopyWindowInfo` (script Swift): cửa sổ chính = layer 0, ghim trên cùng = layer 3, status item menu bar = layer 25 (bề rộng item tăng khi có title mm:ss).
+
 ## Thêm feature mới
 
 1. Table + DAO vào `core/database/drift/` → `--force-jit` để sinh code.

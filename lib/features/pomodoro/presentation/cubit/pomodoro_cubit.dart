@@ -12,7 +12,10 @@ part 'pomodoro_state.dart';
 
 /// Đồng hồ pomodoro: focus → nghỉ ngắn → ... → nghỉ dài.
 /// Mỗi phiên FOCUS kết thúc (hoặc dừng sớm ≥ 1 phút) được lưu để làm report.
-@injectable
+///
+/// Singleton: đồng hồ phải sống độc lập với trang đang mở — đổi tab, ẩn cửa sổ
+/// (macOS chạy tiếp ở menu bar) đều không được reset phiên đang chạy.
+@lazySingleton
 class PomodoroCubit extends Cubit<PomodoroState> {
   final SavePomodoroSession _saveSession;
   final GetPomodoroSessions _getSessions;
