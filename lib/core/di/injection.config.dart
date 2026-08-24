@@ -34,6 +34,23 @@ import 'package:example_app/features/events/domain/usecases/update_event.dart'
     as _i466;
 import 'package:example_app/features/events/presentation/bloc/events_bloc.dart'
     as _i753;
+import 'package:example_app/features/pomodoro/data/datasources/pomodoro_local_datasource.dart'
+    as _i460;
+import 'package:example_app/features/pomodoro/data/repositories/pomodoro_repository_impl.dart'
+    as _i186;
+import 'package:example_app/features/pomodoro/domain/index.dart' as _i228;
+import 'package:example_app/features/pomodoro/domain/repositories/pomodoro_repository.dart'
+    as _i325;
+import 'package:example_app/features/pomodoro/domain/usecases/delete_pomodoro_session.dart'
+    as _i938;
+import 'package:example_app/features/pomodoro/domain/usecases/get_pomodoro_sessions.dart'
+    as _i112;
+import 'package:example_app/features/pomodoro/domain/usecases/save_pomodoro_session.dart'
+    as _i678;
+import 'package:example_app/features/pomodoro/presentation/cubit/pomodoro_cubit.dart'
+    as _i709;
+import 'package:example_app/features/pomodoro/presentation/cubit/pomodoro_report_cubit.dart'
+    as _i697;
 import 'package:example_app/features/tasks/data/datasources/task_local_datasource.dart'
     as _i725;
 import 'package:example_app/features/tasks/data/repositories/task_repository_impl.dart'
@@ -72,14 +89,32 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i413.TaskDao>(
       () => registerModule.taskDao(gh<_i413.AppDatabase>()),
     );
+    gh.lazySingleton<_i413.PomodoroDao>(
+      () => registerModule.pomodoroDao(gh<_i413.AppDatabase>()),
+    );
     gh.lazySingleton<_i725.TaskLocalDataSource>(
       () => _i725.TaskDriftDataSource(gh<_i413.TaskDao>()),
+    );
+    gh.lazySingleton<_i460.PomodoroLocalDataSource>(
+      () => _i460.PomodoroDriftDataSource(gh<_i413.PomodoroDao>()),
+    );
+    gh.lazySingleton<_i228.PomodoroRepository>(
+      () => _i186.PomodoroRepositoryImpl(gh<_i460.PomodoroLocalDataSource>()),
     );
     gh.lazySingleton<_i630.EventLocalDataSource>(
       () => _i630.EventDriftDataSource(gh<_i413.EventDao>()),
     );
     gh.lazySingleton<_i904.TaskRepository>(
       () => _i444.TaskRepositoryImpl(gh<_i725.TaskLocalDataSource>()),
+    );
+    gh.lazySingleton<_i938.DeletePomodoroSession>(
+      () => _i938.DeletePomodoroSession(gh<_i325.PomodoroRepository>()),
+    );
+    gh.lazySingleton<_i112.GetPomodoroSessions>(
+      () => _i112.GetPomodoroSessions(gh<_i325.PomodoroRepository>()),
+    );
+    gh.lazySingleton<_i678.SavePomodoroSession>(
+      () => _i678.SavePomodoroSession(gh<_i325.PomodoroRepository>()),
     );
     gh.lazySingleton<_i714.EventRepository>(
       () => _i356.EventRepositoryImpl(gh<_i630.EventLocalDataSource>()),
@@ -117,6 +152,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i904.CreateTaskSchedule>(),
         gh<_i904.SetTaskDone>(),
         gh<_i904.RemoveTaskSchedule>(),
+      ),
+    );
+    gh.factory<_i709.PomodoroCubit>(
+      () => _i709.PomodoroCubit(
+        gh<_i228.SavePomodoroSession>(),
+        gh<_i228.GetPomodoroSessions>(),
+        gh<_i904.GetTaskInstances>(),
+        gh<_i272.NotificationService>(),
+      ),
+    );
+    gh.factory<_i697.PomodoroReportCubit>(
+      () => _i697.PomodoroReportCubit(
+        gh<_i228.GetPomodoroSessions>(),
+        gh<_i228.DeletePomodoroSession>(),
       ),
     );
     gh.factory<_i753.EventsBloc>(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../calendar/presentation/index.dart';
+import '../../pomodoro/presentation/index.dart';
 import '../../tasks/presentation/index.dart';
 import 'app_bottom_nav.dart';
 
@@ -19,6 +20,7 @@ class _MainShellState extends State<MainShell> {
     _Placeholder(label: 'Discover'),
     CalendarPage(),
     TasksPage(),
+    PomodoroPage(),
     _Placeholder(label: 'Notes'),
   ];
 

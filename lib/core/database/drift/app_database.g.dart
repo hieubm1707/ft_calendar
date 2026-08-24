@@ -1413,6 +1413,543 @@ class TaskCompletionTableCompanion
   }
 }
 
+class $PomodoroSessionTableTable extends PomodoroSessionTable
+    with TableInfo<$PomodoroSessionTableTable, PomodoroSessionTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PomodoroSessionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endedAtMeta = const VerificationMeta(
+    'endedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+    'ended_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _focusSecondsMeta = const VerificationMeta(
+    'focusSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> focusSeconds = GeneratedColumn<int>(
+    'focus_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _plannedSecondsMeta = const VerificationMeta(
+    'plannedSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> plannedSeconds = GeneratedColumn<int>(
+    'planned_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completedMeta = const VerificationMeta(
+    'completed',
+  );
+  @override
+  late final GeneratedColumn<bool> completed = GeneratedColumn<bool>(
+    'completed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("completed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _taskScheduleIdMeta = const VerificationMeta(
+    'taskScheduleId',
+  );
+  @override
+  late final GeneratedColumn<int> taskScheduleId = GeneratedColumn<int>(
+    'task_schedule_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    startedAt,
+    endedAt,
+    focusSeconds,
+    plannedSeconds,
+    completed,
+    label,
+    taskScheduleId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pomodoro_session_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PomodoroSessionTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(
+        _endedAtMeta,
+        endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endedAtMeta);
+    }
+    if (data.containsKey('focus_seconds')) {
+      context.handle(
+        _focusSecondsMeta,
+        focusSeconds.isAcceptableOrUnknown(
+          data['focus_seconds']!,
+          _focusSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_focusSecondsMeta);
+    }
+    if (data.containsKey('planned_seconds')) {
+      context.handle(
+        _plannedSecondsMeta,
+        plannedSeconds.isAcceptableOrUnknown(
+          data['planned_seconds']!,
+          _plannedSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_plannedSecondsMeta);
+    }
+    if (data.containsKey('completed')) {
+      context.handle(
+        _completedMeta,
+        completed.isAcceptableOrUnknown(data['completed']!, _completedMeta),
+      );
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    }
+    if (data.containsKey('task_schedule_id')) {
+      context.handle(
+        _taskScheduleIdMeta,
+        taskScheduleId.isAcceptableOrUnknown(
+          data['task_schedule_id']!,
+          _taskScheduleIdMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PomodoroSessionTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PomodoroSessionTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      endedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ended_at'],
+      )!,
+      focusSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_seconds'],
+      )!,
+      plannedSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}planned_seconds'],
+      )!,
+      completed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}completed'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      ),
+      taskScheduleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}task_schedule_id'],
+      ),
+    );
+  }
+
+  @override
+  $PomodoroSessionTableTable createAlias(String alias) {
+    return $PomodoroSessionTableTable(attachedDatabase, alias);
+  }
+}
+
+class PomodoroSessionTableData extends DataClass
+    implements Insertable<PomodoroSessionTableData> {
+  final int id;
+  final DateTime startedAt;
+  final DateTime endedAt;
+
+  /// Số giây thực sự đã tập trung (không tính lúc pause bị dừng sớm).
+  final int focusSeconds;
+
+  /// Độ dài phiên đã đặt (giây) — để biết phiên có chạy hết hay không.
+  final int plannedSeconds;
+
+  /// true = chạy hết phiên, false = dừng giữa chừng.
+  final bool completed;
+
+  /// Việc đang tập trung (tên task hoặc nhãn tự nhập).
+  final String? label;
+
+  /// Task liên kết (nếu chọn từ tab Công việc).
+  final int? taskScheduleId;
+  const PomodoroSessionTableData({
+    required this.id,
+    required this.startedAt,
+    required this.endedAt,
+    required this.focusSeconds,
+    required this.plannedSeconds,
+    required this.completed,
+    this.label,
+    this.taskScheduleId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    map['ended_at'] = Variable<DateTime>(endedAt);
+    map['focus_seconds'] = Variable<int>(focusSeconds);
+    map['planned_seconds'] = Variable<int>(plannedSeconds);
+    map['completed'] = Variable<bool>(completed);
+    if (!nullToAbsent || label != null) {
+      map['label'] = Variable<String>(label);
+    }
+    if (!nullToAbsent || taskScheduleId != null) {
+      map['task_schedule_id'] = Variable<int>(taskScheduleId);
+    }
+    return map;
+  }
+
+  PomodoroSessionTableCompanion toCompanion(bool nullToAbsent) {
+    return PomodoroSessionTableCompanion(
+      id: Value(id),
+      startedAt: Value(startedAt),
+      endedAt: Value(endedAt),
+      focusSeconds: Value(focusSeconds),
+      plannedSeconds: Value(plannedSeconds),
+      completed: Value(completed),
+      label: label == null && nullToAbsent
+          ? const Value.absent()
+          : Value(label),
+      taskScheduleId: taskScheduleId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(taskScheduleId),
+    );
+  }
+
+  factory PomodoroSessionTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PomodoroSessionTableData(
+      id: serializer.fromJson<int>(json['id']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      endedAt: serializer.fromJson<DateTime>(json['endedAt']),
+      focusSeconds: serializer.fromJson<int>(json['focusSeconds']),
+      plannedSeconds: serializer.fromJson<int>(json['plannedSeconds']),
+      completed: serializer.fromJson<bool>(json['completed']),
+      label: serializer.fromJson<String?>(json['label']),
+      taskScheduleId: serializer.fromJson<int?>(json['taskScheduleId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'endedAt': serializer.toJson<DateTime>(endedAt),
+      'focusSeconds': serializer.toJson<int>(focusSeconds),
+      'plannedSeconds': serializer.toJson<int>(plannedSeconds),
+      'completed': serializer.toJson<bool>(completed),
+      'label': serializer.toJson<String?>(label),
+      'taskScheduleId': serializer.toJson<int?>(taskScheduleId),
+    };
+  }
+
+  PomodoroSessionTableData copyWith({
+    int? id,
+    DateTime? startedAt,
+    DateTime? endedAt,
+    int? focusSeconds,
+    int? plannedSeconds,
+    bool? completed,
+    Value<String?> label = const Value.absent(),
+    Value<int?> taskScheduleId = const Value.absent(),
+  }) => PomodoroSessionTableData(
+    id: id ?? this.id,
+    startedAt: startedAt ?? this.startedAt,
+    endedAt: endedAt ?? this.endedAt,
+    focusSeconds: focusSeconds ?? this.focusSeconds,
+    plannedSeconds: plannedSeconds ?? this.plannedSeconds,
+    completed: completed ?? this.completed,
+    label: label.present ? label.value : this.label,
+    taskScheduleId: taskScheduleId.present
+        ? taskScheduleId.value
+        : this.taskScheduleId,
+  );
+  PomodoroSessionTableData copyWithCompanion(
+    PomodoroSessionTableCompanion data,
+  ) {
+    return PomodoroSessionTableData(
+      id: data.id.present ? data.id.value : this.id,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      focusSeconds: data.focusSeconds.present
+          ? data.focusSeconds.value
+          : this.focusSeconds,
+      plannedSeconds: data.plannedSeconds.present
+          ? data.plannedSeconds.value
+          : this.plannedSeconds,
+      completed: data.completed.present ? data.completed.value : this.completed,
+      label: data.label.present ? data.label.value : this.label,
+      taskScheduleId: data.taskScheduleId.present
+          ? data.taskScheduleId.value
+          : this.taskScheduleId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PomodoroSessionTableData(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('focusSeconds: $focusSeconds, ')
+          ..write('plannedSeconds: $plannedSeconds, ')
+          ..write('completed: $completed, ')
+          ..write('label: $label, ')
+          ..write('taskScheduleId: $taskScheduleId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    startedAt,
+    endedAt,
+    focusSeconds,
+    plannedSeconds,
+    completed,
+    label,
+    taskScheduleId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PomodoroSessionTableData &&
+          other.id == this.id &&
+          other.startedAt == this.startedAt &&
+          other.endedAt == this.endedAt &&
+          other.focusSeconds == this.focusSeconds &&
+          other.plannedSeconds == this.plannedSeconds &&
+          other.completed == this.completed &&
+          other.label == this.label &&
+          other.taskScheduleId == this.taskScheduleId);
+}
+
+class PomodoroSessionTableCompanion
+    extends UpdateCompanion<PomodoroSessionTableData> {
+  final Value<int> id;
+  final Value<DateTime> startedAt;
+  final Value<DateTime> endedAt;
+  final Value<int> focusSeconds;
+  final Value<int> plannedSeconds;
+  final Value<bool> completed;
+  final Value<String?> label;
+  final Value<int?> taskScheduleId;
+  const PomodoroSessionTableCompanion({
+    this.id = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.focusSeconds = const Value.absent(),
+    this.plannedSeconds = const Value.absent(),
+    this.completed = const Value.absent(),
+    this.label = const Value.absent(),
+    this.taskScheduleId = const Value.absent(),
+  });
+  PomodoroSessionTableCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime startedAt,
+    required DateTime endedAt,
+    required int focusSeconds,
+    required int plannedSeconds,
+    this.completed = const Value.absent(),
+    this.label = const Value.absent(),
+    this.taskScheduleId = const Value.absent(),
+  }) : startedAt = Value(startedAt),
+       endedAt = Value(endedAt),
+       focusSeconds = Value(focusSeconds),
+       plannedSeconds = Value(plannedSeconds);
+  static Insertable<PomodoroSessionTableData> custom({
+    Expression<int>? id,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? endedAt,
+    Expression<int>? focusSeconds,
+    Expression<int>? plannedSeconds,
+    Expression<bool>? completed,
+    Expression<String>? label,
+    Expression<int>? taskScheduleId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (startedAt != null) 'started_at': startedAt,
+      if (endedAt != null) 'ended_at': endedAt,
+      if (focusSeconds != null) 'focus_seconds': focusSeconds,
+      if (plannedSeconds != null) 'planned_seconds': plannedSeconds,
+      if (completed != null) 'completed': completed,
+      if (label != null) 'label': label,
+      if (taskScheduleId != null) 'task_schedule_id': taskScheduleId,
+    });
+  }
+
+  PomodoroSessionTableCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? startedAt,
+    Value<DateTime>? endedAt,
+    Value<int>? focusSeconds,
+    Value<int>? plannedSeconds,
+    Value<bool>? completed,
+    Value<String?>? label,
+    Value<int?>? taskScheduleId,
+  }) {
+    return PomodoroSessionTableCompanion(
+      id: id ?? this.id,
+      startedAt: startedAt ?? this.startedAt,
+      endedAt: endedAt ?? this.endedAt,
+      focusSeconds: focusSeconds ?? this.focusSeconds,
+      plannedSeconds: plannedSeconds ?? this.plannedSeconds,
+      completed: completed ?? this.completed,
+      label: label ?? this.label,
+      taskScheduleId: taskScheduleId ?? this.taskScheduleId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    if (focusSeconds.present) {
+      map['focus_seconds'] = Variable<int>(focusSeconds.value);
+    }
+    if (plannedSeconds.present) {
+      map['planned_seconds'] = Variable<int>(plannedSeconds.value);
+    }
+    if (completed.present) {
+      map['completed'] = Variable<bool>(completed.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (taskScheduleId.present) {
+      map['task_schedule_id'] = Variable<int>(taskScheduleId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PomodoroSessionTableCompanion(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('focusSeconds: $focusSeconds, ')
+          ..write('plannedSeconds: $plannedSeconds, ')
+          ..write('completed: $completed, ')
+          ..write('label: $label, ')
+          ..write('taskScheduleId: $taskScheduleId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1421,8 +1958,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $TaskScheduleTableTable(this);
   late final $TaskCompletionTableTable taskCompletionTable =
       $TaskCompletionTableTable(this);
+  late final $PomodoroSessionTableTable pomodoroSessionTable =
+      $PomodoroSessionTableTable(this);
   late final EventDao eventDao = EventDao(this as AppDatabase);
   late final TaskDao taskDao = TaskDao(this as AppDatabase);
+  late final PomodoroDao pomodoroDao = PomodoroDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1431,6 +1971,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     eventTable,
     taskScheduleTable,
     taskCompletionTable,
+    pomodoroSessionTable,
   ];
 }
 
@@ -2186,6 +2727,279 @@ typedef $$TaskCompletionTableTableProcessedTableManager =
       TaskCompletionTableData,
       PrefetchHooks Function()
     >;
+typedef $$PomodoroSessionTableTableCreateCompanionBuilder =
+    PomodoroSessionTableCompanion Function({
+      Value<int> id,
+      required DateTime startedAt,
+      required DateTime endedAt,
+      required int focusSeconds,
+      required int plannedSeconds,
+      Value<bool> completed,
+      Value<String?> label,
+      Value<int?> taskScheduleId,
+    });
+typedef $$PomodoroSessionTableTableUpdateCompanionBuilder =
+    PomodoroSessionTableCompanion Function({
+      Value<int> id,
+      Value<DateTime> startedAt,
+      Value<DateTime> endedAt,
+      Value<int> focusSeconds,
+      Value<int> plannedSeconds,
+      Value<bool> completed,
+      Value<String?> label,
+      Value<int?> taskScheduleId,
+    });
+
+class $$PomodoroSessionTableTableFilterComposer
+    extends Composer<_$AppDatabase, $PomodoroSessionTableTable> {
+  $$PomodoroSessionTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusSeconds => $composableBuilder(
+    column: $table.focusSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get plannedSeconds => $composableBuilder(
+    column: $table.plannedSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get completed => $composableBuilder(
+    column: $table.completed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get taskScheduleId => $composableBuilder(
+    column: $table.taskScheduleId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PomodoroSessionTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $PomodoroSessionTableTable> {
+  $$PomodoroSessionTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get focusSeconds => $composableBuilder(
+    column: $table.focusSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get plannedSeconds => $composableBuilder(
+    column: $table.plannedSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get completed => $composableBuilder(
+    column: $table.completed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get taskScheduleId => $composableBuilder(
+    column: $table.taskScheduleId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PomodoroSessionTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PomodoroSessionTableTable> {
+  $$PomodoroSessionTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get focusSeconds => $composableBuilder(
+    column: $table.focusSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get plannedSeconds => $composableBuilder(
+    column: $table.plannedSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get completed =>
+      $composableBuilder(column: $table.completed, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get taskScheduleId => $composableBuilder(
+    column: $table.taskScheduleId,
+    builder: (column) => column,
+  );
+}
+
+class $$PomodoroSessionTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PomodoroSessionTableTable,
+          PomodoroSessionTableData,
+          $$PomodoroSessionTableTableFilterComposer,
+          $$PomodoroSessionTableTableOrderingComposer,
+          $$PomodoroSessionTableTableAnnotationComposer,
+          $$PomodoroSessionTableTableCreateCompanionBuilder,
+          $$PomodoroSessionTableTableUpdateCompanionBuilder,
+          (
+            PomodoroSessionTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $PomodoroSessionTableTable,
+              PomodoroSessionTableData
+            >,
+          ),
+          PomodoroSessionTableData,
+          PrefetchHooks Function()
+        > {
+  $$PomodoroSessionTableTableTableManager(
+    _$AppDatabase db,
+    $PomodoroSessionTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PomodoroSessionTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PomodoroSessionTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$PomodoroSessionTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime> endedAt = const Value.absent(),
+                Value<int> focusSeconds = const Value.absent(),
+                Value<int> plannedSeconds = const Value.absent(),
+                Value<bool> completed = const Value.absent(),
+                Value<String?> label = const Value.absent(),
+                Value<int?> taskScheduleId = const Value.absent(),
+              }) => PomodoroSessionTableCompanion(
+                id: id,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                focusSeconds: focusSeconds,
+                plannedSeconds: plannedSeconds,
+                completed: completed,
+                label: label,
+                taskScheduleId: taskScheduleId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime startedAt,
+                required DateTime endedAt,
+                required int focusSeconds,
+                required int plannedSeconds,
+                Value<bool> completed = const Value.absent(),
+                Value<String?> label = const Value.absent(),
+                Value<int?> taskScheduleId = const Value.absent(),
+              }) => PomodoroSessionTableCompanion.insert(
+                id: id,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                focusSeconds: focusSeconds,
+                plannedSeconds: plannedSeconds,
+                completed: completed,
+                label: label,
+                taskScheduleId: taskScheduleId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PomodoroSessionTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PomodoroSessionTableTable,
+      PomodoroSessionTableData,
+      $$PomodoroSessionTableTableFilterComposer,
+      $$PomodoroSessionTableTableOrderingComposer,
+      $$PomodoroSessionTableTableAnnotationComposer,
+      $$PomodoroSessionTableTableCreateCompanionBuilder,
+      $$PomodoroSessionTableTableUpdateCompanionBuilder,
+      (
+        PomodoroSessionTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $PomodoroSessionTableTable,
+          PomodoroSessionTableData
+        >,
+      ),
+      PomodoroSessionTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2196,4 +3010,6 @@ class $AppDatabaseManager {
       $$TaskScheduleTableTableTableManager(_db, _db.taskScheduleTable);
   $$TaskCompletionTableTableTableManager get taskCompletionTable =>
       $$TaskCompletionTableTableTableManager(_db, _db.taskCompletionTable);
+  $$PomodoroSessionTableTableTableManager get pomodoroSessionTable =>
+      $$PomodoroSessionTableTableTableManager(_db, _db.pomodoroSessionTable);
 }

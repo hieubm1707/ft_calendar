@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Thanh điều hướng dưới cùng: Discover / Calendar / Tasks / Notes.
+/// Thanh điều hướng dưới cùng: Discover / Calendar / Tasks / Focus / Notes.
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -26,6 +26,8 @@ class AppBottomNav extends StatelessWidget {
             icon: Icon(Icons.calendar_today), label: 'Calendar'),
         NavigationDestination(
             icon: Icon(Icons.checklist_outlined), label: 'Tasks'),
+        NavigationDestination(
+            icon: Icon(Icons.timer_outlined), label: 'Focus'),
         NavigationDestination(
             icon: Icon(Icons.description_outlined), label: 'Notes'),
       ],

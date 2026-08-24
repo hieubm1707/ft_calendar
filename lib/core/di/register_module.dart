@@ -13,4 +13,7 @@ abstract class RegisterModule {
 
   @lazySingleton
   TaskDao taskDao(AppDatabase db) => db.taskDao;
+
+  @lazySingleton
+  PomodoroDao pomodoroDao(AppDatabase db) => db.pomodoroDao;
 }

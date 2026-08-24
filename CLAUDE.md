@@ -146,7 +146,15 @@ Tab "Tasks" quản lý công việc theo ngày, tách biệt với sự kiện l
 - **Mô hình**: `TaskScheduleTable` (loại `dates` = 1/nhiều ngày cụ thể qua `datesCsv`; loại `weekly` = lặp theo `weekdaysMask` từ `startDate`, cờ `active` để huỷ lặp; `note` = mô tả, `minutesOfDay` = giờ tuỳ chọn, `color` = cờ ưu tiên) + `TaskCompletionTable` (đánh dấu hoàn thành theo từng ngày). DB **schemaVersion 4** (v3 tạo 2 bảng; v4 thêm `note` + `minutesOfDay`). Event cũng có `description` (nhập ở add_event_sheet, hiện ở DayDetailPage).
 - **Instance sinh ảo**: `expandTaskInstances()` (hàm thuần ở `features/tasks/domain/task_recurrence.dart`, có unit test) sinh task cho từng ngày trong khoảng — task lặp tự "xuất hiện" đến khi huỷ, KHÔNG lưu sẵn từng ngày.
 - **Tầng**: nhân theo pattern `events` (data/domain/presentation); entity + `TaskRepository` đặt ở `features/tasks/domain` (feature độc lập, không dùng chung).
-- **Điều hướng**: `features/shell/presentation/main_shell.dart` (IndexedStack + `AppBottomNav` chuyển tab Discover/Calendar/Tasks/Notes). `app.dart` → `MainShell`. Các page (CalendarPage, TasksPage) là Scaffold riêng, KHÔNG tự chứa bottom nav.
+- **Điều hướng**: `features/shell/presentation/main_shell.dart` (IndexedStack + `AppBottomNav` chuyển tab Discover/Calendar/Tasks/Focus/Notes). `app.dart` → `MainShell`. Các page (CalendarPage, TasksPage) là Scaffold riêng, KHÔNG tự chứa bottom nav.
+
+## Feature Pomodoro (`features/pomodoro/`) — tab "Focus"
+
+Đồng hồ tập trung + báo cáo thời gian đã tập trung.
+- **Mô hình**: `PomodoroSessionTable` chỉ lưu phiên **FOCUS** đã thực hiện (`startedAt`, `endedAt`, `focusSeconds` thực tế, `plannedSeconds`, `completed` = chạy hết hay dừng sớm, `label` + `taskScheduleId` = việc đang tập trung). Thời gian nghỉ KHÔNG lưu. DB **schemaVersion 5** (v5 tạo bảng pomodoro).
+- **Đồng hồ**: `PomodoroCubit` là máy trạng thái `focus → nghỉ ngắn → … → nghỉ dài` (mặc định 25/5/15, 4 vòng). Đếm ngược theo **mốc deadline đồng hồ thật** (`DateTime`), không cộng dồn tick → chính xác kể cả khi app bị treo/ngủ. Hết giờ focus (hoặc dừng sớm ≥ 60s) → lưu 1 phiên; hết giờ → `NotificationService.showNow()` báo. Giai đoạn kế KHÔNG tự chạy, người dùng bấm Bắt đầu.
+- **Thống kê**: `summarizePomodoro()` (hàm thuần ở `features/pomodoro/domain/pomodoro_stats.dart`, có unit test) gom phiên → tổng/ngày/theo việc/streak; mọi ngày trong khoảng đều có mặt (kể cả ngày 0) để vẽ biểu đồ. Range "Tất cả" lấy mốc đầu = phiên sớm nhất (tránh phình dải ngày).
+- **Trang**: `PomodoroPage` (ring tiến độ + chọn việc + preset 15/25/45/60 + Dừng/Bắt đầu/Bỏ qua) và `PomodoroReportPage` (4 thẻ tổng quan, cột theo ngày, phân bổ theo việc, danh sách phiên gần đây + xoá). Chọn việc lấy task hôm nay qua `features/tasks/domain` (import xuyên feature hợp lệ vì chỉ qua barrel domain).
 
 ## Thêm feature mới
 

@@ -6,16 +6,23 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'daos/event_dao.dart';
+import 'daos/pomodoro_dao.dart';
 import 'daos/task_dao.dart';
 import 'tables/event_table.dart';
+import 'tables/pomodoro_table.dart';
 import 'tables/task_table.dart';
 
 part 'app_database.g.dart';
 
 /// DB duy nhất của app. Thêm feature mới = thêm table vào đây + 1 DAO.
 @DriftDatabase(
-  tables: [EventTable, TaskScheduleTable, TaskCompletionTable],
-  daos: [EventDao, TaskDao],
+  tables: [
+    EventTable,
+    TaskScheduleTable,
+    TaskCompletionTable,
+    PomodoroSessionTable,
+  ],
+  daos: [EventDao, TaskDao, PomodoroDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -24,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -41,6 +48,9 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(taskScheduleTable, taskScheduleTable.note);
             await m.addColumn(
                 taskScheduleTable, taskScheduleTable.minutesOfDay);
+          }
+          if (from < 5) {
+            await m.createTable(pomodoroSessionTable);
           }
         },
       );
