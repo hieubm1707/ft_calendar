@@ -5,8 +5,7 @@ import '../../../../core/desktop/index.dart';
 import '../../../../core/di/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 import '../widgets/duration_format.dart';
-import '../widgets/focus_tag_picker.dart';
-import '../widgets/focus_target_sheet.dart';
+import '../widgets/focus_tag_sheet.dart';
 import '../widgets/pomodoro_ring.dart';
 import 'pomodoro_report_page.dart';
 
@@ -28,24 +27,8 @@ class _PomodoroView extends StatelessWidget {
 
   static const _focusPresets = [15, 25, 45, 60];
 
-  String _phaseLabel(PomodoroPhase phase) {
-    switch (phase) {
-      case PomodoroPhase.focus:
-        return 'Tập trung';
-      case PomodoroPhase.shortBreak:
-        return 'Nghỉ ngắn';
-      case PomodoroPhase.longBreak:
-        return 'Nghỉ dài';
-    }
-  }
-
-  Future<void> _pickTarget(BuildContext context, PomodoroState state) async {
-    final cubit = context.read<PomodoroCubit>();
-    final target = await showFocusTargetSheet(context,
-        todayTasks: state.todayTasks);
-    if (target == null) return;
-    cubit.setTarget(
-        label: target.label, taskScheduleId: target.taskScheduleId);
+  Future<void> _pickTag(BuildContext context) {
+    return showFocusTagSheet(context, cubit: context.read<PomodoroCubit>());
   }
 
   void _openReport(BuildContext context) {
@@ -105,11 +88,11 @@ class _PomodoroView extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(_phaseLabel(state.phase),
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: color)),
+                          _TargetLabel(
+                            state: state,
+                            color: color,
+                            onTap: () => _pickTag(context),
+                          ),
                           const SizedBox(height: 6),
                           Text(state.remainingLabel,
                               style: const TextStyle(
@@ -130,19 +113,8 @@ class _PomodoroView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  FocusTagPicker(state: state),
-                  if (state.todayTasks.any((t) => !t.done))
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        onPressed: () => _pickTarget(context, state),
-                        icon: const Icon(Icons.checklist_rtl, size: 18),
-                        label: const Text('Chọn từ công việc hôm nay'),
-                      ),
-                    ),
                   if (state.isIdle && state.isFocus) ...[
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 20),
                     Wrap(
                       alignment: WrapAlignment.center,
                       spacing: 8,
@@ -171,6 +143,68 @@ class _PomodoroView extends StatelessWidget {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+/// Nhãn giữa đồng hồ: tên tag đang chọn (hoặc tên giai đoạn nếu chưa chọn).
+/// Bấm vào để mở danh sách tag.
+class _TargetLabel extends StatelessWidget {
+  final PomodoroState state;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _TargetLabel({
+    required this.state,
+    required this.color,
+    required this.onTap,
+  });
+
+  static String phaseLabel(PomodoroPhase phase) {
+    switch (phase) {
+      case PomodoroPhase.focus:
+        return 'Tập trung';
+      case PomodoroPhase.shortBreak:
+        return 'Nghỉ ngắn';
+      case PomodoroPhase.longBreak:
+        return 'Nghỉ dài';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hasTarget = state.label != null && state.label!.isNotEmpty;
+    // Đang nghỉ thì tên giai đoạn quan trọng hơn tên việc.
+    final showTarget = hasTarget && state.isFocus;
+    final emoji = state.selectedTag?.emoji;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        // Giữ nhãn nằm gọn trong vòng tròn dù tên tag dài.
+        constraints: const BoxConstraints(maxWidth: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (showTarget && emoji != null) ...[
+              Text(emoji, style: const TextStyle(fontSize: 13)),
+              const SizedBox(width: 5),
+            ],
+            Flexible(
+              child: Text(
+                showTarget ? state.label! : phaseLabel(state.phase),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.w700, color: color),
+              ),
+            ),
+            const SizedBox(width: 3),
+            Icon(Icons.expand_more, size: 16, color: color),
+          ],
         ),
       ),
     );
