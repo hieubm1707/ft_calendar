@@ -31,6 +31,12 @@ class PomodoroState extends Equatable {
   final String? label;
   final int? taskScheduleId;
 
+  /// Tag đang chọn (null = chưa chọn tag).
+  final int? focusTagId;
+
+  /// Tag tập trung có sẵn để chọn nhanh.
+  final List<FocusTag> tags;
+
   /// Thống kê nhanh của hôm nay.
   final int todayFocusSeconds;
   final int todaySessions;
@@ -52,11 +58,21 @@ class PomodoroState extends Equatable {
     this.completedRounds = 0,
     this.label,
     this.taskScheduleId,
+    this.focusTagId,
+    this.tags = const [],
     this.todayFocusSeconds = 0,
     this.todaySessions = 0,
     this.todayTasks = const [],
     this.errorMessage,
   });
+
+  /// Tag đang chọn (null nếu chưa chọn hoặc tag đã bị xoá).
+  FocusTag? get selectedTag {
+    for (final t in tags) {
+      if (t.id != null && t.id == focusTagId) return t;
+    }
+    return null;
+  }
 
   bool get isFocus => phase == PomodoroPhase.focus;
   bool get isRunning => runStatus == PomodoroRunStatus.running;
@@ -88,7 +104,11 @@ class PomodoroState extends Equatable {
     int? completedRounds,
     String? label,
     int? taskScheduleId,
+    int? focusTagId,
+    List<FocusTag>? tags,
     bool clearTarget = false,
+    bool clearTaskScheduleId = false,
+    bool clearFocusTagId = false,
     int? todayFocusSeconds,
     int? todaySessions,
     List<TaskInstance>? todayTasks,
@@ -106,8 +126,13 @@ class PomodoroState extends Equatable {
           roundsBeforeLongBreak ?? this.roundsBeforeLongBreak,
       completedRounds: completedRounds ?? this.completedRounds,
       label: clearTarget ? null : (label ?? this.label),
-      taskScheduleId:
-          clearTarget ? null : (taskScheduleId ?? this.taskScheduleId),
+      taskScheduleId: clearTarget || clearTaskScheduleId
+          ? null
+          : (taskScheduleId ?? this.taskScheduleId),
+      focusTagId: clearTarget || clearFocusTagId
+          ? null
+          : (focusTagId ?? this.focusTagId),
+      tags: tags ?? this.tags,
       todayFocusSeconds: todayFocusSeconds ?? this.todayFocusSeconds,
       todaySessions: todaySessions ?? this.todaySessions,
       todayTasks: todayTasks ?? this.todayTasks,
@@ -128,6 +153,8 @@ class PomodoroState extends Equatable {
         completedRounds,
         label,
         taskScheduleId,
+        focusTagId,
+        tags,
         todayFocusSeconds,
         todaySessions,
         todayTasks,

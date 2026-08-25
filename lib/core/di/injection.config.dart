@@ -36,17 +36,29 @@ import 'package:example_app/features/events/domain/usecases/update_event.dart'
     as _i466;
 import 'package:example_app/features/events/presentation/bloc/events_bloc.dart'
     as _i753;
+import 'package:example_app/features/pomodoro/data/datasources/focus_tag_local_datasource.dart'
+    as _i363;
 import 'package:example_app/features/pomodoro/data/datasources/pomodoro_local_datasource.dart'
     as _i460;
+import 'package:example_app/features/pomodoro/data/repositories/focus_tag_repository_impl.dart'
+    as _i629;
 import 'package:example_app/features/pomodoro/data/repositories/pomodoro_repository_impl.dart'
     as _i186;
 import 'package:example_app/features/pomodoro/domain/index.dart' as _i228;
+import 'package:example_app/features/pomodoro/domain/repositories/focus_tag_repository.dart'
+    as _i280;
 import 'package:example_app/features/pomodoro/domain/repositories/pomodoro_repository.dart'
     as _i325;
+import 'package:example_app/features/pomodoro/domain/usecases/delete_focus_tag.dart'
+    as _i850;
 import 'package:example_app/features/pomodoro/domain/usecases/delete_pomodoro_session.dart'
     as _i938;
+import 'package:example_app/features/pomodoro/domain/usecases/get_focus_tags.dart'
+    as _i794;
 import 'package:example_app/features/pomodoro/domain/usecases/get_pomodoro_sessions.dart'
     as _i112;
+import 'package:example_app/features/pomodoro/domain/usecases/save_focus_tag.dart'
+    as _i915;
 import 'package:example_app/features/pomodoro/domain/usecases/save_pomodoro_session.dart'
     as _i678;
 import 'package:example_app/features/pomodoro/presentation/cubit/pomodoro_cubit.dart'
@@ -99,11 +111,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i413.PomodoroDao>(
       () => registerModule.pomodoroDao(gh<_i413.AppDatabase>()),
     );
+    gh.lazySingleton<_i413.FocusTagDao>(
+      () => registerModule.focusTagDao(gh<_i413.AppDatabase>()),
+    );
     gh.lazySingleton<_i725.TaskLocalDataSource>(
       () => _i725.TaskDriftDataSource(gh<_i413.TaskDao>()),
     );
     gh.lazySingleton<_i460.PomodoroLocalDataSource>(
       () => _i460.PomodoroDriftDataSource(gh<_i413.PomodoroDao>()),
+    );
+    gh.lazySingleton<_i363.FocusTagLocalDataSource>(
+      () => _i363.FocusTagDriftDataSource(gh<_i413.FocusTagDao>()),
     );
     gh.lazySingleton<_i228.PomodoroRepository>(
       () => _i186.PomodoroRepositoryImpl(gh<_i460.PomodoroLocalDataSource>()),
@@ -113,6 +131,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i904.TaskRepository>(
       () => _i444.TaskRepositoryImpl(gh<_i725.TaskLocalDataSource>()),
+    );
+    gh.lazySingleton<_i228.FocusTagRepository>(
+      () => _i629.FocusTagRepositoryImpl(gh<_i363.FocusTagLocalDataSource>()),
     );
     gh.lazySingleton<_i938.DeletePomodoroSession>(
       () => _i938.DeletePomodoroSession(gh<_i325.PomodoroRepository>()),
@@ -161,25 +182,31 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i904.RemoveTaskSchedule>(),
       ),
     );
-    gh.lazySingleton<_i709.PomodoroCubit>(
-      () => _i709.PomodoroCubit(
-        gh<_i228.SavePomodoroSession>(),
-        gh<_i228.GetPomodoroSessions>(),
-        gh<_i904.GetTaskInstances>(),
-        gh<_i272.NotificationService>(),
-      ),
+    gh.lazySingleton<_i850.DeleteFocusTag>(
+      () => _i850.DeleteFocusTag(gh<_i280.FocusTagRepository>()),
     );
-    gh.factory<_i697.PomodoroReportCubit>(
-      () => _i697.PomodoroReportCubit(
-        gh<_i228.GetPomodoroSessions>(),
-        gh<_i228.DeletePomodoroSession>(),
-      ),
+    gh.lazySingleton<_i794.GetFocusTags>(
+      () => _i794.GetFocusTags(gh<_i280.FocusTagRepository>()),
+    );
+    gh.lazySingleton<_i915.SaveFocusTag>(
+      () => _i915.SaveFocusTag(gh<_i280.FocusTagRepository>()),
     );
     gh.factory<_i753.EventsBloc>(
       () => _i753.EventsBloc(
         gh<_i451.GetScheduledEvents>(),
         gh<_i451.CreateEvent>(),
         gh<_i451.DeleteEvent>(),
+      ),
+    );
+    gh.lazySingleton<_i709.PomodoroCubit>(
+      () => _i709.PomodoroCubit(
+        gh<_i228.SavePomodoroSession>(),
+        gh<_i228.GetPomodoroSessions>(),
+        gh<_i904.GetTaskInstances>(),
+        gh<_i228.GetFocusTags>(),
+        gh<_i228.SaveFocusTag>(),
+        gh<_i228.DeleteFocusTag>(),
+        gh<_i272.NotificationService>(),
       ),
     );
     gh.factory<_i915.CalendarCubit>(
@@ -196,6 +223,13 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i610.PomodoroTrayController(
         gh<_i709.PomodoroCubit>(),
         gh<_i1055.DesktopWindowService>(),
+      ),
+    );
+    gh.factory<_i697.PomodoroReportCubit>(
+      () => _i697.PomodoroReportCubit(
+        gh<_i228.GetPomodoroSessions>(),
+        gh<_i228.DeletePomodoroSession>(),
+        gh<_i228.GetFocusTags>(),
       ),
     );
     return this;

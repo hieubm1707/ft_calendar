@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/notifications/index.dart';
+import '../../../../core/usecase/index.dart';
 import '../../../tasks/domain/index.dart';
 import '../../domain/index.dart';
 
@@ -20,12 +21,18 @@ class PomodoroCubit extends Cubit<PomodoroState> {
   final SavePomodoroSession _saveSession;
   final GetPomodoroSessions _getSessions;
   final GetTaskInstances _getTaskInstances;
+  final GetFocusTags _getFocusTags;
+  final SaveFocusTag _saveFocusTag;
+  final DeleteFocusTag _deleteFocusTag;
   final NotificationService _notifications;
 
   PomodoroCubit(
     this._saveSession,
     this._getSessions,
     this._getTaskInstances,
+    this._getFocusTags,
+    this._saveFocusTag,
+    this._deleteFocusTag,
     this._notifications,
   ) : super(const PomodoroState());
 
@@ -43,9 +50,9 @@ class PomodoroCubit extends Cubit<PomodoroState> {
   /// Thời điểm bắt đầu phiên focus hiện tại.
   DateTime? _phaseStartedAt;
 
-  /// Nạp thống kê hôm nay + danh sách task hôm nay (để chọn việc tập trung).
+  /// Nạp tag tập trung + thống kê hôm nay + task hôm nay.
   Future<void> load() async {
-    await Future.wait([_loadTodayStats(), _loadTodayTasks()]);
+    await Future.wait([_loadTags(), _loadTodayStats(), _loadTodayTasks()]);
   }
 
   // ── Điều khiển đồng hồ ────────────────────────────────────────────────
@@ -125,14 +132,60 @@ class PomodoroCubit extends Cubit<PomodoroState> {
     ));
   }
 
-  /// Chọn việc cần tập trung. [taskScheduleId] null = nhãn tự nhập.
+  /// Chọn việc cần tập trung từ task hôm nay (không gắn tag).
   void setTarget({String? label, int? taskScheduleId}) {
     final trimmed = label?.trim();
     if (trimmed == null || trimmed.isEmpty) {
       emit(state.copyWith(clearTarget: true));
       return;
     }
-    emit(state.copyWith(label: trimmed, taskScheduleId: taskScheduleId));
+    emit(state.copyWith(
+      label: trimmed,
+      taskScheduleId: taskScheduleId,
+      focusTagId: null,
+      clearFocusTagId: true,
+    ));
+  }
+
+  /// Chọn tag để tập trung; bấm lại tag đang chọn = bỏ chọn.
+  /// Chọn tag cũng đặt luôn độ dài phiên focus theo tag (khi đang rảnh).
+  void selectTag(FocusTag tag) {
+    if (tag.id != null && tag.id == state.focusTagId) {
+      emit(state.copyWith(clearTarget: true));
+      return;
+    }
+    _applyTag(tag);
+  }
+
+  // ── Quản lý tag ───────────────────────────────────────────────────────
+
+  /// Thêm mới (`tag.id == null`) hoặc sửa tag. Tag mới xếp cuối danh sách.
+  Future<void> saveTag(FocusTag tag) async {
+    final toSave = tag.id == null
+        ? tag.copyWith(sortOrder: _nextSortOrder())
+        : tag;
+    final result = await _saveFocusTag(toSave);
+    if (isClosed) return;
+    await result.fold(
+      (failure) async => emit(state.copyWith(errorMessage: failure.message)),
+      (_) async {
+        await _loadTags();
+        // Tag đang chọn vừa bị sửa → cập nhật nhãn/độ dài đang hiển thị.
+        if (tag.id != null && tag.id == state.focusTagId) _applyTag(tag);
+      },
+    );
+  }
+
+  Future<void> deleteTag(int id) async {
+    final result = await _deleteFocusTag(id);
+    if (isClosed) return;
+    await result.fold(
+      (failure) async => emit(state.copyWith(errorMessage: failure.message)),
+      (_) async {
+        if (state.focusTagId == id) emit(state.copyWith(clearTarget: true));
+        await _loadTags();
+      },
+    );
   }
 
   // ── Nội bộ ────────────────────────────────────────────────────────────
@@ -240,6 +293,7 @@ class PomodoroCubit extends Cubit<PomodoroState> {
       completed: completed,
       label: state.label,
       taskScheduleId: state.taskScheduleId,
+      focusTagId: state.focusTagId,
     );
 
     final result = await _saveSession(session);
@@ -247,6 +301,33 @@ class PomodoroCubit extends Cubit<PomodoroState> {
     await result.fold(
       (failure) async => emit(state.copyWith(errorMessage: failure.message)),
       (_) async => _loadTodayStats(),
+    );
+  }
+
+  int _nextSortOrder() =>
+      state.tags.fold(-1, (m, t) => t.sortOrder > m ? t.sortOrder : m) + 1;
+
+  /// Đặt tag làm mục tiêu; nếu đang rảnh thì lấy luôn độ dài phiên của tag.
+  void _applyTag(FocusTag tag) {
+    final applyMinutes = state.isIdle && state.isFocus && tag.minutes > 0;
+    final seconds = tag.minutes * 60;
+    emit(state.copyWith(
+      label: tag.title,
+      focusTagId: tag.id,
+      taskScheduleId: null,
+      clearTaskScheduleId: true,
+      focusMinutes: applyMinutes ? tag.minutes : null,
+      remainingSeconds: applyMinutes ? seconds : null,
+      totalSeconds: applyMinutes ? seconds : null,
+    ));
+  }
+
+  Future<void> _loadTags() async {
+    final result = await _getFocusTags(const NoParams());
+    if (isClosed) return;
+    result.fold(
+      (failure) => emit(state.copyWith(errorMessage: failure.message)),
+      (tags) => emit(state.copyWith(tags: tags)),
     );
   }
 

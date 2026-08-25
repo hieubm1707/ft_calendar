@@ -21,6 +21,9 @@ class PomodoroSession extends Equatable {
   /// Task liên kết (nếu chọn từ tab Công việc).
   final int? taskScheduleId;
 
+  /// Tag tập trung đã chọn (null = nhãn tự do / task) — dùng cho focus trend.
+  final int? focusTagId;
+
   const PomodoroSession({
     this.id,
     required this.startedAt,
@@ -30,6 +33,7 @@ class PomodoroSession extends Equatable {
     this.completed = true,
     this.label,
     this.taskScheduleId,
+    this.focusTagId,
   });
 
   int get focusMinutes => focusSeconds ~/ 60;
@@ -44,5 +48,6 @@ class PomodoroSession extends Equatable {
         completed,
         label,
         taskScheduleId,
+        focusTagId,
       ];
 }

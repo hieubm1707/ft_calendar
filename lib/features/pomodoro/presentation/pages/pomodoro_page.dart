@@ -5,6 +5,7 @@ import '../../../../core/desktop/index.dart';
 import '../../../../core/di/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 import '../widgets/duration_format.dart';
+import '../widgets/focus_tag_picker.dart';
 import '../widgets/focus_target_sheet.dart';
 import '../widgets/pomodoro_ring.dart';
 import 'pomodoro_report_page.dart';
@@ -130,10 +131,16 @@ class _PomodoroView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  _TargetButton(
-                    label: state.label,
-                    onTap: () => _pickTarget(context, state),
-                  ),
+                  FocusTagPicker(state: state),
+                  if (state.todayTasks.any((t) => !t.done))
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        onPressed: () => _pickTarget(context, state),
+                        icon: const Icon(Icons.checklist_rtl, size: 18),
+                        label: const Text('Chọn từ công việc hôm nay'),
+                      ),
+                    ),
                   if (state.isIdle && state.isFocus) ...[
                     const SizedBox(height: 14),
                     Wrap(
@@ -195,50 +202,6 @@ class _RoundDots extends StatelessWidget {
             ),
           ),
       ],
-    );
-  }
-}
-
-class _TargetButton extends StatelessWidget {
-  final String? label;
-  final VoidCallback onTap;
-
-  const _TargetButton({required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final has = label != null && label!.isNotEmpty;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Row(
-          children: [
-            Icon(has ? Icons.check_circle_outline : Icons.add_task,
-                size: 20, color: const Color(0xFF8E8E93)),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                has ? label! : 'Chọn việc cần tập trung',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: has ? FontWeight.w600 : FontWeight.w400,
-                  color: has
-                      ? const Color(0xFF1C1C1E)
-                      : const Color(0xFF8E8E93),
-                ),
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: Color(0xFFBDBDBD)),
-          ],
-        ),
-      ),
     );
   }
 }

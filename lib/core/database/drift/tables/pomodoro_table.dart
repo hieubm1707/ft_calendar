@@ -23,4 +23,7 @@ class PomodoroSessionTable extends Table {
 
   /// Task liên kết (nếu chọn từ tab Công việc).
   IntColumn get taskScheduleId => integer().nullable()();
+
+  /// Tag tập trung đã chọn (nếu chọn từ danh sách tag) — dùng cho focus trend.
+  IntColumn get focusTagId => integer().nullable()();
 }

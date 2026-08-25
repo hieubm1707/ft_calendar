@@ -20,20 +20,45 @@ class PomodoroDaySummary extends Equatable {
   List<Object?> get props => [date, sessions, focusSeconds];
 }
 
-/// Tổng hợp theo việc đã tập trung. [label] rỗng = phiên không đặt tên.
-class PomodoroLabelSummary extends Equatable {
+/// Tổng hợp theo tag/việc đã tập trung — dữ liệu cho "focus trend".
+/// [tagId] null = phiên không gắn tag (nhãn tự do hoặc task); [label] rỗng =
+/// phiên không đặt tên.
+class PomodoroTagSummary extends Equatable {
+  final int? tagId;
   final String label;
   final int sessions;
   final int focusSeconds;
 
-  const PomodoroLabelSummary({
+  const PomodoroTagSummary({
+    this.tagId,
     required this.label,
     required this.sessions,
     required this.focusSeconds,
   });
 
   @override
-  List<Object?> get props => [label, sessions, focusSeconds];
+  List<Object?> get props => [tagId, label, sessions, focusSeconds];
+}
+
+/// Độ gom của biểu đồ: khoảng ngắn xem từng ngày, khoảng dài (năm) xem từng tháng.
+enum PomodoroBucketUnit { day, month }
+
+/// Một cột của biểu đồ (1 ngày hoặc 1 tháng).
+class PomodoroBucket extends Equatable {
+  final DateTime start;
+  final PomodoroBucketUnit unit;
+  final int sessions;
+  final int focusSeconds;
+
+  const PomodoroBucket({
+    required this.start,
+    required this.unit,
+    required this.sessions,
+    required this.focusSeconds,
+  });
+
+  @override
+  List<Object?> get props => [start, unit, sessions, focusSeconds];
 }
 
 /// Kết quả report cho một khoảng ngày.
@@ -47,8 +72,8 @@ class PomodoroReport extends Equatable {
   /// Mọi ngày trong khoảng, kể cả ngày không có phiên (để vẽ biểu đồ).
   final List<PomodoroDaySummary> days;
 
-  /// Gom theo việc, giảm dần theo thời gian tập trung.
-  final List<PomodoroLabelSummary> labels;
+  /// Gom theo tag/việc, giảm dần theo thời gian tập trung (focus trend).
+  final List<PomodoroTagSummary> tags;
 
   const PomodoroReport({
     required this.from,
@@ -57,7 +82,7 @@ class PomodoroReport extends Equatable {
     required this.completedSessions,
     required this.totalFocusSeconds,
     required this.days,
-    required this.labels,
+    required this.tags,
   });
 
   static final empty = PomodoroReport(
@@ -67,7 +92,7 @@ class PomodoroReport extends Equatable {
     completedSessions: 0,
     totalFocusSeconds: 0,
     days: const [],
-    labels: const [],
+    tags: const [],
   );
 
   /// Số ngày thực sự có tập trung.
@@ -94,6 +119,16 @@ class PomodoroReport extends Equatable {
     return streak;
   }
 
+  /// Tag được tập trung nhiều nhất trong khoảng (null nếu chưa có phiên nào).
+  PomodoroTagSummary? get topTag => tags.isEmpty ? null : tags.first;
+
+  /// Tỉ lệ 0..1 thời gian dành cho [tag] trên tổng.
+  double shareOf(PomodoroTagSummary tag) =>
+      totalFocusSeconds == 0 ? 0 : tag.focusSeconds / totalFocusSeconds;
+
+  /// Số ngày trong khoảng.
+  int get dayCount => days.length;
+
   @override
   List<Object?> get props => [
         from,
@@ -102,22 +137,28 @@ class PomodoroReport extends Equatable {
         completedSessions,
         totalFocusSeconds,
         days,
-        labels,
+        tags,
       ];
 }
 
 /// Gom [sessions] thành report cho khoảng ngày [from]..[to] (bao gồm cả 2 đầu).
+/// [tagTitles] map `tagId -> tên tag hiện tại`: đổi tên tag thì report cũ cũng
+/// hiển thị theo tên mới (nhãn lưu trong phiên chỉ là bản chụp lúc chạy).
 /// Logic thuần (không phụ thuộc Drift/Flutter) → dễ unit test.
 PomodoroReport summarizePomodoro({
   required List<PomodoroSession> sessions,
   required DateTime from,
   required DateTime to,
+  Map<int, String> tagTitles = const {},
 }) {
   final start = _dayOnly(from);
   final end = _dayOnly(to);
 
   final byDay = <DateTime, List<PomodoroSession>>{};
-  final byLabel = <String, List<PomodoroSession>>{};
+  // key: 'tag:<id>' nếu có tag, ngược lại 'label:<nhãn>' — hai tag trùng tên
+  // vẫn tách riêng.
+  final byTag = <String, List<PomodoroSession>>{};
+  final tagNames = <String, ({int? tagId, String label})>{};
   var totalSeconds = 0;
   var completed = 0;
   var total = 0;
@@ -126,7 +167,13 @@ PomodoroReport summarizePomodoro({
     final day = _dayOnly(s.startedAt);
     if (day.isBefore(start) || day.isAfter(end)) continue;
     (byDay[day] ??= []).add(s);
-    (byLabel[s.label?.trim() ?? ''] ??= []).add(s);
+
+    final tagId = s.focusTagId;
+    final label = (tagId == null ? null : tagTitles[tagId]) ??
+        (s.label?.trim() ?? '');
+    final key = tagId == null ? 'label:$label' : 'tag:$tagId';
+    (byTag[key] ??= []).add(s);
+    tagNames[key] = (tagId: tagId, label: label);
     totalSeconds += s.focusSeconds;
     total++;
     if (s.completed) completed++;
@@ -144,9 +191,10 @@ PomodoroReport summarizePomodoro({
     ));
   }
 
-  final labels = byLabel.entries
-      .map((e) => PomodoroLabelSummary(
-            label: e.key,
+  final tags = byTag.entries
+      .map((e) => PomodoroTagSummary(
+            tagId: tagNames[e.key]!.tagId,
+            label: tagNames[e.key]!.label,
             sessions: e.value.length,
             focusSeconds: e.value.fold(0, (sum, s) => sum + s.focusSeconds),
           ))
@@ -163,6 +211,42 @@ PomodoroReport summarizePomodoro({
     completedSessions: completed,
     totalFocusSeconds: totalSeconds,
     days: days,
-    labels: labels,
+    tags: tags,
   );
+}
+
+/// Khoảng dài (> 62 ngày, tức từ ~2 tháng trở lên) thì vẽ theo tháng cho dễ đọc.
+PomodoroBucketUnit autoBucketUnit(int dayCount) =>
+    dayCount > 62 ? PomodoroBucketUnit.month : PomodoroBucketUnit.day;
+
+/// Gom tổng hợp ngày thành cột biểu đồ theo [unit]. Giữ nguyên thứ tự thời gian
+/// và không bỏ tháng trống (để biểu đồ liền mạch).
+List<PomodoroBucket> bucketDaySummaries(
+  List<PomodoroDaySummary> days,
+  PomodoroBucketUnit unit,
+) {
+  if (unit == PomodoroBucketUnit.day) {
+    return days
+        .map((d) => PomodoroBucket(
+              start: d.date,
+              unit: unit,
+              sessions: d.sessions,
+              focusSeconds: d.focusSeconds,
+            ))
+        .toList();
+  }
+
+  final buckets = <DateTime, PomodoroBucket>{};
+  for (final d in days) {
+    final key = DateTime(d.date.year, d.date.month);
+    final current = buckets[key];
+    buckets[key] = PomodoroBucket(
+      start: key,
+      unit: unit,
+      sessions: (current?.sessions ?? 0) + d.sessions,
+      focusSeconds: (current?.focusSeconds ?? 0) + d.focusSeconds,
+    );
+  }
+  final keys = buckets.keys.toList()..sort();
+  return [for (final k in keys) buckets[k]!];
 }

@@ -13,6 +13,7 @@ extension PomodoroSessionRowMapper on PomodoroSessionTableData {
         completed: completed,
         label: label,
         taskScheduleId: taskScheduleId,
+        focusTagId: focusTagId,
       );
 }
 
@@ -26,5 +27,6 @@ extension PomodoroSessionEntityMapper on PomodoroSession {
         completed: Value(completed),
         label: Value(label),
         taskScheduleId: Value(taskScheduleId),
+        focusTagId: Value(focusTagId),
       );
 }

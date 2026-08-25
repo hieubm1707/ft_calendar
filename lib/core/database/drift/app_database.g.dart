@@ -1511,6 +1511,17 @@ class $PomodoroSessionTableTable extends PomodoroSessionTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _focusTagIdMeta = const VerificationMeta(
+    'focusTagId',
+  );
+  @override
+  late final GeneratedColumn<int> focusTagId = GeneratedColumn<int>(
+    'focus_tag_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1521,6 +1532,7 @@ class $PomodoroSessionTableTable extends PomodoroSessionTable
     completed,
     label,
     taskScheduleId,
+    focusTagId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1596,6 +1608,15 @@ class $PomodoroSessionTableTable extends PomodoroSessionTable
         ),
       );
     }
+    if (data.containsKey('focus_tag_id')) {
+      context.handle(
+        _focusTagIdMeta,
+        focusTagId.isAcceptableOrUnknown(
+          data['focus_tag_id']!,
+          _focusTagIdMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1640,6 +1661,10 @@ class $PomodoroSessionTableTable extends PomodoroSessionTable
         DriftSqlType.int,
         data['${effectivePrefix}task_schedule_id'],
       ),
+      focusTagId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_tag_id'],
+      ),
     );
   }
 
@@ -1669,6 +1694,9 @@ class PomodoroSessionTableData extends DataClass
 
   /// Task liên kết (nếu chọn từ tab Công việc).
   final int? taskScheduleId;
+
+  /// Tag tập trung đã chọn (nếu chọn từ danh sách tag) — dùng cho focus trend.
+  final int? focusTagId;
   const PomodoroSessionTableData({
     required this.id,
     required this.startedAt,
@@ -1678,6 +1706,7 @@ class PomodoroSessionTableData extends DataClass
     required this.completed,
     this.label,
     this.taskScheduleId,
+    this.focusTagId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1693,6 +1722,9 @@ class PomodoroSessionTableData extends DataClass
     }
     if (!nullToAbsent || taskScheduleId != null) {
       map['task_schedule_id'] = Variable<int>(taskScheduleId);
+    }
+    if (!nullToAbsent || focusTagId != null) {
+      map['focus_tag_id'] = Variable<int>(focusTagId);
     }
     return map;
   }
@@ -1711,6 +1743,9 @@ class PomodoroSessionTableData extends DataClass
       taskScheduleId: taskScheduleId == null && nullToAbsent
           ? const Value.absent()
           : Value(taskScheduleId),
+      focusTagId: focusTagId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusTagId),
     );
   }
 
@@ -1728,6 +1763,7 @@ class PomodoroSessionTableData extends DataClass
       completed: serializer.fromJson<bool>(json['completed']),
       label: serializer.fromJson<String?>(json['label']),
       taskScheduleId: serializer.fromJson<int?>(json['taskScheduleId']),
+      focusTagId: serializer.fromJson<int?>(json['focusTagId']),
     );
   }
   @override
@@ -1742,6 +1778,7 @@ class PomodoroSessionTableData extends DataClass
       'completed': serializer.toJson<bool>(completed),
       'label': serializer.toJson<String?>(label),
       'taskScheduleId': serializer.toJson<int?>(taskScheduleId),
+      'focusTagId': serializer.toJson<int?>(focusTagId),
     };
   }
 
@@ -1754,6 +1791,7 @@ class PomodoroSessionTableData extends DataClass
     bool? completed,
     Value<String?> label = const Value.absent(),
     Value<int?> taskScheduleId = const Value.absent(),
+    Value<int?> focusTagId = const Value.absent(),
   }) => PomodoroSessionTableData(
     id: id ?? this.id,
     startedAt: startedAt ?? this.startedAt,
@@ -1765,6 +1803,7 @@ class PomodoroSessionTableData extends DataClass
     taskScheduleId: taskScheduleId.present
         ? taskScheduleId.value
         : this.taskScheduleId,
+    focusTagId: focusTagId.present ? focusTagId.value : this.focusTagId,
   );
   PomodoroSessionTableData copyWithCompanion(
     PomodoroSessionTableCompanion data,
@@ -1784,6 +1823,9 @@ class PomodoroSessionTableData extends DataClass
       taskScheduleId: data.taskScheduleId.present
           ? data.taskScheduleId.value
           : this.taskScheduleId,
+      focusTagId: data.focusTagId.present
+          ? data.focusTagId.value
+          : this.focusTagId,
     );
   }
 
@@ -1797,7 +1839,8 @@ class PomodoroSessionTableData extends DataClass
           ..write('plannedSeconds: $plannedSeconds, ')
           ..write('completed: $completed, ')
           ..write('label: $label, ')
-          ..write('taskScheduleId: $taskScheduleId')
+          ..write('taskScheduleId: $taskScheduleId, ')
+          ..write('focusTagId: $focusTagId')
           ..write(')'))
         .toString();
   }
@@ -1812,6 +1855,7 @@ class PomodoroSessionTableData extends DataClass
     completed,
     label,
     taskScheduleId,
+    focusTagId,
   );
   @override
   bool operator ==(Object other) =>
@@ -1824,7 +1868,8 @@ class PomodoroSessionTableData extends DataClass
           other.plannedSeconds == this.plannedSeconds &&
           other.completed == this.completed &&
           other.label == this.label &&
-          other.taskScheduleId == this.taskScheduleId);
+          other.taskScheduleId == this.taskScheduleId &&
+          other.focusTagId == this.focusTagId);
 }
 
 class PomodoroSessionTableCompanion
@@ -1837,6 +1882,7 @@ class PomodoroSessionTableCompanion
   final Value<bool> completed;
   final Value<String?> label;
   final Value<int?> taskScheduleId;
+  final Value<int?> focusTagId;
   const PomodoroSessionTableCompanion({
     this.id = const Value.absent(),
     this.startedAt = const Value.absent(),
@@ -1846,6 +1892,7 @@ class PomodoroSessionTableCompanion
     this.completed = const Value.absent(),
     this.label = const Value.absent(),
     this.taskScheduleId = const Value.absent(),
+    this.focusTagId = const Value.absent(),
   });
   PomodoroSessionTableCompanion.insert({
     this.id = const Value.absent(),
@@ -1856,6 +1903,7 @@ class PomodoroSessionTableCompanion
     this.completed = const Value.absent(),
     this.label = const Value.absent(),
     this.taskScheduleId = const Value.absent(),
+    this.focusTagId = const Value.absent(),
   }) : startedAt = Value(startedAt),
        endedAt = Value(endedAt),
        focusSeconds = Value(focusSeconds),
@@ -1869,6 +1917,7 @@ class PomodoroSessionTableCompanion
     Expression<bool>? completed,
     Expression<String>? label,
     Expression<int>? taskScheduleId,
+    Expression<int>? focusTagId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1879,6 +1928,7 @@ class PomodoroSessionTableCompanion
       if (completed != null) 'completed': completed,
       if (label != null) 'label': label,
       if (taskScheduleId != null) 'task_schedule_id': taskScheduleId,
+      if (focusTagId != null) 'focus_tag_id': focusTagId,
     });
   }
 
@@ -1891,6 +1941,7 @@ class PomodoroSessionTableCompanion
     Value<bool>? completed,
     Value<String?>? label,
     Value<int?>? taskScheduleId,
+    Value<int?>? focusTagId,
   }) {
     return PomodoroSessionTableCompanion(
       id: id ?? this.id,
@@ -1901,6 +1952,7 @@ class PomodoroSessionTableCompanion
       completed: completed ?? this.completed,
       label: label ?? this.label,
       taskScheduleId: taskScheduleId ?? this.taskScheduleId,
+      focusTagId: focusTagId ?? this.focusTagId,
     );
   }
 
@@ -1931,6 +1983,9 @@ class PomodoroSessionTableCompanion
     if (taskScheduleId.present) {
       map['task_schedule_id'] = Variable<int>(taskScheduleId.value);
     }
+    if (focusTagId.present) {
+      map['focus_tag_id'] = Variable<int>(focusTagId.value);
+    }
     return map;
   }
 
@@ -1944,7 +1999,411 @@ class PomodoroSessionTableCompanion
           ..write('plannedSeconds: $plannedSeconds, ')
           ..write('completed: $completed, ')
           ..write('label: $label, ')
-          ..write('taskScheduleId: $taskScheduleId')
+          ..write('taskScheduleId: $taskScheduleId, ')
+          ..write('focusTagId: $focusTagId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FocusTagTableTable extends FocusTagTable
+    with TableInfo<$FocusTagTableTable, FocusTagTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FocusTagTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 60,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _minutesMeta = const VerificationMeta(
+    'minutes',
+  );
+  @override
+  late final GeneratedColumn<int> minutes = GeneratedColumn<int>(
+    'minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0xFF00B3A6),
+  );
+  static const VerificationMeta _emojiMeta = const VerificationMeta('emoji');
+  @override
+  late final GeneratedColumn<String> emoji = GeneratedColumn<String>(
+    'emoji',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    title,
+    minutes,
+    color,
+    emoji,
+    sortOrder,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'focus_tag_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FocusTagTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('minutes')) {
+      context.handle(
+        _minutesMeta,
+        minutes.isAcceptableOrUnknown(data['minutes']!, _minutesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_minutesMeta);
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
+    if (data.containsKey('emoji')) {
+      context.handle(
+        _emojiMeta,
+        emoji.isAcceptableOrUnknown(data['emoji']!, _emojiMeta),
+      );
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FocusTagTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FocusTagTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      minutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}minutes'],
+      )!,
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}color'],
+      )!,
+      emoji: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}emoji'],
+      ),
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+    );
+  }
+
+  @override
+  $FocusTagTableTable createAlias(String alias) {
+    return $FocusTagTableTable(attachedDatabase, alias);
+  }
+}
+
+class FocusTagTableData extends DataClass
+    implements Insertable<FocusTagTableData> {
+  final int id;
+  final String title;
+
+  /// Độ dài phiên focus gợi ý (phút).
+  final int minutes;
+
+  /// Màu hiển thị (ARGB) — dùng cho chip và biểu đồ focus trend.
+  final int color;
+
+  /// Biểu tượng dạng emoji (không dùng IconData để không phá tree-shake icons).
+  final String? emoji;
+
+  /// Thứ tự hiển thị; nhỏ hơn đứng trước.
+  final int sortOrder;
+  const FocusTagTableData({
+    required this.id,
+    required this.title,
+    required this.minutes,
+    required this.color,
+    this.emoji,
+    required this.sortOrder,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['minutes'] = Variable<int>(minutes);
+    map['color'] = Variable<int>(color);
+    if (!nullToAbsent || emoji != null) {
+      map['emoji'] = Variable<String>(emoji);
+    }
+    map['sort_order'] = Variable<int>(sortOrder);
+    return map;
+  }
+
+  FocusTagTableCompanion toCompanion(bool nullToAbsent) {
+    return FocusTagTableCompanion(
+      id: Value(id),
+      title: Value(title),
+      minutes: Value(minutes),
+      color: Value(color),
+      emoji: emoji == null && nullToAbsent
+          ? const Value.absent()
+          : Value(emoji),
+      sortOrder: Value(sortOrder),
+    );
+  }
+
+  factory FocusTagTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FocusTagTableData(
+      id: serializer.fromJson<int>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      minutes: serializer.fromJson<int>(json['minutes']),
+      color: serializer.fromJson<int>(json['color']),
+      emoji: serializer.fromJson<String?>(json['emoji']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'title': serializer.toJson<String>(title),
+      'minutes': serializer.toJson<int>(minutes),
+      'color': serializer.toJson<int>(color),
+      'emoji': serializer.toJson<String?>(emoji),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+    };
+  }
+
+  FocusTagTableData copyWith({
+    int? id,
+    String? title,
+    int? minutes,
+    int? color,
+    Value<String?> emoji = const Value.absent(),
+    int? sortOrder,
+  }) => FocusTagTableData(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    minutes: minutes ?? this.minutes,
+    color: color ?? this.color,
+    emoji: emoji.present ? emoji.value : this.emoji,
+    sortOrder: sortOrder ?? this.sortOrder,
+  );
+  FocusTagTableData copyWithCompanion(FocusTagTableCompanion data) {
+    return FocusTagTableData(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      minutes: data.minutes.present ? data.minutes.value : this.minutes,
+      color: data.color.present ? data.color.value : this.color,
+      emoji: data.emoji.present ? data.emoji.value : this.emoji,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FocusTagTableData(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('minutes: $minutes, ')
+          ..write('color: $color, ')
+          ..write('emoji: $emoji, ')
+          ..write('sortOrder: $sortOrder')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, title, minutes, color, emoji, sortOrder);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FocusTagTableData &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.minutes == this.minutes &&
+          other.color == this.color &&
+          other.emoji == this.emoji &&
+          other.sortOrder == this.sortOrder);
+}
+
+class FocusTagTableCompanion extends UpdateCompanion<FocusTagTableData> {
+  final Value<int> id;
+  final Value<String> title;
+  final Value<int> minutes;
+  final Value<int> color;
+  final Value<String?> emoji;
+  final Value<int> sortOrder;
+  const FocusTagTableCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.minutes = const Value.absent(),
+    this.color = const Value.absent(),
+    this.emoji = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+  });
+  FocusTagTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    required int minutes,
+    this.color = const Value.absent(),
+    this.emoji = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+  }) : title = Value(title),
+       minutes = Value(minutes);
+  static Insertable<FocusTagTableData> custom({
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<int>? minutes,
+    Expression<int>? color,
+    Expression<String>? emoji,
+    Expression<int>? sortOrder,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (minutes != null) 'minutes': minutes,
+      if (color != null) 'color': color,
+      if (emoji != null) 'emoji': emoji,
+      if (sortOrder != null) 'sort_order': sortOrder,
+    });
+  }
+
+  FocusTagTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? title,
+    Value<int>? minutes,
+    Value<int>? color,
+    Value<String?>? emoji,
+    Value<int>? sortOrder,
+  }) {
+    return FocusTagTableCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      minutes: minutes ?? this.minutes,
+      color: color ?? this.color,
+      emoji: emoji ?? this.emoji,
+      sortOrder: sortOrder ?? this.sortOrder,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (minutes.present) {
+      map['minutes'] = Variable<int>(minutes.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
+    if (emoji.present) {
+      map['emoji'] = Variable<String>(emoji.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FocusTagTableCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('minutes: $minutes, ')
+          ..write('color: $color, ')
+          ..write('emoji: $emoji, ')
+          ..write('sortOrder: $sortOrder')
           ..write(')'))
         .toString();
   }
@@ -1960,9 +2419,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $TaskCompletionTableTable(this);
   late final $PomodoroSessionTableTable pomodoroSessionTable =
       $PomodoroSessionTableTable(this);
+  late final $FocusTagTableTable focusTagTable = $FocusTagTableTable(this);
   late final EventDao eventDao = EventDao(this as AppDatabase);
   late final TaskDao taskDao = TaskDao(this as AppDatabase);
   late final PomodoroDao pomodoroDao = PomodoroDao(this as AppDatabase);
+  late final FocusTagDao focusTagDao = FocusTagDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1972,6 +2433,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     taskScheduleTable,
     taskCompletionTable,
     pomodoroSessionTable,
+    focusTagTable,
   ];
 }
 
@@ -2737,6 +3199,7 @@ typedef $$PomodoroSessionTableTableCreateCompanionBuilder =
       Value<bool> completed,
       Value<String?> label,
       Value<int?> taskScheduleId,
+      Value<int?> focusTagId,
     });
 typedef $$PomodoroSessionTableTableUpdateCompanionBuilder =
     PomodoroSessionTableCompanion Function({
@@ -2748,6 +3211,7 @@ typedef $$PomodoroSessionTableTableUpdateCompanionBuilder =
       Value<bool> completed,
       Value<String?> label,
       Value<int?> taskScheduleId,
+      Value<int?> focusTagId,
     });
 
 class $$PomodoroSessionTableTableFilterComposer
@@ -2796,6 +3260,11 @@ class $$PomodoroSessionTableTableFilterComposer
 
   ColumnFilters<int> get taskScheduleId => $composableBuilder(
     column: $table.taskScheduleId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusTagId => $composableBuilder(
+    column: $table.focusTagId,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -2848,6 +3317,11 @@ class $$PomodoroSessionTableTableOrderingComposer
     column: $table.taskScheduleId,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get focusTagId => $composableBuilder(
+    column: $table.focusTagId,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PomodoroSessionTableTableAnnotationComposer
@@ -2886,6 +3360,11 @@ class $$PomodoroSessionTableTableAnnotationComposer
 
   GeneratedColumn<int> get taskScheduleId => $composableBuilder(
     column: $table.taskScheduleId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get focusTagId => $composableBuilder(
+    column: $table.focusTagId,
     builder: (column) => column,
   );
 }
@@ -2941,6 +3420,7 @@ class $$PomodoroSessionTableTableTableManager
                 Value<bool> completed = const Value.absent(),
                 Value<String?> label = const Value.absent(),
                 Value<int?> taskScheduleId = const Value.absent(),
+                Value<int?> focusTagId = const Value.absent(),
               }) => PomodoroSessionTableCompanion(
                 id: id,
                 startedAt: startedAt,
@@ -2950,6 +3430,7 @@ class $$PomodoroSessionTableTableTableManager
                 completed: completed,
                 label: label,
                 taskScheduleId: taskScheduleId,
+                focusTagId: focusTagId,
               ),
           createCompanionCallback:
               ({
@@ -2961,6 +3442,7 @@ class $$PomodoroSessionTableTableTableManager
                 Value<bool> completed = const Value.absent(),
                 Value<String?> label = const Value.absent(),
                 Value<int?> taskScheduleId = const Value.absent(),
+                Value<int?> focusTagId = const Value.absent(),
               }) => PomodoroSessionTableCompanion.insert(
                 id: id,
                 startedAt: startedAt,
@@ -2970,6 +3452,7 @@ class $$PomodoroSessionTableTableTableManager
                 completed: completed,
                 label: label,
                 taskScheduleId: taskScheduleId,
+                focusTagId: focusTagId,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -3000,6 +3483,223 @@ typedef $$PomodoroSessionTableTableProcessedTableManager =
       PomodoroSessionTableData,
       PrefetchHooks Function()
     >;
+typedef $$FocusTagTableTableCreateCompanionBuilder =
+    FocusTagTableCompanion Function({
+      Value<int> id,
+      required String title,
+      required int minutes,
+      Value<int> color,
+      Value<String?> emoji,
+      Value<int> sortOrder,
+    });
+typedef $$FocusTagTableTableUpdateCompanionBuilder =
+    FocusTagTableCompanion Function({
+      Value<int> id,
+      Value<String> title,
+      Value<int> minutes,
+      Value<int> color,
+      Value<String?> emoji,
+      Value<int> sortOrder,
+    });
+
+class $$FocusTagTableTableFilterComposer
+    extends Composer<_$AppDatabase, $FocusTagTableTable> {
+  $$FocusTagTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get emoji => $composableBuilder(
+    column: $table.emoji,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FocusTagTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FocusTagTableTable> {
+  $$FocusTagTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get emoji => $composableBuilder(
+    column: $table.emoji,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FocusTagTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FocusTagTableTable> {
+  $$FocusTagTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<int> get minutes =>
+      $composableBuilder(column: $table.minutes, builder: (column) => column);
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get emoji =>
+      $composableBuilder(column: $table.emoji, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+}
+
+class $$FocusTagTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FocusTagTableTable,
+          FocusTagTableData,
+          $$FocusTagTableTableFilterComposer,
+          $$FocusTagTableTableOrderingComposer,
+          $$FocusTagTableTableAnnotationComposer,
+          $$FocusTagTableTableCreateCompanionBuilder,
+          $$FocusTagTableTableUpdateCompanionBuilder,
+          (
+            FocusTagTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $FocusTagTableTable,
+              FocusTagTableData
+            >,
+          ),
+          FocusTagTableData,
+          PrefetchHooks Function()
+        > {
+  $$FocusTagTableTableTableManager(_$AppDatabase db, $FocusTagTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FocusTagTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FocusTagTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FocusTagTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<int> minutes = const Value.absent(),
+                Value<int> color = const Value.absent(),
+                Value<String?> emoji = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+              }) => FocusTagTableCompanion(
+                id: id,
+                title: title,
+                minutes: minutes,
+                color: color,
+                emoji: emoji,
+                sortOrder: sortOrder,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String title,
+                required int minutes,
+                Value<int> color = const Value.absent(),
+                Value<String?> emoji = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+              }) => FocusTagTableCompanion.insert(
+                id: id,
+                title: title,
+                minutes: minutes,
+                color: color,
+                emoji: emoji,
+                sortOrder: sortOrder,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FocusTagTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FocusTagTableTable,
+      FocusTagTableData,
+      $$FocusTagTableTableFilterComposer,
+      $$FocusTagTableTableOrderingComposer,
+      $$FocusTagTableTableAnnotationComposer,
+      $$FocusTagTableTableCreateCompanionBuilder,
+      $$FocusTagTableTableUpdateCompanionBuilder,
+      (
+        FocusTagTableData,
+        BaseReferences<_$AppDatabase, $FocusTagTableTable, FocusTagTableData>,
+      ),
+      FocusTagTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3012,4 +3712,6 @@ class $AppDatabaseManager {
       $$TaskCompletionTableTableTableManager(_db, _db.taskCompletionTable);
   $$PomodoroSessionTableTableTableManager get pomodoroSessionTable =>
       $$PomodoroSessionTableTableTableManager(_db, _db.pomodoroSessionTable);
+  $$FocusTagTableTableTableManager get focusTagTable =>
+      $$FocusTagTableTableTableManager(_db, _db.focusTagTable);
 }

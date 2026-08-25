@@ -7,6 +7,7 @@ void main() {
     int seconds = 25 * 60,
     bool completed = true,
     String? label,
+    int? focusTagId,
   }) =>
       PomodoroSession(
         startedAt: start,
@@ -15,6 +16,7 @@ void main() {
         plannedSeconds: 25 * 60,
         completed: completed,
         label: label,
+        focusTagId: focusTagId,
       );
 
   final from = DateTime(2026, 8, 18); // Thứ Ba
@@ -78,7 +80,7 @@ void main() {
     expect(r.totalFocusSeconds, 1800);
   });
 
-  test('gom theo việc, giảm dần theo thời gian; nhãn rỗng gom chung', () {
+  test('gom theo nhãn, giảm dần theo thời gian; nhãn rỗng gom chung', () {
     final r = summarizePomodoro(
       sessions: [
         session(start: DateTime(2026, 8, 19, 9), seconds: 600, label: 'Viết blog'),
@@ -89,11 +91,84 @@ void main() {
       from: from,
       to: to,
     );
-    expect(r.labels.first.label, 'Học Flutter');
-    expect(r.labels.first.focusSeconds, 1500);
-    final unnamed = r.labels.firstWhere((l) => l.label.isEmpty);
+    expect(r.tags.first.label, 'Học Flutter');
+    expect(r.tags.first.focusSeconds, 1500);
+    final unnamed = r.tags.firstWhere((l) => l.label.isEmpty);
     expect(unnamed.sessions, 2); // '  ' (trim) + null gom chung
     expect(unnamed.focusSeconds, 600);
+  });
+
+  test('focus trend: gom theo tag, lấy tên tag hiện tại chứ không phải nhãn cũ',
+      () {
+    final r = summarizePomodoro(
+      sessions: [
+        // Nhãn lưu trong phiên là tên cũ của tag 1.
+        session(
+            start: DateTime(2026, 8, 19, 9),
+            seconds: 900,
+            label: 'Cong viec',
+            focusTagId: 1),
+        session(
+            start: DateTime(2026, 8, 20, 9),
+            seconds: 1500,
+            label: 'Work',
+            focusTagId: 1),
+        session(
+            start: DateTime(2026, 8, 21, 9),
+            seconds: 600,
+            label: 'Read',
+            focusTagId: 2),
+      ],
+      from: from,
+      to: to,
+      tagTitles: const {1: 'Work', 2: 'Read'},
+    );
+    expect(r.tags.length, 2);
+    expect(r.topTag!.tagId, 1);
+    expect(r.topTag!.label, 'Work');
+    expect(r.topTag!.sessions, 2);
+    expect(r.topTag!.focusSeconds, 2400);
+    expect(r.shareOf(r.topTag!), closeTo(2400 / 3000, 0.0001));
+  });
+
+  test('cùng nhãn nhưng khác tag thì tách riêng', () {
+    final r = summarizePomodoro(
+      sessions: [
+        session(start: DateTime(2026, 8, 19, 9), seconds: 600, focusTagId: 1),
+        session(start: DateTime(2026, 8, 20, 9), seconds: 600, focusTagId: 2),
+        session(start: DateTime(2026, 8, 21, 9), seconds: 600, label: 'Focus'),
+      ],
+      from: from,
+      to: to,
+      tagTitles: const {1: 'Focus', 2: 'Focus'},
+    );
+    // 2 tag trùng tên + 1 phiên không gắn tag = 3 nhóm.
+    expect(r.tags.length, 3);
+  });
+
+  test('bucket: khoảng ngắn giữ theo ngày, khoảng dài gom theo tháng', () {
+    final r = summarizePomodoro(
+      sessions: [
+        session(start: DateTime(2026, 1, 5, 9), seconds: 600),
+        session(start: DateTime(2026, 1, 20, 9), seconds: 900),
+        session(start: DateTime(2026, 3, 2, 9), seconds: 300),
+      ],
+      from: DateTime(2026, 1, 1),
+      to: DateTime(2026, 3, 31),
+    );
+    expect(autoBucketUnit(r.dayCount), PomodoroBucketUnit.month);
+
+    final months = bucketDaySummaries(r.days, PomodoroBucketUnit.month);
+    expect(months.length, 3); // 1, 2, 3 — tháng trống vẫn có mặt
+    expect(months.first.start, DateTime(2026, 1));
+    expect(months.first.focusSeconds, 1500);
+    expect(months[1].focusSeconds, 0);
+    expect(months.last.focusSeconds, 300);
+
+    final short = summarizePomodoro(
+        sessions: const [], from: DateTime(2026, 8, 18), to: DateTime(2026, 8, 24));
+    expect(autoBucketUnit(short.dayCount), PomodoroBucketUnit.day);
+    expect(bucketDaySummaries(short.days, PomodoroBucketUnit.day).length, 7);
   });
 
   test('streak: đếm lùi từ cuối, ngày cuối trống không phá chuỗi', () {
