@@ -46,6 +46,9 @@ class TypingCubit extends Cubit<TypingState> {
     await Future.wait([_loadBank(state.language), _loadTodayResults()]);
   }
 
+  /// Nạp lại kho nội dung (sau khi người dùng import/xoá gói) và sinh đề mới.
+  Future<void> reloadContent() => _loadBank(state.language);
+
   // ── Cài đặt ───────────────────────────────────────────────────────────
 
   Future<void> setLanguage(TypingLanguage language) async {

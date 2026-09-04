@@ -3150,6 +3150,428 @@ class TypingResultTableCompanion
   }
 }
 
+class $TypingContentPackTableTable extends TypingContentPackTable
+    with TableInfo<$TypingContentPackTableTable, TypingContentPackTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TypingContentPackTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 120,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _languageMeta = const VerificationMeta(
+    'language',
+  );
+  @override
+  late final GeneratedColumn<String> language = GeneratedColumn<String>(
+    'language',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 2,
+      maxTextLength: 8,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _wordsJsonMeta = const VerificationMeta(
+    'wordsJson',
+  );
+  @override
+  late final GeneratedColumn<String> wordsJson = GeneratedColumn<String>(
+    'words_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _paragraphsJsonMeta = const VerificationMeta(
+    'paragraphsJson',
+  );
+  @override
+  late final GeneratedColumn<String> paragraphsJson = GeneratedColumn<String>(
+    'paragraphs_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _addedAtMeta = const VerificationMeta(
+    'addedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> addedAt = GeneratedColumn<DateTime>(
+    'added_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    language,
+    wordsJson,
+    paragraphsJson,
+    addedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'typing_content_pack_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TypingContentPackTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('language')) {
+      context.handle(
+        _languageMeta,
+        language.isAcceptableOrUnknown(data['language']!, _languageMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_languageMeta);
+    }
+    if (data.containsKey('words_json')) {
+      context.handle(
+        _wordsJsonMeta,
+        wordsJson.isAcceptableOrUnknown(data['words_json']!, _wordsJsonMeta),
+      );
+    }
+    if (data.containsKey('paragraphs_json')) {
+      context.handle(
+        _paragraphsJsonMeta,
+        paragraphsJson.isAcceptableOrUnknown(
+          data['paragraphs_json']!,
+          _paragraphsJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('added_at')) {
+      context.handle(
+        _addedAtMeta,
+        addedAt.isAcceptableOrUnknown(data['added_at']!, _addedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_addedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TypingContentPackTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TypingContentPackTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      language: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}language'],
+      )!,
+      wordsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}words_json'],
+      )!,
+      paragraphsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}paragraphs_json'],
+      )!,
+      addedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}added_at'],
+      )!,
+    );
+  }
+
+  @override
+  $TypingContentPackTableTable createAlias(String alias) {
+    return $TypingContentPackTableTable(attachedDatabase, alias);
+  }
+}
+
+class TypingContentPackTableData extends DataClass
+    implements Insertable<TypingContentPackTableData> {
+  final int id;
+
+  /// Tên gói để nhận ra trong danh sách (thường là tên file).
+  final String name;
+
+  /// Mã ngôn ngữ gói này thuộc về: 'en' | 'vi'.
+  final String language;
+
+  /// Danh sách từ, lưu dạng chuỗi JSON (mảng chuỗi).
+  final String wordsJson;
+
+  /// Danh sách đoạn văn, lưu dạng chuỗi JSON (mảng chuỗi).
+  final String paragraphsJson;
+  final DateTime addedAt;
+  const TypingContentPackTableData({
+    required this.id,
+    required this.name,
+    required this.language,
+    required this.wordsJson,
+    required this.paragraphsJson,
+    required this.addedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['language'] = Variable<String>(language);
+    map['words_json'] = Variable<String>(wordsJson);
+    map['paragraphs_json'] = Variable<String>(paragraphsJson);
+    map['added_at'] = Variable<DateTime>(addedAt);
+    return map;
+  }
+
+  TypingContentPackTableCompanion toCompanion(bool nullToAbsent) {
+    return TypingContentPackTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      language: Value(language),
+      wordsJson: Value(wordsJson),
+      paragraphsJson: Value(paragraphsJson),
+      addedAt: Value(addedAt),
+    );
+  }
+
+  factory TypingContentPackTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TypingContentPackTableData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      language: serializer.fromJson<String>(json['language']),
+      wordsJson: serializer.fromJson<String>(json['wordsJson']),
+      paragraphsJson: serializer.fromJson<String>(json['paragraphsJson']),
+      addedAt: serializer.fromJson<DateTime>(json['addedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'language': serializer.toJson<String>(language),
+      'wordsJson': serializer.toJson<String>(wordsJson),
+      'paragraphsJson': serializer.toJson<String>(paragraphsJson),
+      'addedAt': serializer.toJson<DateTime>(addedAt),
+    };
+  }
+
+  TypingContentPackTableData copyWith({
+    int? id,
+    String? name,
+    String? language,
+    String? wordsJson,
+    String? paragraphsJson,
+    DateTime? addedAt,
+  }) => TypingContentPackTableData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    language: language ?? this.language,
+    wordsJson: wordsJson ?? this.wordsJson,
+    paragraphsJson: paragraphsJson ?? this.paragraphsJson,
+    addedAt: addedAt ?? this.addedAt,
+  );
+  TypingContentPackTableData copyWithCompanion(
+    TypingContentPackTableCompanion data,
+  ) {
+    return TypingContentPackTableData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      language: data.language.present ? data.language.value : this.language,
+      wordsJson: data.wordsJson.present ? data.wordsJson.value : this.wordsJson,
+      paragraphsJson: data.paragraphsJson.present
+          ? data.paragraphsJson.value
+          : this.paragraphsJson,
+      addedAt: data.addedAt.present ? data.addedAt.value : this.addedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingContentPackTableData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('language: $language, ')
+          ..write('wordsJson: $wordsJson, ')
+          ..write('paragraphsJson: $paragraphsJson, ')
+          ..write('addedAt: $addedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, name, language, wordsJson, paragraphsJson, addedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TypingContentPackTableData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.language == this.language &&
+          other.wordsJson == this.wordsJson &&
+          other.paragraphsJson == this.paragraphsJson &&
+          other.addedAt == this.addedAt);
+}
+
+class TypingContentPackTableCompanion
+    extends UpdateCompanion<TypingContentPackTableData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> language;
+  final Value<String> wordsJson;
+  final Value<String> paragraphsJson;
+  final Value<DateTime> addedAt;
+  const TypingContentPackTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.language = const Value.absent(),
+    this.wordsJson = const Value.absent(),
+    this.paragraphsJson = const Value.absent(),
+    this.addedAt = const Value.absent(),
+  });
+  TypingContentPackTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String language,
+    this.wordsJson = const Value.absent(),
+    this.paragraphsJson = const Value.absent(),
+    required DateTime addedAt,
+  }) : name = Value(name),
+       language = Value(language),
+       addedAt = Value(addedAt);
+  static Insertable<TypingContentPackTableData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? language,
+    Expression<String>? wordsJson,
+    Expression<String>? paragraphsJson,
+    Expression<DateTime>? addedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (language != null) 'language': language,
+      if (wordsJson != null) 'words_json': wordsJson,
+      if (paragraphsJson != null) 'paragraphs_json': paragraphsJson,
+      if (addedAt != null) 'added_at': addedAt,
+    });
+  }
+
+  TypingContentPackTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String>? language,
+    Value<String>? wordsJson,
+    Value<String>? paragraphsJson,
+    Value<DateTime>? addedAt,
+  }) {
+    return TypingContentPackTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      language: language ?? this.language,
+      wordsJson: wordsJson ?? this.wordsJson,
+      paragraphsJson: paragraphsJson ?? this.paragraphsJson,
+      addedAt: addedAt ?? this.addedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (language.present) {
+      map['language'] = Variable<String>(language.value);
+    }
+    if (wordsJson.present) {
+      map['words_json'] = Variable<String>(wordsJson.value);
+    }
+    if (paragraphsJson.present) {
+      map['paragraphs_json'] = Variable<String>(paragraphsJson.value);
+    }
+    if (addedAt.present) {
+      map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingContentPackTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('language: $language, ')
+          ..write('wordsJson: $wordsJson, ')
+          ..write('paragraphsJson: $paragraphsJson, ')
+          ..write('addedAt: $addedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3163,11 +3585,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FocusTagTableTable focusTagTable = $FocusTagTableTable(this);
   late final $TypingResultTableTable typingResultTable =
       $TypingResultTableTable(this);
+  late final $TypingContentPackTableTable typingContentPackTable =
+      $TypingContentPackTableTable(this);
   late final EventDao eventDao = EventDao(this as AppDatabase);
   late final TaskDao taskDao = TaskDao(this as AppDatabase);
   late final PomodoroDao pomodoroDao = PomodoroDao(this as AppDatabase);
   late final FocusTagDao focusTagDao = FocusTagDao(this as AppDatabase);
   late final TypingDao typingDao = TypingDao(this as AppDatabase);
+  late final TypingContentDao typingContentDao = TypingContentDao(
+    this as AppDatabase,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3179,6 +3606,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     pomodoroSessionTable,
     focusTagTable,
     typingResultTable,
+    typingContentPackTable,
   ];
 }
 
@@ -4797,6 +5225,240 @@ typedef $$TypingResultTableTableProcessedTableManager =
       TypingResultTableData,
       PrefetchHooks Function()
     >;
+typedef $$TypingContentPackTableTableCreateCompanionBuilder =
+    TypingContentPackTableCompanion Function({
+      Value<int> id,
+      required String name,
+      required String language,
+      Value<String> wordsJson,
+      Value<String> paragraphsJson,
+      required DateTime addedAt,
+    });
+typedef $$TypingContentPackTableTableUpdateCompanionBuilder =
+    TypingContentPackTableCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String> language,
+      Value<String> wordsJson,
+      Value<String> paragraphsJson,
+      Value<DateTime> addedAt,
+    });
+
+class $$TypingContentPackTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TypingContentPackTableTable> {
+  $$TypingContentPackTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get wordsJson => $composableBuilder(
+    column: $table.wordsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get paragraphsJson => $composableBuilder(
+    column: $table.paragraphsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get addedAt => $composableBuilder(
+    column: $table.addedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TypingContentPackTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TypingContentPackTableTable> {
+  $$TypingContentPackTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get wordsJson => $composableBuilder(
+    column: $table.wordsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get paragraphsJson => $composableBuilder(
+    column: $table.paragraphsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get addedAt => $composableBuilder(
+    column: $table.addedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TypingContentPackTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TypingContentPackTableTable> {
+  $$TypingContentPackTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get language =>
+      $composableBuilder(column: $table.language, builder: (column) => column);
+
+  GeneratedColumn<String> get wordsJson =>
+      $composableBuilder(column: $table.wordsJson, builder: (column) => column);
+
+  GeneratedColumn<String> get paragraphsJson => $composableBuilder(
+    column: $table.paragraphsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get addedAt =>
+      $composableBuilder(column: $table.addedAt, builder: (column) => column);
+}
+
+class $$TypingContentPackTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TypingContentPackTableTable,
+          TypingContentPackTableData,
+          $$TypingContentPackTableTableFilterComposer,
+          $$TypingContentPackTableTableOrderingComposer,
+          $$TypingContentPackTableTableAnnotationComposer,
+          $$TypingContentPackTableTableCreateCompanionBuilder,
+          $$TypingContentPackTableTableUpdateCompanionBuilder,
+          (
+            TypingContentPackTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TypingContentPackTableTable,
+              TypingContentPackTableData
+            >,
+          ),
+          TypingContentPackTableData,
+          PrefetchHooks Function()
+        > {
+  $$TypingContentPackTableTableTableManager(
+    _$AppDatabase db,
+    $TypingContentPackTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TypingContentPackTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$TypingContentPackTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$TypingContentPackTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> language = const Value.absent(),
+                Value<String> wordsJson = const Value.absent(),
+                Value<String> paragraphsJson = const Value.absent(),
+                Value<DateTime> addedAt = const Value.absent(),
+              }) => TypingContentPackTableCompanion(
+                id: id,
+                name: name,
+                language: language,
+                wordsJson: wordsJson,
+                paragraphsJson: paragraphsJson,
+                addedAt: addedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                required String language,
+                Value<String> wordsJson = const Value.absent(),
+                Value<String> paragraphsJson = const Value.absent(),
+                required DateTime addedAt,
+              }) => TypingContentPackTableCompanion.insert(
+                id: id,
+                name: name,
+                language: language,
+                wordsJson: wordsJson,
+                paragraphsJson: paragraphsJson,
+                addedAt: addedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TypingContentPackTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TypingContentPackTableTable,
+      TypingContentPackTableData,
+      $$TypingContentPackTableTableFilterComposer,
+      $$TypingContentPackTableTableOrderingComposer,
+      $$TypingContentPackTableTableAnnotationComposer,
+      $$TypingContentPackTableTableCreateCompanionBuilder,
+      $$TypingContentPackTableTableUpdateCompanionBuilder,
+      (
+        TypingContentPackTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TypingContentPackTableTable,
+          TypingContentPackTableData
+        >,
+      ),
+      TypingContentPackTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4813,4 +5475,9 @@ class $AppDatabaseManager {
       $$FocusTagTableTableTableManager(_db, _db.focusTagTable);
   $$TypingResultTableTableTableManager get typingResultTable =>
       $$TypingResultTableTableTableManager(_db, _db.typingResultTable);
+  $$TypingContentPackTableTableTableManager get typingContentPackTable =>
+      $$TypingContentPackTableTableTableManager(
+        _db,
+        _db.typingContentPackTable,
+      );
 }

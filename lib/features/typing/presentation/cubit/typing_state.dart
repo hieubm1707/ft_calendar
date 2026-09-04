@@ -60,12 +60,6 @@ class TypingState extends Equatable {
     return '$m:$s';
   }
 
-  /// Tiến độ gõ hết đề 0..1 (dùng cho thanh tiến độ của đoạn văn).
-  double get promptProgress {
-    if (prompt.isEmpty) return 0;
-    return (typed.runes.length / prompt.runes.length).clamp(0.0, 1.0);
-  }
-
   /// WPM tốt nhất hôm nay — để biết mình có phá kỷ lục trong ngày không.
   double get todayBestWpm =>
       todayResults.fold(0.0, (m, r) => r.wpm > m ? r.wpm : m);

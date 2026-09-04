@@ -6,6 +6,7 @@ import '../../domain/index.dart';
 import '../cubit/typing_cubit.dart';
 import '../widgets/typing_prompt_view.dart';
 import '../widgets/typing_theme.dart';
+import 'typing_content_page.dart';
 import 'typing_history_page.dart';
 
 /// Trang "Typing": bài test gõ phím theo thời gian, 2 ngôn ngữ Anh/Việt.
@@ -52,6 +53,17 @@ class _TypingViewState extends State<_TypingView> {
     );
   }
 
+  /// Mở kho nội dung; import/xoá xong thì nạp lại kho và sinh đề mới.
+  Future<void> _openContent(BuildContext context) async {
+    final cubit = context.read<TypingCubit>();
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => TypingContentPage(language: cubit.state.language),
+      ),
+    );
+    if (changed == true) await cubit.reloadContent();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +84,10 @@ class _TypingViewState extends State<_TypingView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _Header(onHistory: () => _openHistory(context)),
+                  _Header(
+                    onContent: () => _openContent(context),
+                    onHistory: () => _openHistory(context),
+                  ),
                   const SizedBox(height: 12),
                   _Settings(state: state),
                   const SizedBox(height: 16),
@@ -84,12 +99,11 @@ class _TypingViewState extends State<_TypingView> {
                       child: Center(child: CircularProgressIndicator()),
                     )
                   else if (state.prompt.isEmpty)
-                    const _EmptyBank()
+                    _EmptyBank(onImport: () => _openContent(context))
                   else ...[
                     TypingPromptView(
                       prompt: state.prompt,
                       typed: state.typed,
-                      progress: state.promptProgress,
                     ),
                     const SizedBox(height: 12),
                     _InputBox(
@@ -135,9 +149,10 @@ class _TypingViewState extends State<_TypingView> {
 }
 
 class _Header extends StatelessWidget {
+  final VoidCallback onContent;
   final VoidCallback onHistory;
 
-  const _Header({required this.onHistory});
+  const _Header({required this.onContent, required this.onHistory});
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +164,11 @@ class _Header extends StatelessWidget {
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
                   color: kTypingInk)),
+        ),
+        IconButton(
+          tooltip: 'Kho nội dung',
+          onPressed: onContent,
+          icon: const Icon(Icons.library_add_outlined, color: kTypingInk),
         ),
         IconButton(
           tooltip: 'Lịch sử',
@@ -332,19 +352,29 @@ class _InputBox extends StatelessWidget {
   }
 }
 
-/// Kho từ rỗng: hướng dẫn đúng chỗ cần thả file nội dung.
+/// Kho rỗng: chỉ thẳng tới chỗ import thay vì bắt người dùng tự mò.
 class _EmptyBank extends StatelessWidget {
-  const _EmptyBank();
+  final VoidCallback onImport;
+
+  const _EmptyBank({required this.onImport});
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 40),
-      child: Text(
-        'Chưa có nội dung để gõ.\n'
-        'Thêm file JSON vào assets/typing/<ngôn ngữ>/ rồi mở lại app.',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: kTypingMuted),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: Column(
+        children: [
+          const Text('Chưa có nội dung để gõ.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: kTypingMuted)),
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            onPressed: onImport,
+            style: FilledButton.styleFrom(backgroundColor: kTypingAccent),
+            icon: const Icon(Icons.library_add_outlined, size: 18),
+            label: const Text('Thêm nội dung'),
+          ),
+        ],
       ),
     );
   }

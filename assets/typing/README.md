@@ -1,5 +1,12 @@
 # Nội dung bài test gõ phím
 
+> Cách nhanh nhất để thêm từ/đoạn văn là **ngay trong app**: tab Typing →
+> icon 📚 (Kho nội dung) → "Chọn file" hoặc "Dán nội dung". Nội dung thêm theo
+> lối đó lưu vào DB, không cần build lại app.
+>
+> Thư mục này là nội dung **có sẵn đóng gói theo app** — dùng khi muốn nội dung
+> đi kèm bản cài cho mọi máy.
+
 Mỗi ngôn ngữ là một thư mục theo mã: `en/` (Tiếng Anh), `vi/` (Tiếng Việt).
 
 App nạp **mọi file `.json`** trong thư mục ngôn ngữ rồi gộp lại (bỏ trùng).
