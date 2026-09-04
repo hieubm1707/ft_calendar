@@ -42,30 +42,30 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
+        // ⚠️ KHÔNG tin tuyệt đối vào `from`. Một DB thật có thể ở trạng thái
+        // NỬA VỜI: schema đã đổi nhưng `user_version` chưa kịp tăng (migration
+        // lần trước chết giữa chừng). Khi đó bước `addColumn` theo số phiên bản
+        // sẽ ném "duplicate column name" → cả migration rollback → DB kẹt mãi ở
+        // phiên bản cũ và bảng mới không bao giờ được tạo.
+        //
+        // Mọi bước từ trước tới nay đều chỉ THÊM bảng/cột (không biến đổi dữ
+        // liệu), nên cách chắc ăn là đối chiếu lại với schema hiện tại: tạo bảng
+        // còn thiếu, thêm cột còn thiếu, bỏ qua thứ đã có. Migration nhờ vậy
+        // chạy lại được nhiều lần và tự chữa DB đang hỏng.
+        // Thêm cột mới về sau: khai báo ở table rồi thêm 1 dòng
+        // `_addColumnIfMissing` vào đây.
         onUpgrade: (m, from, to) async {
-          if (from < 2) {
-            await m.addColumn(eventTable, eventTable.color);
-          }
-          if (from < 3) {
-            await m.createTable(taskScheduleTable);
-            await m.createTable(taskCompletionTable);
-          }
-          if (from < 4) {
-            await m.addColumn(taskScheduleTable, taskScheduleTable.note);
-            await m.addColumn(
-                taskScheduleTable, taskScheduleTable.minutesOfDay);
-          }
-          if (from < 5) {
-            await m.createTable(pomodoroSessionTable);
-          }
-          if (from < 6) {
-            await m.createTable(focusTagTable);
-            await m.addColumn(
-                pomodoroSessionTable, pomodoroSessionTable.focusTagId);
-          }
-          if (from < 7) {
-            await m.createTable(typingResultTable);
-          }
+          // createAll sinh `CREATE TABLE IF NOT EXISTS` → bảng đã có thì bỏ qua.
+          await m.createAll();
+
+          await _addColumnIfMissing(m, eventTable, eventTable.description);
+          await _addColumnIfMissing(m, eventTable, eventTable.color);
+          await _addColumnIfMissing(
+              m, taskScheduleTable, taskScheduleTable.note);
+          await _addColumnIfMissing(
+              m, taskScheduleTable, taskScheduleTable.minutesOfDay);
+          await _addColumnIfMissing(
+              m, pomodoroSessionTable, pomodoroSessionTable.focusTagId);
         },
         // Seed tag mặc định 1 lần (cài mới hoặc vừa nâng cấp lên v6).
         // Không seed lại nếu người dùng đã tự xoá hết tag.
@@ -84,6 +84,21 @@ class AppDatabase extends _$AppDatabase {
     (title: 'Focus', minutes: 25, color: 0xFF00B3A6, emoji: '🎯'),
     (title: 'Study', minutes: 45, color: 0xFFAB47BC, emoji: '📚'),
   ];
+
+  /// Thêm [column] vào [table] nếu bảng chưa có cột đó.
+  /// SQLite không hỗ trợ `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` nên phải
+  /// hỏi `PRAGMA table_info` trước.
+  Future<void> _addColumnIfMissing(
+    Migrator m,
+    TableInfo table,
+    GeneratedColumn column,
+  ) async {
+    final info =
+        await customSelect('PRAGMA table_info(${table.actualTableName});')
+            .get();
+    final exists = info.any((row) => row.read<String>('name') == column.name);
+    if (!exists) await m.addColumn(table, column);
+  }
 
   Future<void> _seedFocusTagsIfEmpty() async {
     final existing = await select(focusTagTable).get();

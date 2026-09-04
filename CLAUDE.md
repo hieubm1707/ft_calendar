@@ -54,6 +54,18 @@ dart run build_runner watch --force-jit           # sinh code liên tục khi de
 Chạy lại mỗi khi đổi Drift table/DAO, hoặc thêm/bớt annotation `@injectable`.
 File sinh ra: `*.g.dart` (Drift), `lib/core/di/injection.config.dart` (injectable).
 
+## Migration DB (`core/database/drift/app_database.dart`)
+
+`onUpgrade` **không tin tuyệt đối vào `from`**. DB thật có thể ở trạng thái *nửa vời*: schema đã đổi nhưng `user_version` chưa kịp tăng (migration lần trước chết giữa chừng). Khi đó `addColumn` theo số phiên bản ném `duplicate column name` → cả migration rollback → DB **kẹt vĩnh viễn** ở phiên bản cũ, bảng mới không bao giờ được tạo (đã xảy ra thật trên bản macOS: `user_version` = 5 nhưng schema đã ở v6, nên `typing_result_table` không được tạo).
+
+Vì mọi bước từ trước tới nay chỉ THÊM bảng/cột (không biến đổi dữ liệu), `onUpgrade` đối chiếu lại với schema hiện tại và **tự chữa**:
+1. `m.createAll()` — sinh `CREATE TABLE IF NOT EXISTS`, bảng đã có thì bỏ qua.
+2. `_addColumnIfMissing()` cho từng cột thêm về sau — hỏi `PRAGMA table_info` trước vì SQLite không có `ADD COLUMN IF NOT EXISTS`.
+
+**Thêm cột mới**: khai báo ở table rồi thêm 1 dòng `_addColumnIfMissing` (không cần bọc `if (from < n)`). **Thêm bảng mới**: chỉ cần khai báo trong `@DriftDatabase` — `createAll()` lo phần còn lại. Vẫn phải tăng `schemaVersion` để `onUpgrade` được gọi.
+
+Test ở `test/core/database/migration_test.dart` dựng DB in-memory ở đúng các trạng thái cũ/hỏng (dùng `NativeDatabase.memory(setup:)` + `PRAGMA user_version`) và kiểm tra migration chạy được nhiều lần.
+
 ## Cấu trúc & luồng phụ thuộc
 
 ```
