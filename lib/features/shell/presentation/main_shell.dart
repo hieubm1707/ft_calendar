@@ -5,9 +5,10 @@ import '../../../core/di/index.dart';
 import '../../calendar/presentation/index.dart';
 import '../../pomodoro/presentation/index.dart';
 import '../../tasks/presentation/index.dart';
+import '../../typing/presentation/index.dart';
 import 'app_bottom_nav.dart';
 
-/// Khung chính: bottom nav chuyển giữa Discover / Calendar / Tasks / Notes.
+/// Khung chính: bottom nav chuyển giữa Typing / Calendar / Tasks / Focus / Notes.
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
@@ -19,7 +20,7 @@ class _MainShellState extends State<MainShell> {
   int _index = 1; // mặc định tab Calendar
 
   static const _pages = [
-    _Placeholder(label: 'Discover'),
+    TypingPage(),
     CalendarPage(),
     TasksPage(),
     PomodoroPage(),

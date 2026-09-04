@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Thanh điều hướng dưới cùng: Discover / Calendar / Tasks / Focus / Notes.
+/// Thanh điều hướng dưới cùng: Typing / Calendar / Tasks / Focus / Notes.
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -21,7 +21,7 @@ class AppBottomNav extends StatelessWidget {
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       destinations: const [
         NavigationDestination(
-            icon: Icon(Icons.grid_view_outlined), label: 'Discover'),
+            icon: Icon(Icons.keyboard_alt_outlined), label: 'Typing'),
         NavigationDestination(
             icon: Icon(Icons.calendar_today), label: 'Calendar'),
         NavigationDestination(

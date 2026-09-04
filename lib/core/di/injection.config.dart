@@ -84,6 +84,31 @@ import 'package:example_app/features/tasks/domain/usecases/set_task_done.dart'
     as _i1029;
 import 'package:example_app/features/tasks/presentation/cubit/task_cubit.dart'
     as _i553;
+import 'package:example_app/features/typing/data/datasources/typing_content_datasource.dart'
+    as _i682;
+import 'package:example_app/features/typing/data/datasources/typing_local_datasource.dart'
+    as _i908;
+import 'package:example_app/features/typing/data/repositories/typing_content_repository_impl.dart'
+    as _i558;
+import 'package:example_app/features/typing/data/repositories/typing_repository_impl.dart'
+    as _i250;
+import 'package:example_app/features/typing/domain/index.dart' as _i885;
+import 'package:example_app/features/typing/domain/repositories/typing_content_repository.dart'
+    as _i713;
+import 'package:example_app/features/typing/domain/repositories/typing_repository.dart'
+    as _i500;
+import 'package:example_app/features/typing/domain/usecases/delete_typing_result.dart'
+    as _i529;
+import 'package:example_app/features/typing/domain/usecases/get_typing_content.dart'
+    as _i677;
+import 'package:example_app/features/typing/domain/usecases/get_typing_results.dart'
+    as _i37;
+import 'package:example_app/features/typing/domain/usecases/save_typing_result.dart'
+    as _i825;
+import 'package:example_app/features/typing/presentation/cubit/typing_cubit.dart'
+    as _i97;
+import 'package:example_app/features/typing/presentation/cubit/typing_history_cubit.dart'
+    as _i677;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -102,6 +127,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i815.NotificationService>(
       () => _i815.NotificationService(),
     );
+    gh.lazySingleton<_i682.TypingContentDataSource>(
+      () => _i682.TypingContentAssetDataSource(),
+    );
     gh.lazySingleton<_i413.EventDao>(
       () => registerModule.eventDao(gh<_i413.AppDatabase>()),
     );
@@ -113,6 +141,17 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i413.FocusTagDao>(
       () => registerModule.focusTagDao(gh<_i413.AppDatabase>()),
+    );
+    gh.lazySingleton<_i413.TypingDao>(
+      () => registerModule.typingDao(gh<_i413.AppDatabase>()),
+    );
+    gh.lazySingleton<_i908.TypingLocalDataSource>(
+      () => _i908.TypingDriftDataSource(gh<_i413.TypingDao>()),
+    );
+    gh.lazySingleton<_i885.TypingContentRepository>(
+      () => _i558.TypingContentRepositoryImpl(
+        gh<_i682.TypingContentDataSource>(),
+      ),
     );
     gh.lazySingleton<_i725.TaskLocalDataSource>(
       () => _i725.TaskDriftDataSource(gh<_i413.TaskDao>()),
@@ -129,8 +168,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i630.EventLocalDataSource>(
       () => _i630.EventDriftDataSource(gh<_i413.EventDao>()),
     );
+    gh.lazySingleton<_i885.TypingRepository>(
+      () => _i250.TypingRepositoryImpl(gh<_i908.TypingLocalDataSource>()),
+    );
+    gh.lazySingleton<_i677.GetTypingContent>(
+      () => _i677.GetTypingContent(gh<_i713.TypingContentRepository>()),
+    );
     gh.lazySingleton<_i904.TaskRepository>(
       () => _i444.TaskRepositoryImpl(gh<_i725.TaskLocalDataSource>()),
+    );
+    gh.lazySingleton<_i529.DeleteTypingResult>(
+      () => _i529.DeleteTypingResult(gh<_i500.TypingRepository>()),
+    );
+    gh.lazySingleton<_i37.GetTypingResults>(
+      () => _i37.GetTypingResults(gh<_i500.TypingRepository>()),
+    );
+    gh.lazySingleton<_i825.SaveTypingResult>(
+      () => _i825.SaveTypingResult(gh<_i500.TypingRepository>()),
     );
     gh.lazySingleton<_i228.FocusTagRepository>(
       () => _i629.FocusTagRepositoryImpl(gh<_i363.FocusTagLocalDataSource>()),
@@ -146,6 +200,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i714.EventRepository>(
       () => _i356.EventRepositoryImpl(gh<_i630.EventLocalDataSource>()),
+    );
+    gh.factory<_i97.TypingCubit>(
+      () => _i97.TypingCubit(
+        gh<_i885.GetTypingContent>(),
+        gh<_i885.SaveTypingResult>(),
+        gh<_i885.GetTypingResults>(),
+      ),
     );
     gh.lazySingleton<_i176.CreateTaskSchedule>(
       () => _i176.CreateTaskSchedule(gh<_i721.TaskRepository>()),
@@ -180,6 +241,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i904.CreateTaskSchedule>(),
         gh<_i904.SetTaskDone>(),
         gh<_i904.RemoveTaskSchedule>(),
+      ),
+    );
+    gh.factory<_i677.TypingHistoryCubit>(
+      () => _i677.TypingHistoryCubit(
+        gh<_i885.GetTypingResults>(),
+        gh<_i885.DeleteTypingResult>(),
       ),
     );
     gh.lazySingleton<_i850.DeleteFocusTag>(

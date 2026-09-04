@@ -2409,6 +2409,747 @@ class FocusTagTableCompanion extends UpdateCompanion<FocusTagTableData> {
   }
 }
 
+class $TypingResultTableTable extends TypingResultTable
+    with TableInfo<$TypingResultTableTable, TypingResultTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TypingResultTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _takenAtMeta = const VerificationMeta(
+    'takenAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> takenAt = GeneratedColumn<DateTime>(
+    'taken_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _languageMeta = const VerificationMeta(
+    'language',
+  );
+  @override
+  late final GeneratedColumn<String> language = GeneratedColumn<String>(
+    'language',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 2,
+      maxTextLength: 8,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modeMeta = const VerificationMeta('mode');
+  @override
+  late final GeneratedColumn<String> mode = GeneratedColumn<String>(
+    'mode',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 16,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
+    'durationSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+    'duration_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _elapsedSecondsMeta = const VerificationMeta(
+    'elapsedSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> elapsedSeconds = GeneratedColumn<int>(
+    'elapsed_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typedCharsMeta = const VerificationMeta(
+    'typedChars',
+  );
+  @override
+  late final GeneratedColumn<int> typedChars = GeneratedColumn<int>(
+    'typed_chars',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _correctCharsMeta = const VerificationMeta(
+    'correctChars',
+  );
+  @override
+  late final GeneratedColumn<int> correctChars = GeneratedColumn<int>(
+    'correct_chars',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _incorrectCharsMeta = const VerificationMeta(
+    'incorrectChars',
+  );
+  @override
+  late final GeneratedColumn<int> incorrectChars = GeneratedColumn<int>(
+    'incorrect_chars',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _correctWordsMeta = const VerificationMeta(
+    'correctWords',
+  );
+  @override
+  late final GeneratedColumn<int> correctWords = GeneratedColumn<int>(
+    'correct_words',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _wpmMeta = const VerificationMeta('wpm');
+  @override
+  late final GeneratedColumn<double> wpm = GeneratedColumn<double>(
+    'wpm',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _accuracyMeta = const VerificationMeta(
+    'accuracy',
+  );
+  @override
+  late final GeneratedColumn<double> accuracy = GeneratedColumn<double>(
+    'accuracy',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    takenAt,
+    language,
+    mode,
+    durationSeconds,
+    elapsedSeconds,
+    typedChars,
+    correctChars,
+    incorrectChars,
+    correctWords,
+    wpm,
+    accuracy,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'typing_result_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TypingResultTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('taken_at')) {
+      context.handle(
+        _takenAtMeta,
+        takenAt.isAcceptableOrUnknown(data['taken_at']!, _takenAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_takenAtMeta);
+    }
+    if (data.containsKey('language')) {
+      context.handle(
+        _languageMeta,
+        language.isAcceptableOrUnknown(data['language']!, _languageMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_languageMeta);
+    }
+    if (data.containsKey('mode')) {
+      context.handle(
+        _modeMeta,
+        mode.isAcceptableOrUnknown(data['mode']!, _modeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modeMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+        _durationSecondsMeta,
+        durationSeconds.isAcceptableOrUnknown(
+          data['duration_seconds']!,
+          _durationSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('elapsed_seconds')) {
+      context.handle(
+        _elapsedSecondsMeta,
+        elapsedSeconds.isAcceptableOrUnknown(
+          data['elapsed_seconds']!,
+          _elapsedSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_elapsedSecondsMeta);
+    }
+    if (data.containsKey('typed_chars')) {
+      context.handle(
+        _typedCharsMeta,
+        typedChars.isAcceptableOrUnknown(data['typed_chars']!, _typedCharsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typedCharsMeta);
+    }
+    if (data.containsKey('correct_chars')) {
+      context.handle(
+        _correctCharsMeta,
+        correctChars.isAcceptableOrUnknown(
+          data['correct_chars']!,
+          _correctCharsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_correctCharsMeta);
+    }
+    if (data.containsKey('incorrect_chars')) {
+      context.handle(
+        _incorrectCharsMeta,
+        incorrectChars.isAcceptableOrUnknown(
+          data['incorrect_chars']!,
+          _incorrectCharsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_incorrectCharsMeta);
+    }
+    if (data.containsKey('correct_words')) {
+      context.handle(
+        _correctWordsMeta,
+        correctWords.isAcceptableOrUnknown(
+          data['correct_words']!,
+          _correctWordsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_correctWordsMeta);
+    }
+    if (data.containsKey('wpm')) {
+      context.handle(
+        _wpmMeta,
+        wpm.isAcceptableOrUnknown(data['wpm']!, _wpmMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_wpmMeta);
+    }
+    if (data.containsKey('accuracy')) {
+      context.handle(
+        _accuracyMeta,
+        accuracy.isAcceptableOrUnknown(data['accuracy']!, _accuracyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_accuracyMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TypingResultTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TypingResultTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      takenAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}taken_at'],
+      )!,
+      language: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}language'],
+      )!,
+      mode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mode'],
+      )!,
+      durationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_seconds'],
+      )!,
+      elapsedSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}elapsed_seconds'],
+      )!,
+      typedChars: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}typed_chars'],
+      )!,
+      correctChars: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_chars'],
+      )!,
+      incorrectChars: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}incorrect_chars'],
+      )!,
+      correctWords: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_words'],
+      )!,
+      wpm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}wpm'],
+      )!,
+      accuracy: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}accuracy'],
+      )!,
+    );
+  }
+
+  @override
+  $TypingResultTableTable createAlias(String alias) {
+    return $TypingResultTableTable(attachedDatabase, alias);
+  }
+}
+
+class TypingResultTableData extends DataClass
+    implements Insertable<TypingResultTableData> {
+  final int id;
+
+  /// Thời điểm kết thúc bài test.
+  final DateTime takenAt;
+
+  /// Mã ngôn ngữ đã gõ: 'en' | 'vi'.
+  final String language;
+
+  /// Nguồn nội dung: 'words' (từ ngẫu nhiên) | 'paragraph' (đoạn văn).
+  final String mode;
+
+  /// Độ dài bài test đã chọn (giây).
+  final int durationSeconds;
+
+  /// Số giây thực sự đã gõ (gõ xong đề sớm thì nhỏ hơn [durationSeconds]).
+  final int elapsedSeconds;
+  final int typedChars;
+  final int correctChars;
+  final int incorrectChars;
+
+  /// Số từ gõ đúng trọn vẹn (khác với "từ" 5 ký tự dùng để tính WPM).
+  final int correctWords;
+
+  /// Tốc độ gõ (từ/phút; 1 từ = 5 ký tự ĐÚNG) và độ chính xác 0..1.
+  final double wpm;
+  final double accuracy;
+  const TypingResultTableData({
+    required this.id,
+    required this.takenAt,
+    required this.language,
+    required this.mode,
+    required this.durationSeconds,
+    required this.elapsedSeconds,
+    required this.typedChars,
+    required this.correctChars,
+    required this.incorrectChars,
+    required this.correctWords,
+    required this.wpm,
+    required this.accuracy,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['taken_at'] = Variable<DateTime>(takenAt);
+    map['language'] = Variable<String>(language);
+    map['mode'] = Variable<String>(mode);
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    map['elapsed_seconds'] = Variable<int>(elapsedSeconds);
+    map['typed_chars'] = Variable<int>(typedChars);
+    map['correct_chars'] = Variable<int>(correctChars);
+    map['incorrect_chars'] = Variable<int>(incorrectChars);
+    map['correct_words'] = Variable<int>(correctWords);
+    map['wpm'] = Variable<double>(wpm);
+    map['accuracy'] = Variable<double>(accuracy);
+    return map;
+  }
+
+  TypingResultTableCompanion toCompanion(bool nullToAbsent) {
+    return TypingResultTableCompanion(
+      id: Value(id),
+      takenAt: Value(takenAt),
+      language: Value(language),
+      mode: Value(mode),
+      durationSeconds: Value(durationSeconds),
+      elapsedSeconds: Value(elapsedSeconds),
+      typedChars: Value(typedChars),
+      correctChars: Value(correctChars),
+      incorrectChars: Value(incorrectChars),
+      correctWords: Value(correctWords),
+      wpm: Value(wpm),
+      accuracy: Value(accuracy),
+    );
+  }
+
+  factory TypingResultTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TypingResultTableData(
+      id: serializer.fromJson<int>(json['id']),
+      takenAt: serializer.fromJson<DateTime>(json['takenAt']),
+      language: serializer.fromJson<String>(json['language']),
+      mode: serializer.fromJson<String>(json['mode']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      elapsedSeconds: serializer.fromJson<int>(json['elapsedSeconds']),
+      typedChars: serializer.fromJson<int>(json['typedChars']),
+      correctChars: serializer.fromJson<int>(json['correctChars']),
+      incorrectChars: serializer.fromJson<int>(json['incorrectChars']),
+      correctWords: serializer.fromJson<int>(json['correctWords']),
+      wpm: serializer.fromJson<double>(json['wpm']),
+      accuracy: serializer.fromJson<double>(json['accuracy']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'takenAt': serializer.toJson<DateTime>(takenAt),
+      'language': serializer.toJson<String>(language),
+      'mode': serializer.toJson<String>(mode),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'elapsedSeconds': serializer.toJson<int>(elapsedSeconds),
+      'typedChars': serializer.toJson<int>(typedChars),
+      'correctChars': serializer.toJson<int>(correctChars),
+      'incorrectChars': serializer.toJson<int>(incorrectChars),
+      'correctWords': serializer.toJson<int>(correctWords),
+      'wpm': serializer.toJson<double>(wpm),
+      'accuracy': serializer.toJson<double>(accuracy),
+    };
+  }
+
+  TypingResultTableData copyWith({
+    int? id,
+    DateTime? takenAt,
+    String? language,
+    String? mode,
+    int? durationSeconds,
+    int? elapsedSeconds,
+    int? typedChars,
+    int? correctChars,
+    int? incorrectChars,
+    int? correctWords,
+    double? wpm,
+    double? accuracy,
+  }) => TypingResultTableData(
+    id: id ?? this.id,
+    takenAt: takenAt ?? this.takenAt,
+    language: language ?? this.language,
+    mode: mode ?? this.mode,
+    durationSeconds: durationSeconds ?? this.durationSeconds,
+    elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
+    typedChars: typedChars ?? this.typedChars,
+    correctChars: correctChars ?? this.correctChars,
+    incorrectChars: incorrectChars ?? this.incorrectChars,
+    correctWords: correctWords ?? this.correctWords,
+    wpm: wpm ?? this.wpm,
+    accuracy: accuracy ?? this.accuracy,
+  );
+  TypingResultTableData copyWithCompanion(TypingResultTableCompanion data) {
+    return TypingResultTableData(
+      id: data.id.present ? data.id.value : this.id,
+      takenAt: data.takenAt.present ? data.takenAt.value : this.takenAt,
+      language: data.language.present ? data.language.value : this.language,
+      mode: data.mode.present ? data.mode.value : this.mode,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      elapsedSeconds: data.elapsedSeconds.present
+          ? data.elapsedSeconds.value
+          : this.elapsedSeconds,
+      typedChars: data.typedChars.present
+          ? data.typedChars.value
+          : this.typedChars,
+      correctChars: data.correctChars.present
+          ? data.correctChars.value
+          : this.correctChars,
+      incorrectChars: data.incorrectChars.present
+          ? data.incorrectChars.value
+          : this.incorrectChars,
+      correctWords: data.correctWords.present
+          ? data.correctWords.value
+          : this.correctWords,
+      wpm: data.wpm.present ? data.wpm.value : this.wpm,
+      accuracy: data.accuracy.present ? data.accuracy.value : this.accuracy,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingResultTableData(')
+          ..write('id: $id, ')
+          ..write('takenAt: $takenAt, ')
+          ..write('language: $language, ')
+          ..write('mode: $mode, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('elapsedSeconds: $elapsedSeconds, ')
+          ..write('typedChars: $typedChars, ')
+          ..write('correctChars: $correctChars, ')
+          ..write('incorrectChars: $incorrectChars, ')
+          ..write('correctWords: $correctWords, ')
+          ..write('wpm: $wpm, ')
+          ..write('accuracy: $accuracy')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    takenAt,
+    language,
+    mode,
+    durationSeconds,
+    elapsedSeconds,
+    typedChars,
+    correctChars,
+    incorrectChars,
+    correctWords,
+    wpm,
+    accuracy,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TypingResultTableData &&
+          other.id == this.id &&
+          other.takenAt == this.takenAt &&
+          other.language == this.language &&
+          other.mode == this.mode &&
+          other.durationSeconds == this.durationSeconds &&
+          other.elapsedSeconds == this.elapsedSeconds &&
+          other.typedChars == this.typedChars &&
+          other.correctChars == this.correctChars &&
+          other.incorrectChars == this.incorrectChars &&
+          other.correctWords == this.correctWords &&
+          other.wpm == this.wpm &&
+          other.accuracy == this.accuracy);
+}
+
+class TypingResultTableCompanion
+    extends UpdateCompanion<TypingResultTableData> {
+  final Value<int> id;
+  final Value<DateTime> takenAt;
+  final Value<String> language;
+  final Value<String> mode;
+  final Value<int> durationSeconds;
+  final Value<int> elapsedSeconds;
+  final Value<int> typedChars;
+  final Value<int> correctChars;
+  final Value<int> incorrectChars;
+  final Value<int> correctWords;
+  final Value<double> wpm;
+  final Value<double> accuracy;
+  const TypingResultTableCompanion({
+    this.id = const Value.absent(),
+    this.takenAt = const Value.absent(),
+    this.language = const Value.absent(),
+    this.mode = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.elapsedSeconds = const Value.absent(),
+    this.typedChars = const Value.absent(),
+    this.correctChars = const Value.absent(),
+    this.incorrectChars = const Value.absent(),
+    this.correctWords = const Value.absent(),
+    this.wpm = const Value.absent(),
+    this.accuracy = const Value.absent(),
+  });
+  TypingResultTableCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime takenAt,
+    required String language,
+    required String mode,
+    required int durationSeconds,
+    required int elapsedSeconds,
+    required int typedChars,
+    required int correctChars,
+    required int incorrectChars,
+    required int correctWords,
+    required double wpm,
+    required double accuracy,
+  }) : takenAt = Value(takenAt),
+       language = Value(language),
+       mode = Value(mode),
+       durationSeconds = Value(durationSeconds),
+       elapsedSeconds = Value(elapsedSeconds),
+       typedChars = Value(typedChars),
+       correctChars = Value(correctChars),
+       incorrectChars = Value(incorrectChars),
+       correctWords = Value(correctWords),
+       wpm = Value(wpm),
+       accuracy = Value(accuracy);
+  static Insertable<TypingResultTableData> custom({
+    Expression<int>? id,
+    Expression<DateTime>? takenAt,
+    Expression<String>? language,
+    Expression<String>? mode,
+    Expression<int>? durationSeconds,
+    Expression<int>? elapsedSeconds,
+    Expression<int>? typedChars,
+    Expression<int>? correctChars,
+    Expression<int>? incorrectChars,
+    Expression<int>? correctWords,
+    Expression<double>? wpm,
+    Expression<double>? accuracy,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (takenAt != null) 'taken_at': takenAt,
+      if (language != null) 'language': language,
+      if (mode != null) 'mode': mode,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (elapsedSeconds != null) 'elapsed_seconds': elapsedSeconds,
+      if (typedChars != null) 'typed_chars': typedChars,
+      if (correctChars != null) 'correct_chars': correctChars,
+      if (incorrectChars != null) 'incorrect_chars': incorrectChars,
+      if (correctWords != null) 'correct_words': correctWords,
+      if (wpm != null) 'wpm': wpm,
+      if (accuracy != null) 'accuracy': accuracy,
+    });
+  }
+
+  TypingResultTableCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? takenAt,
+    Value<String>? language,
+    Value<String>? mode,
+    Value<int>? durationSeconds,
+    Value<int>? elapsedSeconds,
+    Value<int>? typedChars,
+    Value<int>? correctChars,
+    Value<int>? incorrectChars,
+    Value<int>? correctWords,
+    Value<double>? wpm,
+    Value<double>? accuracy,
+  }) {
+    return TypingResultTableCompanion(
+      id: id ?? this.id,
+      takenAt: takenAt ?? this.takenAt,
+      language: language ?? this.language,
+      mode: mode ?? this.mode,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
+      typedChars: typedChars ?? this.typedChars,
+      correctChars: correctChars ?? this.correctChars,
+      incorrectChars: incorrectChars ?? this.incorrectChars,
+      correctWords: correctWords ?? this.correctWords,
+      wpm: wpm ?? this.wpm,
+      accuracy: accuracy ?? this.accuracy,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (takenAt.present) {
+      map['taken_at'] = Variable<DateTime>(takenAt.value);
+    }
+    if (language.present) {
+      map['language'] = Variable<String>(language.value);
+    }
+    if (mode.present) {
+      map['mode'] = Variable<String>(mode.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (elapsedSeconds.present) {
+      map['elapsed_seconds'] = Variable<int>(elapsedSeconds.value);
+    }
+    if (typedChars.present) {
+      map['typed_chars'] = Variable<int>(typedChars.value);
+    }
+    if (correctChars.present) {
+      map['correct_chars'] = Variable<int>(correctChars.value);
+    }
+    if (incorrectChars.present) {
+      map['incorrect_chars'] = Variable<int>(incorrectChars.value);
+    }
+    if (correctWords.present) {
+      map['correct_words'] = Variable<int>(correctWords.value);
+    }
+    if (wpm.present) {
+      map['wpm'] = Variable<double>(wpm.value);
+    }
+    if (accuracy.present) {
+      map['accuracy'] = Variable<double>(accuracy.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingResultTableCompanion(')
+          ..write('id: $id, ')
+          ..write('takenAt: $takenAt, ')
+          ..write('language: $language, ')
+          ..write('mode: $mode, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('elapsedSeconds: $elapsedSeconds, ')
+          ..write('typedChars: $typedChars, ')
+          ..write('correctChars: $correctChars, ')
+          ..write('incorrectChars: $incorrectChars, ')
+          ..write('correctWords: $correctWords, ')
+          ..write('wpm: $wpm, ')
+          ..write('accuracy: $accuracy')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2420,10 +3161,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $PomodoroSessionTableTable pomodoroSessionTable =
       $PomodoroSessionTableTable(this);
   late final $FocusTagTableTable focusTagTable = $FocusTagTableTable(this);
+  late final $TypingResultTableTable typingResultTable =
+      $TypingResultTableTable(this);
   late final EventDao eventDao = EventDao(this as AppDatabase);
   late final TaskDao taskDao = TaskDao(this as AppDatabase);
   late final PomodoroDao pomodoroDao = PomodoroDao(this as AppDatabase);
   late final FocusTagDao focusTagDao = FocusTagDao(this as AppDatabase);
+  late final TypingDao typingDao = TypingDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2434,6 +3178,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     taskCompletionTable,
     pomodoroSessionTable,
     focusTagTable,
+    typingResultTable,
   ];
 }
 
@@ -3700,6 +4445,358 @@ typedef $$FocusTagTableTableProcessedTableManager =
       FocusTagTableData,
       PrefetchHooks Function()
     >;
+typedef $$TypingResultTableTableCreateCompanionBuilder =
+    TypingResultTableCompanion Function({
+      Value<int> id,
+      required DateTime takenAt,
+      required String language,
+      required String mode,
+      required int durationSeconds,
+      required int elapsedSeconds,
+      required int typedChars,
+      required int correctChars,
+      required int incorrectChars,
+      required int correctWords,
+      required double wpm,
+      required double accuracy,
+    });
+typedef $$TypingResultTableTableUpdateCompanionBuilder =
+    TypingResultTableCompanion Function({
+      Value<int> id,
+      Value<DateTime> takenAt,
+      Value<String> language,
+      Value<String> mode,
+      Value<int> durationSeconds,
+      Value<int> elapsedSeconds,
+      Value<int> typedChars,
+      Value<int> correctChars,
+      Value<int> incorrectChars,
+      Value<int> correctWords,
+      Value<double> wpm,
+      Value<double> accuracy,
+    });
+
+class $$TypingResultTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TypingResultTableTable> {
+  $$TypingResultTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get takenAt => $composableBuilder(
+    column: $table.takenAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get typedChars => $composableBuilder(
+    column: $table.typedChars,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctChars => $composableBuilder(
+    column: $table.correctChars,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get incorrectChars => $composableBuilder(
+    column: $table.incorrectChars,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctWords => $composableBuilder(
+    column: $table.correctWords,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get wpm => $composableBuilder(
+    column: $table.wpm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get accuracy => $composableBuilder(
+    column: $table.accuracy,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TypingResultTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TypingResultTableTable> {
+  $$TypingResultTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get takenAt => $composableBuilder(
+    column: $table.takenAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get typedChars => $composableBuilder(
+    column: $table.typedChars,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctChars => $composableBuilder(
+    column: $table.correctChars,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get incorrectChars => $composableBuilder(
+    column: $table.incorrectChars,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctWords => $composableBuilder(
+    column: $table.correctWords,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get wpm => $composableBuilder(
+    column: $table.wpm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get accuracy => $composableBuilder(
+    column: $table.accuracy,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TypingResultTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TypingResultTableTable> {
+  $$TypingResultTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get takenAt =>
+      $composableBuilder(column: $table.takenAt, builder: (column) => column);
+
+  GeneratedColumn<String> get language =>
+      $composableBuilder(column: $table.language, builder: (column) => column);
+
+  GeneratedColumn<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get typedChars => $composableBuilder(
+    column: $table.typedChars,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctChars => $composableBuilder(
+    column: $table.correctChars,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get incorrectChars => $composableBuilder(
+    column: $table.incorrectChars,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctWords => $composableBuilder(
+    column: $table.correctWords,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get wpm =>
+      $composableBuilder(column: $table.wpm, builder: (column) => column);
+
+  GeneratedColumn<double> get accuracy =>
+      $composableBuilder(column: $table.accuracy, builder: (column) => column);
+}
+
+class $$TypingResultTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TypingResultTableTable,
+          TypingResultTableData,
+          $$TypingResultTableTableFilterComposer,
+          $$TypingResultTableTableOrderingComposer,
+          $$TypingResultTableTableAnnotationComposer,
+          $$TypingResultTableTableCreateCompanionBuilder,
+          $$TypingResultTableTableUpdateCompanionBuilder,
+          (
+            TypingResultTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TypingResultTableTable,
+              TypingResultTableData
+            >,
+          ),
+          TypingResultTableData,
+          PrefetchHooks Function()
+        > {
+  $$TypingResultTableTableTableManager(
+    _$AppDatabase db,
+    $TypingResultTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TypingResultTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TypingResultTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TypingResultTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> takenAt = const Value.absent(),
+                Value<String> language = const Value.absent(),
+                Value<String> mode = const Value.absent(),
+                Value<int> durationSeconds = const Value.absent(),
+                Value<int> elapsedSeconds = const Value.absent(),
+                Value<int> typedChars = const Value.absent(),
+                Value<int> correctChars = const Value.absent(),
+                Value<int> incorrectChars = const Value.absent(),
+                Value<int> correctWords = const Value.absent(),
+                Value<double> wpm = const Value.absent(),
+                Value<double> accuracy = const Value.absent(),
+              }) => TypingResultTableCompanion(
+                id: id,
+                takenAt: takenAt,
+                language: language,
+                mode: mode,
+                durationSeconds: durationSeconds,
+                elapsedSeconds: elapsedSeconds,
+                typedChars: typedChars,
+                correctChars: correctChars,
+                incorrectChars: incorrectChars,
+                correctWords: correctWords,
+                wpm: wpm,
+                accuracy: accuracy,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime takenAt,
+                required String language,
+                required String mode,
+                required int durationSeconds,
+                required int elapsedSeconds,
+                required int typedChars,
+                required int correctChars,
+                required int incorrectChars,
+                required int correctWords,
+                required double wpm,
+                required double accuracy,
+              }) => TypingResultTableCompanion.insert(
+                id: id,
+                takenAt: takenAt,
+                language: language,
+                mode: mode,
+                durationSeconds: durationSeconds,
+                elapsedSeconds: elapsedSeconds,
+                typedChars: typedChars,
+                correctChars: correctChars,
+                incorrectChars: incorrectChars,
+                correctWords: correctWords,
+                wpm: wpm,
+                accuracy: accuracy,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TypingResultTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TypingResultTableTable,
+      TypingResultTableData,
+      $$TypingResultTableTableFilterComposer,
+      $$TypingResultTableTableOrderingComposer,
+      $$TypingResultTableTableAnnotationComposer,
+      $$TypingResultTableTableCreateCompanionBuilder,
+      $$TypingResultTableTableUpdateCompanionBuilder,
+      (
+        TypingResultTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TypingResultTableTable,
+          TypingResultTableData
+        >,
+      ),
+      TypingResultTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3714,4 +4811,6 @@ class $AppDatabaseManager {
       $$PomodoroSessionTableTableTableManager(_db, _db.pomodoroSessionTable);
   $$FocusTagTableTableTableManager get focusTagTable =>
       $$FocusTagTableTableTableManager(_db, _db.focusTagTable);
+  $$TypingResultTableTableTableManager get typingResultTable =>
+      $$TypingResultTableTableTableManager(_db, _db.typingResultTable);
 }

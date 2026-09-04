@@ -19,4 +19,7 @@ abstract class RegisterModule {
 
   @lazySingleton
   FocusTagDao focusTagDao(AppDatabase db) => db.focusTagDao;
+
+  @lazySingleton
+  TypingDao typingDao(AppDatabase db) => db.typingDao;
 }

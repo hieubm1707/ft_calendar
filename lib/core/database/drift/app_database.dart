@@ -9,10 +9,12 @@ import 'daos/event_dao.dart';
 import 'daos/focus_tag_dao.dart';
 import 'daos/pomodoro_dao.dart';
 import 'daos/task_dao.dart';
+import 'daos/typing_dao.dart';
 import 'tables/event_table.dart';
 import 'tables/focus_tag_table.dart';
 import 'tables/pomodoro_table.dart';
 import 'tables/task_table.dart';
+import 'tables/typing_table.dart';
 
 part 'app_database.g.dart';
 
@@ -24,8 +26,9 @@ part 'app_database.g.dart';
     TaskCompletionTable,
     PomodoroSessionTable,
     FocusTagTable,
+    TypingResultTable,
   ],
-  daos: [EventDao, TaskDao, PomodoroDao, FocusTagDao],
+  daos: [EventDao, TaskDao, PomodoroDao, FocusTagDao, TypingDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -34,7 +37,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -59,6 +62,9 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(focusTagTable);
             await m.addColumn(
                 pomodoroSessionTable, pomodoroSessionTable.focusTagId);
+          }
+          if (from < 7) {
+            await m.createTable(typingResultTable);
           }
         },
         // Seed tag mặc định 1 lần (cài mới hoặc vừa nâng cấp lên v6).
