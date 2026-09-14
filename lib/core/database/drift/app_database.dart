@@ -8,12 +8,14 @@ import 'package:path_provider/path_provider.dart';
 import 'daos/event_dao.dart';
 import 'daos/focus_tag_dao.dart';
 import 'daos/pomodoro_dao.dart';
+import 'daos/remote_device_dao.dart';
 import 'daos/task_dao.dart';
 import 'daos/typing_content_dao.dart';
 import 'daos/typing_dao.dart';
 import 'tables/event_table.dart';
 import 'tables/focus_tag_table.dart';
 import 'tables/pomodoro_table.dart';
+import 'tables/remote_device_table.dart';
 import 'tables/task_table.dart';
 import 'tables/typing_content_table.dart';
 import 'tables/typing_table.dart';
@@ -30,6 +32,7 @@ part 'app_database.g.dart';
     FocusTagTable,
     TypingResultTable,
     TypingContentPackTable,
+    RemoteDeviceTable,
   ],
   daos: [
     EventDao,
@@ -38,6 +41,7 @@ part 'app_database.g.dart';
     FocusTagDao,
     TypingDao,
     TypingContentDao,
+    RemoteDeviceDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -47,7 +51,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

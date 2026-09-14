@@ -25,4 +25,8 @@ abstract class RegisterModule {
 
   @lazySingleton
   TypingContentDao typingContentDao(AppDatabase db) => db.typingContentDao;
+
+  @lazySingleton
+  RemoteDeviceDao remoteDeviceDao(AppDatabase db) => db.remoteDeviceDao;
 }
+

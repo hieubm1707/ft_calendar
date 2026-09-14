@@ -67,6 +67,10 @@ import 'package:example_app/features/pomodoro/presentation/cubit/pomodoro_report
     as _i697;
 import 'package:example_app/features/pomodoro/presentation/desktop/pomodoro_tray_controller.dart'
     as _i610;
+import 'package:example_app/features/remote/data/repositories/remote_repository_impl.dart'
+    as _i179;
+import 'package:example_app/features/remote/domain/repositories/remote_repository.dart'
+    as _i137;
 import 'package:example_app/features/tasks/data/datasources/task_local_datasource.dart'
     as _i725;
 import 'package:example_app/features/tasks/data/repositories/task_repository_impl.dart'
@@ -162,12 +166,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i413.TypingContentDao>(
       () => registerModule.typingContentDao(gh<_i413.AppDatabase>()),
     );
+    gh.lazySingleton<_i413.RemoteDeviceDao>(
+      () => registerModule.remoteDeviceDao(gh<_i413.AppDatabase>()),
+    );
     gh.lazySingleton<_i908.TypingLocalDataSource>(
       () => _i908.TypingDriftDataSource(gh<_i413.TypingDao>()),
     );
     gh.lazySingleton<_i734.TypingContentPackDataSource>(
       () =>
           _i734.TypingContentPackDriftDataSource(gh<_i413.TypingContentDao>()),
+    );
+    gh.lazySingleton<_i137.RemoteRepository>(
+      () => _i179.RemoteRepositoryImpl(gh<_i413.RemoteDeviceDao>()),
     );
     gh.lazySingleton<_i725.TaskLocalDataSource>(
       () => _i725.TaskDriftDataSource(gh<_i413.TaskDao>()),

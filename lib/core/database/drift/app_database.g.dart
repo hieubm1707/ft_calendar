@@ -3572,6 +3572,305 @@ class TypingContentPackTableCompanion
   }
 }
 
+class $RemoteDeviceTableTable extends RemoteDeviceTable
+    with TableInfo<$RemoteDeviceTableTable, RemoteDeviceEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RemoteDeviceTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 100,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name, type, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'remote_device_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RemoteDeviceEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RemoteDeviceEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RemoteDeviceEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $RemoteDeviceTableTable createAlias(String alias) {
+    return $RemoteDeviceTableTable(attachedDatabase, alias);
+  }
+}
+
+class RemoteDeviceEntry extends DataClass
+    implements Insertable<RemoteDeviceEntry> {
+  final int id;
+  final String name;
+  final String type;
+  final DateTime createdAt;
+  const RemoteDeviceEntry({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['type'] = Variable<String>(type);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  RemoteDeviceTableCompanion toCompanion(bool nullToAbsent) {
+    return RemoteDeviceTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      type: Value(type),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory RemoteDeviceEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RemoteDeviceEntry(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      type: serializer.fromJson<String>(json['type']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'type': serializer.toJson<String>(type),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  RemoteDeviceEntry copyWith({
+    int? id,
+    String? name,
+    String? type,
+    DateTime? createdAt,
+  }) => RemoteDeviceEntry(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    type: type ?? this.type,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  RemoteDeviceEntry copyWithCompanion(RemoteDeviceTableCompanion data) {
+    return RemoteDeviceEntry(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      type: data.type.present ? data.type.value : this.type,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RemoteDeviceEntry(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, type, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RemoteDeviceEntry &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.type == this.type &&
+          other.createdAt == this.createdAt);
+}
+
+class RemoteDeviceTableCompanion extends UpdateCompanion<RemoteDeviceEntry> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> type;
+  final Value<DateTime> createdAt;
+  const RemoteDeviceTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.type = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  RemoteDeviceTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String type,
+    this.createdAt = const Value.absent(),
+  }) : name = Value(name),
+       type = Value(type);
+  static Insertable<RemoteDeviceEntry> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? type,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (type != null) 'type': type,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  RemoteDeviceTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String>? type,
+    Value<DateTime>? createdAt,
+  }) {
+    return RemoteDeviceTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RemoteDeviceTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3587,12 +3886,17 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $TypingResultTableTable(this);
   late final $TypingContentPackTableTable typingContentPackTable =
       $TypingContentPackTableTable(this);
+  late final $RemoteDeviceTableTable remoteDeviceTable =
+      $RemoteDeviceTableTable(this);
   late final EventDao eventDao = EventDao(this as AppDatabase);
   late final TaskDao taskDao = TaskDao(this as AppDatabase);
   late final PomodoroDao pomodoroDao = PomodoroDao(this as AppDatabase);
   late final FocusTagDao focusTagDao = FocusTagDao(this as AppDatabase);
   late final TypingDao typingDao = TypingDao(this as AppDatabase);
   late final TypingContentDao typingContentDao = TypingContentDao(
+    this as AppDatabase,
+  );
+  late final RemoteDeviceDao remoteDeviceDao = RemoteDeviceDao(
     this as AppDatabase,
   );
   @override
@@ -3607,6 +3911,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     focusTagTable,
     typingResultTable,
     typingContentPackTable,
+    remoteDeviceTable,
   ];
 }
 
@@ -5459,6 +5764,194 @@ typedef $$TypingContentPackTableTableProcessedTableManager =
       TypingContentPackTableData,
       PrefetchHooks Function()
     >;
+typedef $$RemoteDeviceTableTableCreateCompanionBuilder =
+    RemoteDeviceTableCompanion Function({
+      Value<int> id,
+      required String name,
+      required String type,
+      Value<DateTime> createdAt,
+    });
+typedef $$RemoteDeviceTableTableUpdateCompanionBuilder =
+    RemoteDeviceTableCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String> type,
+      Value<DateTime> createdAt,
+    });
+
+class $$RemoteDeviceTableTableFilterComposer
+    extends Composer<_$AppDatabase, $RemoteDeviceTableTable> {
+  $$RemoteDeviceTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$RemoteDeviceTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $RemoteDeviceTableTable> {
+  $$RemoteDeviceTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$RemoteDeviceTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RemoteDeviceTableTable> {
+  $$RemoteDeviceTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$RemoteDeviceTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RemoteDeviceTableTable,
+          RemoteDeviceEntry,
+          $$RemoteDeviceTableTableFilterComposer,
+          $$RemoteDeviceTableTableOrderingComposer,
+          $$RemoteDeviceTableTableAnnotationComposer,
+          $$RemoteDeviceTableTableCreateCompanionBuilder,
+          $$RemoteDeviceTableTableUpdateCompanionBuilder,
+          (
+            RemoteDeviceEntry,
+            BaseReferences<
+              _$AppDatabase,
+              $RemoteDeviceTableTable,
+              RemoteDeviceEntry
+            >,
+          ),
+          RemoteDeviceEntry,
+          PrefetchHooks Function()
+        > {
+  $$RemoteDeviceTableTableTableManager(
+    _$AppDatabase db,
+    $RemoteDeviceTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RemoteDeviceTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RemoteDeviceTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RemoteDeviceTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => RemoteDeviceTableCompanion(
+                id: id,
+                name: name,
+                type: type,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                required String type,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => RemoteDeviceTableCompanion.insert(
+                id: id,
+                name: name,
+                type: type,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$RemoteDeviceTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RemoteDeviceTableTable,
+      RemoteDeviceEntry,
+      $$RemoteDeviceTableTableFilterComposer,
+      $$RemoteDeviceTableTableOrderingComposer,
+      $$RemoteDeviceTableTableAnnotationComposer,
+      $$RemoteDeviceTableTableCreateCompanionBuilder,
+      $$RemoteDeviceTableTableUpdateCompanionBuilder,
+      (
+        RemoteDeviceEntry,
+        BaseReferences<
+          _$AppDatabase,
+          $RemoteDeviceTableTable,
+          RemoteDeviceEntry
+        >,
+      ),
+      RemoteDeviceEntry,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5480,4 +5973,6 @@ class $AppDatabaseManager {
         _db,
         _db.typingContentPackTable,
       );
+  $$RemoteDeviceTableTableTableManager get remoteDeviceTable =>
+      $$RemoteDeviceTableTableTableManager(_db, _db.remoteDeviceTable);
 }

@@ -7,3 +7,5 @@ export 'daos/pomodoro_dao.dart';
 export 'daos/task_dao.dart';
 export 'daos/typing_content_dao.dart';
 export 'daos/typing_dao.dart';
+export 'daos/remote_device_dao.dart';
+

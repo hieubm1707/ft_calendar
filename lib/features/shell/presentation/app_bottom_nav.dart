@@ -21,15 +21,24 @@ class AppBottomNav extends StatelessWidget {
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       destinations: const [
         NavigationDestination(
-            icon: Icon(Icons.keyboard_alt_outlined), label: 'Typing'),
+          icon: Icon(Icons.keyboard_alt_outlined),
+          label: 'Typing',
+        ),
         NavigationDestination(
-            icon: Icon(Icons.calendar_today), label: 'Calendar'),
+          icon: Icon(Icons.calendar_today),
+          label: 'Calendar',
+        ),
         NavigationDestination(
-            icon: Icon(Icons.checklist_outlined), label: 'Tasks'),
+          icon: Icon(Icons.checklist_outlined),
+          label: 'Tasks',
+        ),
+        NavigationDestination(icon: Icon(Icons.timer_outlined), label: 'Focus'),
         NavigationDestination(
-            icon: Icon(Icons.timer_outlined), label: 'Focus'),
-        NavigationDestination(
-            icon: Icon(Icons.description_outlined), label: 'Notes'),
+          icon: Icon(Icons.settings_remote_outlined),
+          label: 'Remote',
+        ),
+        // NavigationDestination(
+        //     icon: Icon(Icons.description_outlined), label: 'Notes'),
       ],
     );
   }
