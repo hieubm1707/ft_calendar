@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/di/index.dart';
 import 'features/pomodoro/presentation/index.dart';
-import 'features/shell/presentation/main_shell.dart';
+import 'features/home/presentation/home.dart';
 
 class FtCalendarApp extends StatelessWidget {
   const FtCalendarApp({super.key});
@@ -21,7 +21,7 @@ class FtCalendarApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00B3A6)),
           useMaterial3: true,
         ),
-        home: const MainShell(),
+        home: const Home(),
       ),
     );
   }

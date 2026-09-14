@@ -41,6 +41,38 @@ class _PomodoroView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBackground,
+      appBar: AppBar(
+        title: const Text(
+          'Tập trung',
+          style: TextStyle(
+            color: Color(0xFF1C1C1E),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0.5,
+        iconTheme: const IconThemeData(color: Color(0xFF1C1C1E)),
+        actions: [
+          if (getIt<DesktopWindowService>().isSupported)
+            IconButton(
+              tooltip: 'Cửa sổ nổi nhỏ',
+              onPressed: () => getIt<DesktopWindowService>().setMiniMode(true),
+              icon: const Icon(
+                Icons.picture_in_picture_alt_outlined,
+                color: Color(0xFF1C1C1E),
+              ),
+            ),
+          IconButton(
+            tooltip: 'Báo cáo',
+            onPressed: () => _openReport(context),
+            icon: const Icon(
+              Icons.bar_chart_rounded,
+              color: Color(0xFF1C1C1E),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         bottom: false,
         child: BlocConsumer<PomodoroCubit, PomodoroState>(
@@ -54,33 +86,6 @@ class _PomodoroView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Text('Tập trung',
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFF1C1C1E))),
-                      ),
-                      if (getIt<DesktopWindowService>().isSupported)
-                        IconButton(
-                          tooltip: 'Cửa sổ nổi nhỏ',
-                          onPressed: () =>
-                              getIt<DesktopWindowService>().setMiniMode(true),
-                          icon: const Icon(
-                              Icons.picture_in_picture_alt_outlined,
-                              color: Color(0xFF1C1C1E)),
-                        ),
-                      IconButton(
-                        tooltip: 'Báo cáo',
-                        onPressed: () => _openReport(context),
-                        icon: const Icon(Icons.bar_chart_rounded,
-                            color: Color(0xFF1C1C1E)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
                   Center(
                     child: PomodoroRing(
                       progress: state.progress,

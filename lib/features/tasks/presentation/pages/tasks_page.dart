@@ -70,19 +70,24 @@ class _TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF7F2),
+      appBar: AppBar(
+        title: const Text(
+          'Công việc',
+          style: TextStyle(
+            color: Color(0xFF1C1C1E),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0.5,
+        iconTheme: const IconThemeData(color: Color(0xFF1C1C1E)),
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 12, 20, 8),
-              child: Text('Công việc',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF1C1C1E))),
-            ),
             Expanded(
               child: BlocConsumer<TaskCubit, TaskState>(
                 listenWhen: (p, c) => c.status == TaskStatus.failure,

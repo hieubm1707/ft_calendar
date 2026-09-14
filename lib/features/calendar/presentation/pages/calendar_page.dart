@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -124,16 +123,63 @@ class _CalendarViewState extends State<_CalendarView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF7F2),
+      appBar: AppBar(
+        title: ValueListenableBuilder<int>(
+          valueListenable: _visibleYear,
+          builder: (context, y, child) => Text(
+            'Lịch $y',
+            style: const TextStyle(
+              color: Color(0xFF1C1C1E),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0.5,
+        iconTheme: const IconThemeData(color: Color(0xFF1C1C1E)),
+        actions: [
+          BlocBuilder<CalendarCubit, CalendarState>(
+            buildWhen: (p, c) => p.activeColors != c.activeColors,
+            builder: (context, state) {
+              final active = state.activeColors.isNotEmpty;
+              return IconButton(
+                onPressed: _openFilter,
+                icon: Icon(
+                  active ? Icons.filter_alt : Icons.filter_alt_outlined,
+                  color: active
+                      ? Theme.of(context).colorScheme.primary
+                      : const Color(0xFF1C1C1E),
+                ),
+              );
+            },
+          ),
+          GestureDetector(
+            onTap: _scrollToToday,
+            child: Container(
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEDE9E4),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'Today',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1C1C1E),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _Header(
-              year: _visibleYear,
-              onToday: _scrollToToday,
-              onFilter: _openFilter,
-            ),
             Expanded(
               child: BlocConsumer<CalendarCubit, CalendarState>(
                 listenWhen: (p, c) => c.status == CalendarStatus.failure,
@@ -143,6 +189,14 @@ class _CalendarViewState extends State<_CalendarView> {
                   );
                 },
                 builder: (context, state) {
+                  if (state.status == CalendarStatus.loading ||
+                      state.status == CalendarStatus.initial) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFFF5252),
+                      ),
+                    );
+                  }
                   return ScrollablePositionedList.builder(
                     itemScrollController: _itemScrollController,
                     itemPositionsListener: _positionsListener,
@@ -173,70 +227,3 @@ class _CalendarViewState extends State<_CalendarView> {
   }
 }
 
-class _Header extends StatelessWidget {
-  final ValueListenable<int> year;
-  final VoidCallback onToday;
-  final VoidCallback onFilter;
-
-  const _Header({
-    required this.year,
-    required this.onToday,
-    required this.onFilter,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 12, 4),
-      child: Row(
-        children: [
-          ValueListenableBuilder<int>(
-            valueListenable: year,
-            builder: (context, y, child) => Text(
-              '$y',
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF1C1C1E),
-              ),
-            ),
-          ),
-          const Spacer(),
-          BlocBuilder<CalendarCubit, CalendarState>(
-            buildWhen: (p, c) => p.activeColors != c.activeColors,
-            builder: (context, state) {
-              final active = state.activeColors.isNotEmpty;
-              return IconButton(
-                onPressed: onFilter,
-                icon: Icon(
-                  active ? Icons.filter_alt : Icons.filter_alt_outlined,
-                  color: active
-                      ? Theme.of(context).colorScheme.primary
-                      : const Color(0xFF1C1C1E),
-                ),
-              );
-            },
-          ),
-          GestureDetector(
-            onTap: onToday,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEDE9E4),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'Today',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1C1C1E),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

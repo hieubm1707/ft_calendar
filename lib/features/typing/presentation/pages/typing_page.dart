@@ -68,6 +68,31 @@ class _TypingViewState extends State<_TypingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kTypingBackground,
+      appBar: AppBar(
+        title: const Text(
+          'Gõ phím',
+          style: TextStyle(
+            color: kTypingInk,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0.5,
+        iconTheme: const IconThemeData(color: kTypingInk),
+        actions: [
+          IconButton(
+            tooltip: 'Kho nội dung',
+            onPressed: () => _openContent(context),
+            icon: const Icon(Icons.library_add_outlined, color: kTypingInk),
+          ),
+          IconButton(
+            tooltip: 'Lịch sử',
+            onPressed: () => _openHistory(context),
+            icon: const Icon(Icons.bar_chart_rounded, color: kTypingInk),
+          ),
+        ],
+      ),
       body: SafeArea(
         bottom: false,
         child: BlocConsumer<TypingCubit, TypingState>(
@@ -84,11 +109,6 @@ class _TypingViewState extends State<_TypingView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _Header(
-                    onContent: () => _openContent(context),
-                    onHistory: () => _openHistory(context),
-                  ),
-                  const SizedBox(height: 12),
                   _Settings(state: state),
                   const SizedBox(height: 16),
                   _LiveStats(state: state),
@@ -148,37 +168,6 @@ class _TypingViewState extends State<_TypingView> {
   }
 }
 
-class _Header extends StatelessWidget {
-  final VoidCallback onContent;
-  final VoidCallback onHistory;
-
-  const _Header({required this.onContent, required this.onHistory});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          child: Text('Gõ phím',
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: kTypingInk)),
-        ),
-        IconButton(
-          tooltip: 'Kho nội dung',
-          onPressed: onContent,
-          icon: const Icon(Icons.library_add_outlined, color: kTypingInk),
-        ),
-        IconButton(
-          tooltip: 'Lịch sử',
-          onPressed: onHistory,
-          icon: const Icon(Icons.bar_chart_rounded, color: kTypingInk),
-        ),
-      ],
-    );
-  }
-}
 
 /// Ngôn ngữ + chế độ nội dung + thời lượng. Khoá lại khi bài đang chạy.
 class _Settings extends StatelessWidget {
