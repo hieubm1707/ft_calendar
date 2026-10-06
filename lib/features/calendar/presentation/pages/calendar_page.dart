@@ -18,37 +18,15 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
-    final start = DateTime(today.year, today.month - _monthsBefore, 1);
-    final months = List.generate(
-      _monthsBefore + 1 + _monthsAfter,
-      (i) => DateTime(start.year, start.month + i, 1),
-    );
-    final last = months.last;
-    final rangeEnd = DateTime(last.year, last.month,
-        DateUtils.getDaysInMonth(last.year, last.month), 23, 59, 59);
-
     return BlocProvider(
-      create: (_) => getIt<CalendarCubit>()..loadRange(start, rangeEnd),
-      child: _CalendarView(
-        today: today,
-        months: months,
-        todayIndex: _monthsBefore,
-      ),
+      create: (_) => getIt<CalendarCubit>(),
+      child: const _CalendarView(),
     );
   }
 }
 
 class _CalendarView extends StatefulWidget {
-  final DateTime today;
-  final List<DateTime> months;
-  final int todayIndex;
-
-  const _CalendarView({
-    required this.today,
-    required this.months,
-    required this.todayIndex,
-  });
+  const _CalendarView();
 
   @override
   State<_CalendarView> createState() => _CalendarViewState();
@@ -57,13 +35,33 @@ class _CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<_CalendarView> {
   final _itemScrollController = ItemScrollController();
   final _positionsListener = ItemPositionsListener.create();
-  late final ValueNotifier<int> _visibleYear =
-      ValueNotifier(widget.months[widget.todayIndex].year);
+  
+  late final DateTime _today;
+  late final List<DateTime> _months;
+  late final int _todayIndex;
+  late final ValueNotifier<int> _visibleYear;
 
   @override
   void initState() {
     super.initState();
+    _today = DateTime.now();
+    _todayIndex = CalendarPage._monthsBefore;
+    final start = DateTime(_today.year, _today.month - CalendarPage._monthsBefore, 1);
+    _months = List.generate(
+      CalendarPage._monthsBefore + 1 + CalendarPage._monthsAfter,
+      (i) => DateTime(start.year, start.month + i, 1),
+    );
+    _visibleYear = ValueNotifier(_months[_todayIndex].year);
     _positionsListener.itemPositions.addListener(_onScroll);
+
+    // Hoãn việc load DB sang microtask/postFrame sau khi route animation hoàn tất
+    Future.microtask(() {
+      if (!mounted) return;
+      final last = _months.last;
+      final rangeEnd = DateTime(last.year, last.month,
+          DateUtils.getDaysInMonth(last.year, last.month), 23, 59, 59);
+      context.read<CalendarCubit>().loadRange(start, rangeEnd);
+    });
   }
 
   @override
@@ -73,7 +71,7 @@ class _CalendarViewState extends State<_CalendarView> {
     super.dispose();
   }
 
-  void _onScroll() {
+    void _onScroll() {
     final positions = _positionsListener.itemPositions.value;
     if (positions.isEmpty) return;
     // Tháng trên cùng đang hiển thị.
@@ -81,12 +79,12 @@ class _CalendarViewState extends State<_CalendarView> {
         .where((p) => p.itemTrailingEdge > 0)
         .reduce((a, b) => a.itemLeadingEdge < b.itemLeadingEdge ? a : b)
         .index;
-    _visibleYear.value = widget.months[topIndex].year;
+    _visibleYear.value = _months[topIndex].year;
   }
 
   void _scrollToToday() {
     _itemScrollController.scrollTo(
-      index: widget.todayIndex,
+      index: _todayIndex,
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeOut,
     );
@@ -115,7 +113,7 @@ class _CalendarViewState extends State<_CalendarView> {
 
   Future<void> _addToday() async {
     final cubit = context.read<CalendarCubit>();
-    final event = await showAddEventSheet(context, initialDate: widget.today);
+    final event = await showAddEventSheet(context, initialDate: _today);
     if (event != null) await cubit.addEvent(event);
   }
 
@@ -200,12 +198,12 @@ class _CalendarViewState extends State<_CalendarView> {
                   return ScrollablePositionedList.builder(
                     itemScrollController: _itemScrollController,
                     itemPositionsListener: _positionsListener,
-                    initialScrollIndex: widget.todayIndex,
+                    initialScrollIndex: _todayIndex,
                     padding: const EdgeInsets.fromLTRB(16, 0, 12, 24),
-                    itemCount: widget.months.length,
+                    itemCount: _months.length,
                     itemBuilder: (_, i) => MonthView(
-                      month: widget.months[i],
-                      today: widget.today,
+                      month: _months[i],
+                      today: _today,
                       eventsOf: state.eventsOf,
                       onTapDay: _openDay,
                     ),
