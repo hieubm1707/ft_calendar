@@ -9,15 +9,15 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../../core/desktop/index.dart';
 import '../../../../core/di/index.dart';
 import '../cubit/pomodoro_cubit.dart';
-import '../widgets/pomodoro_ring.dart';
 
 const _kFocusColor = Color(0xFF00B3A6);
 const _kBreakColor = Color(0xFF5C6BC0);
 const _kBackground = Color(0xFF101418);
 const _kForeground = Color(0xFFF2F2F7);
 const _kMuted = Color(0xFF8E8E93);
+const _kSideGutter = 16.0;
 
-/// Đồng hồ tập trung toàn màn hình: nền tối, chỉ còn vòng tiến độ + thời gian.
+/// Đồng hồ tập trung toàn màn hình: nền tối, chỉ còn thời gian + thanh tiến độ ngang.
 ///
 /// Ẩn thanh trạng thái/điều hướng, giữ màn hình sáng, macOS thì phóng cửa sổ ra
 /// toàn màn hình. Khi đồng hồ đang chạy, nút điều khiển tự ẩn sau vài giây —
@@ -27,10 +27,10 @@ class PomodoroFullscreenPage extends StatefulWidget {
   const PomodoroFullscreenPage({super.key});
 
   static Route<void> route() => PageRouteBuilder<void>(
-        pageBuilder: (_, _, _) => const PomodoroFullscreenPage(),
-        transitionsBuilder: (_, animation, _, child) =>
-            FadeTransition(opacity: animation, child: child),
-      );
+    pageBuilder: (_, _, _) => const PomodoroFullscreenPage(),
+    transitionsBuilder: (_, animation, _, child) =>
+        FadeTransition(opacity: animation, child: child),
+  );
 
   @override
   State<PomodoroFullscreenPage> createState() => _PomodoroFullscreenPageState();
@@ -114,16 +114,18 @@ class _PomodoroFullscreenPageState extends State<PomodoroFullscreenPage> {
                   ),
                   Expanded(
                     child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final size = math.min(
-                              constraints.maxWidth,
-                              constraints.maxHeight,
-                            ) *
-                            0.85;
-                        return Center(
-                          child: _Clock(state: state, color: color, size: size),
-                        );
-                      },
+                      builder: (context, constraints) => Center(
+                        child: _Clock(
+                          state: state,
+                          color: color,
+                          width: constraints.maxWidth - 2 * _kSideGutter,
+                          // Chừa chỗ cho nhãn + thanh tiến độ + chấm vòng.
+                          maxTimerHeight: math.max(
+                            0,
+                            constraints.maxHeight - _Clock.chromeHeight,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   _Fade(
@@ -166,9 +168,18 @@ class _Fade extends StatelessWidget {
 class _Clock extends StatelessWidget {
   final PomodoroState state;
   final Color color;
-  final double size;
+  final double width;
+  final double maxTimerHeight;
 
-  const _Clock({required this.state, required this.color, required this.size});
+  const _Clock({
+    required this.state,
+    required this.color,
+    required this.width,
+    required this.maxTimerHeight,
+  });
+
+  /// Tổng chiều cao phần quanh số đếm: nhãn + khoảng cách + thanh + chấm.
+  static const chromeHeight = 110.0;
 
   static String phaseLabel(PomodoroPhase phase) {
     switch (phase) {
@@ -189,53 +200,91 @@ class _Clock extends StatelessWidget {
     final emoji = showTarget ? state.selectedTag?.emoji : null;
     final title = showTarget ? state.label! : phaseLabel(state.phase);
     final done = state.completedRounds % state.roundsBeforeLongBreak;
-    return PomodoroRing(
-      progress: state.progress,
-      color: color,
-      size: size,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size * 0.14),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              emoji == null ? title : '$emoji  $title',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: size * 0.06,
-                fontWeight: FontWeight.w700,
-                color: color,
-              ),
+    return SizedBox(
+      width: width,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            emoji == null ? title : '$emoji  $title',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: color,
             ),
-            FittedBox(
-              fit: BoxFit.scaleDown,
+          ),
+          // Số đếm lấp đầy màn hình: vẽ chữ thật to rồi thu lại cho vừa cạnh
+          // chạm trước (bề rộng khi dọc, chiều cao khi ngang).
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: width,
+              maxHeight: maxTimerHeight,
+            ),
+            child: FittedBox(
               child: Text(
                 state.remainingLabel,
-                style: TextStyle(
-                  fontSize: size * 0.22,
+                style: const TextStyle(
+                  fontSize: 1000,
+                  height: 1,
                   fontWeight: FontWeight.w800,
                   color: _kForeground,
-                  fontFeatures: const [FontFeature.tabularFigures()],
+                  fontFeatures: [FontFeature.tabularFigures()],
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < state.roundsBeforeLongBreak; i++)
-                  Container(
-                    width: 8,
-                    height: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: i < done ? color : color.withValues(alpha: 0.25),
-                    ),
+          ),
+          const SizedBox(height: 12),
+          _LineProgress(progress: state.progress, color: color),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var i = 0; i < state.roundsBeforeLongBreak; i++)
+                Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: i < done ? color : color.withValues(alpha: 0.25),
                   ),
-              ],
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Thanh tiến độ ngang bo tròn (0..1) — thay cho vòng tròn ở chế độ toàn màn hình.
+class _LineProgress extends StatelessWidget {
+  final double progress;
+  final Color color;
+
+  const _LineProgress({required this.progress, required this.color});
+
+  static const _height = 10.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(_height / 2),
+      child: Container(
+        height: _height,
+        color: color.withValues(alpha: 0.15),
+        alignment: Alignment.centerLeft,
+        child: FractionallySizedBox(
+          widthFactor: progress.clamp(0.0, 1.0),
+          heightFactor: 1,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(_height / 2),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -277,8 +326,8 @@ class _Controls extends StatelessWidget {
               state.isRunning
                   ? 'Tạm dừng'
                   : (state.runStatus == PomodoroRunStatus.paused
-                      ? 'Tiếp tục'
-                      : 'Bắt đầu'),
+                        ? 'Tiếp tục'
+                        : 'Bắt đầu'),
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
             ),
           ),
