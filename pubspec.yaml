@@ -67,6 +67,9 @@ dependencies:
   # Chọn file JSON/CSV để import từ vựng cho bài test gõ phím
   file_selector: ^1.0.3
 
+  # Giữ màn hình sáng khi đồng hồ tập trung ở chế độ toàn màn hình
+  wakelock_plus: ^1.6.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

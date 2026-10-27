@@ -7,6 +7,7 @@ import '../cubit/pomodoro_cubit.dart';
 import '../widgets/duration_format.dart';
 import '../widgets/focus_tag_sheet.dart';
 import '../widgets/pomodoro_ring.dart';
+import 'pomodoro_fullscreen_page.dart';
 import 'pomodoro_report_page.dart';
 
 const _kFocusColor = Color(0xFF00B3A6);
@@ -37,6 +38,10 @@ class _PomodoroView extends StatelessWidget {
     );
   }
 
+  void _openFullscreen(BuildContext context) {
+    Navigator.of(context).push(PomodoroFullscreenPage.route());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +68,14 @@ class _PomodoroView extends StatelessWidget {
                 color: Color(0xFF1C1C1E),
               ),
             ),
+          IconButton(
+            tooltip: 'Toàn màn hình',
+            onPressed: () => _openFullscreen(context),
+            icon: const Icon(
+              Icons.fullscreen,
+              color: Color(0xFF1C1C1E),
+            ),
+          ),
           IconButton(
             tooltip: 'Báo cáo',
             onPressed: () => _openReport(context),

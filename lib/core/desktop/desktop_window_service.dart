@@ -67,6 +67,12 @@ class DesktopWindowService with WindowListener {
 
   Future<void> toggleAlwaysOnTop() => setAlwaysOnTop(!_alwaysOnTop.value);
 
+  /// Phóng cửa sổ ra toàn màn hình (đồng hồ tập trung toàn màn hình).
+  Future<void> setFullScreen(bool enabled) async {
+    if (!isSupported) return;
+    await windowManager.setFullScreen(enabled);
+  }
+
   Future<void> showWindow() async {
     if (!isSupported) return;
     await windowManager.show();
