@@ -19,10 +19,11 @@ const _kSideGutter = 16.0;
 
 /// Đồng hồ tập trung toàn màn hình: nền tối, chỉ còn thời gian + thanh tiến độ ngang.
 ///
-/// Ẩn thanh trạng thái/điều hướng, giữ màn hình sáng, macOS thì phóng cửa sổ ra
-/// toàn màn hình. Khi đồng hồ đang chạy, nút điều khiển tự ẩn sau vài giây —
-/// chạm vào màn hình để hiện lại. Cubit vẫn là singleton nên thoát ra không
-/// ảnh hưởng phiên đang chạy.
+/// Luôn xoay ngang (thoát ra thì về dọc), ẩn thanh trạng thái/điều hướng, giữ
+/// màn hình sáng, macOS thì phóng cửa sổ ra toàn màn hình. Nút điều khiển gom
+/// lên góc trên bên phải để số đếm chiếm gần hết màn hình; khi đồng hồ đang
+/// chạy chúng tự ẩn sau vài giây — chạm vào màn hình để hiện lại. Cubit vẫn là
+/// singleton nên thoát ra không ảnh hưởng phiên đang chạy.
 class PomodoroFullscreenPage extends StatefulWidget {
   const PomodoroFullscreenPage({super.key});
 
@@ -45,6 +46,10 @@ class _PomodoroFullscreenPageState extends State<PomodoroFullscreenPage> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations(const [
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     WakelockPlus.enable();
     getIt<DesktopWindowService>().setFullScreen(true);
@@ -54,6 +59,7 @@ class _PomodoroFullscreenPageState extends State<PomodoroFullscreenPage> {
   @override
   void dispose() {
     _hideTimer?.cancel();
+    SystemChrome.setPreferredOrientations(const [DeviceOrientation.portraitUp]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     WakelockPlus.disable();
     getIt<DesktopWindowService>().setFullScreen(false);
@@ -99,17 +105,18 @@ class _PomodoroFullscreenPageState extends State<PomodoroFullscreenPage> {
               final color = state.isFocus ? _kFocusColor : _kBreakColor;
               return Column(
                 children: [
-                  _Fade(
-                    visible: _controlsVisible,
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        tooltip: 'Thoát toàn màn hình',
-                        iconSize: 28,
-                        color: _kMuted,
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: const Icon(Icons.fullscreen_exit),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(_kSideGutter, 4, 4, 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _PhaseLabel(state: state, color: color),
+                        ),
+                        _Fade(
+                          visible: _controlsVisible,
+                          child: _Controls(state: state, color: color),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
@@ -119,20 +126,13 @@ class _PomodoroFullscreenPageState extends State<PomodoroFullscreenPage> {
                           state: state,
                           color: color,
                           width: constraints.maxWidth - 2 * _kSideGutter,
-                          // Chừa chỗ cho nhãn + thanh tiến độ + chấm vòng.
+                          // Chừa chỗ cho thanh tiến độ bên dưới.
                           maxTimerHeight: math.max(
                             0,
                             constraints.maxHeight - _Clock.chromeHeight,
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  _Fade(
-                    visible: _controlsVisible,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-                      child: _Controls(state: state, color: color),
                     ),
                   ),
                 ],
@@ -165,21 +165,13 @@ class _Fade extends StatelessWidget {
   }
 }
 
-class _Clock extends StatelessWidget {
+/// Nhãn góc trên bên trái: tên tag đang chọn (hoặc tên giai đoạn) + chấm vòng.
+/// Luôn hiện, không ẩn theo nút điều khiển.
+class _PhaseLabel extends StatelessWidget {
   final PomodoroState state;
   final Color color;
-  final double width;
-  final double maxTimerHeight;
 
-  const _Clock({
-    required this.state,
-    required this.color,
-    required this.width,
-    required this.maxTimerHeight,
-  });
-
-  /// Tổng chiều cao phần quanh số đếm: nhãn + khoảng cách + thanh + chấm.
-  static const chromeHeight = 110.0;
+  const _PhaseLabel({required this.state, required this.color});
 
   static String phaseLabel(PomodoroPhase phase) {
     switch (phase) {
@@ -200,23 +192,61 @@ class _Clock extends StatelessWidget {
     final emoji = showTarget ? state.selectedTag?.emoji : null;
     final title = showTarget ? state.label! : phaseLabel(state.phase);
     final done = state.completedRounds % state.roundsBeforeLongBreak;
+    return Row(
+      children: [
+        Flexible(
+          child: Text(
+            emoji == null ? title : '$emoji  $title',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        for (var i = 0; i < state.roundsBeforeLongBreak; i++)
+          Container(
+            width: 8,
+            height: 8,
+            margin: const EdgeInsets.symmetric(horizontal: 3),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: i < done ? color : color.withValues(alpha: 0.25),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _Clock extends StatelessWidget {
+  final PomodoroState state;
+  final Color color;
+  final double width;
+  final double maxTimerHeight;
+
+  const _Clock({
+    required this.state,
+    required this.color,
+    required this.width,
+    required this.maxTimerHeight,
+  });
+
+  /// Chiều cao phần dưới số đếm: khoảng cách + thanh tiến độ + lề dưới.
+  static const chromeHeight = 40.0;
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: width,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            emoji == null ? title : '$emoji  $title',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: color,
-            ),
-          ),
           // Số đếm lấp đầy màn hình: vẽ chữ thật to rồi thu lại cho vừa cạnh
-          // chạm trước (bề rộng khi dọc, chiều cao khi ngang).
+          // chạm trước (thường là chiều cao vì màn hình luôn nằm ngang).
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: width,
@@ -237,22 +267,6 @@ class _Clock extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           _LineProgress(progress: state.progress, color: color),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (var i = 0; i < state.roundsBeforeLongBreak; i++)
-                Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.symmetric(horizontal: 3),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: i < done ? color : color.withValues(alpha: 0.25),
-                  ),
-                ),
-            ],
-          ),
         ],
       ),
     );
@@ -291,6 +305,7 @@ class _LineProgress extends StatelessWidget {
   }
 }
 
+/// Cụm nút góc trên bên phải: Dừng · Chạy/Tạm dừng · Bỏ qua · Thoát.
 class _Controls extends StatelessWidget {
   final PomodoroState state;
   final Color color;
@@ -302,43 +317,48 @@ class _Controls extends StatelessWidget {
     final cubit = context.read<PomodoroCubit>();
     final canStop = !state.isIdle || state.elapsedSeconds > 0;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
           tooltip: 'Dừng',
-          iconSize: 30,
+          iconSize: 28,
           color: _kForeground,
           disabledColor: _kMuted.withValues(alpha: 0.4),
           onPressed: canStop ? cubit.stop : null,
-          icon: const Icon(Icons.stop_circle_outlined),
+          icon: const Icon(Icons.stop_rounded),
         ),
-        const SizedBox(width: 18),
-        SizedBox(
-          width: 170,
-          height: 56,
-          child: FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: color,
-              shape: const StadiumBorder(),
-            ),
-            onPressed: state.isRunning ? cubit.pause : cubit.start,
-            child: Text(
-              state.isRunning
-                  ? 'Tạm dừng'
-                  : (state.runStatus == PomodoroRunStatus.paused
-                        ? 'Tiếp tục'
-                        : 'Bắt đầu'),
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
-            ),
+        const SizedBox(width: 4),
+        IconButton.filled(
+          tooltip: state.isRunning
+              ? 'Tạm dừng'
+              : (state.runStatus == PomodoroRunStatus.paused
+                    ? 'Tiếp tục'
+                    : 'Bắt đầu'),
+          iconSize: 28,
+          style: IconButton.styleFrom(
+            backgroundColor: color,
+            foregroundColor: Colors.white,
+          ),
+          onPressed: state.isRunning ? cubit.pause : cubit.start,
+          icon: Icon(
+            state.isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded,
           ),
         ),
-        const SizedBox(width: 18),
+        const SizedBox(width: 4),
         IconButton(
           tooltip: 'Bỏ qua',
-          iconSize: 30,
+          iconSize: 28,
           color: _kForeground,
           onPressed: cubit.skip,
-          icon: const Icon(Icons.skip_next_outlined),
+          icon: const Icon(Icons.skip_next_rounded),
+        ),
+        const SizedBox(width: 12),
+        IconButton(
+          tooltip: 'Thoát toàn màn hình',
+          iconSize: 28,
+          color: _kMuted,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.fullscreen_exit),
         ),
       ],
     );
