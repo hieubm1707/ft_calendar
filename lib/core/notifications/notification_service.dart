@@ -148,6 +148,40 @@ class NotificationService {
     );
   }
 
+  /// Đặt 1 thông báo nổ đúng 1 lần lúc [when] (bỏ qua nếu ở quá khứ).
+  Future<void> scheduleOnce({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime when,
+  }) async {
+    if (!when.isAfter(DateTime.now())) return;
+    await _plugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tz.TZDateTime.from(when, tz.local),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channelId,
+          'Nhắc sự kiện',
+          channelDescription: 'Thông báo nhắc sự kiện đã lên lịch',
+          importance: Importance.max,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+        macOS: DarwinNotificationDetails(),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
+
+  /// Id các thông báo đang chờ nổ.
+  Future<List<int>> pendingIds() async =>
+      (await _plugin.pendingNotificationRequests()).map((r) => r.id).toList();
+
   /// Huỷ nhắc của một sự kiện.
   Future<void> cancel(int id) => _plugin.cancel(id);
 

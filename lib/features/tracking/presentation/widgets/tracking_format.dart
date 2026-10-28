@@ -41,3 +41,10 @@ String dayTitle(DateTime day, DateTime today) {
   if (diff == 1) return 'Hôm qua';
   return '${kWeekdayShort[day.weekday - 1]}, ${day.day}/${day.month}';
 }
+
+/// Tạm ẩn giờ nhắc riêng của từng mục tiêu — dùng bộ nhắc chung ở Cài đặt
+/// Tracking. Dữ liệu cũ vẫn giữ trong DB, bật lại là hiện như trước.
+const kShowGoalReminders = false;
+
+String comparisonSymbol(ReminderComparison c) =>
+    c == ReminderComparison.lessThan ? '<' : '=';

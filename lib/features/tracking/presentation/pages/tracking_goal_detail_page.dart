@@ -255,7 +255,7 @@ class _Info extends StatelessWidget {
                   : '${fmtDate(goal.startDate)} – ${fmtDate(end)}',
               style: muted,
             ),
-            if (goal.reminders.isNotEmpty)
+            if (kShowGoalReminders && goal.reminders.isNotEmpty)
               _IconText(
                 icon: Icons.notifications_none,
                 text: goal.reminders.map(fmtMinutes).join(', '),

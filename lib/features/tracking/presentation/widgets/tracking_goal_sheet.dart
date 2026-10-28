@@ -218,27 +218,32 @@ class _TrackingGoalSheetState extends State<_TrackingGoalSheet> {
                 ],
               ),
             ],
-            const SizedBox(height: 18),
-            _Label(icon: Icons.notifications_none, text: 'Nhắc nhở'),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final m in _reminders)
-                  Chip(
-                    label: Text(fmtMinutes(m)),
-                    onDeleted: () =>
-                        setState(() => _reminders = [..._reminders]..remove(m)),
-                  ),
-                if (_reminders.length < TrackingGoal.maxReminders)
-                  ActionChip(
-                    avatar: const Icon(Icons.add, size: 18),
-                    label: const Text('Thêm giờ nhắc'),
-                    onPressed: _addReminder,
-                  ),
-              ],
-            ),
+            // Tạm ẩn — dùng bộ nhắc chung ở Cài đặt Tracking. Giờ nhắc đã lưu
+            // vẫn được giữ nguyên khi sửa mục tiêu.
+            if (kShowGoalReminders) ...[
+              const SizedBox(height: 18),
+              _Label(icon: Icons.notifications_none, text: 'Nhắc nhở'),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final m in _reminders)
+                    Chip(
+                      label: Text(fmtMinutes(m)),
+                      onDeleted: () => setState(
+                        () => _reminders = [..._reminders]..remove(m),
+                      ),
+                    ),
+                  if (_reminders.length < TrackingGoal.maxReminders)
+                    ActionChip(
+                      avatar: const Icon(Icons.add, size: 18),
+                      label: const Text('Thêm giờ nhắc'),
+                      onPressed: _addReminder,
+                    ),
+                ],
+              ),
+            ],
             const SizedBox(height: 18),
             _Label(icon: Icons.event, text: 'Thời gian'),
             const SizedBox(height: 4),

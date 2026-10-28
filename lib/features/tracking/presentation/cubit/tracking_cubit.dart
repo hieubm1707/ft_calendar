@@ -7,6 +7,8 @@ import '../../../../core/error/index.dart';
 import '../../../../core/notifications/index.dart';
 import '../../../../core/usecase/index.dart';
 import '../../domain/index.dart';
+import '../reminders/tracking_reminder_sync.dart';
+import '../widgets/tracking_format.dart';
 
 part 'tracking_state.dart';
 
@@ -15,7 +17,8 @@ DateTime _today() {
   return DateTime(n.year, n.month, n.day);
 }
 
-/// Trang Tracking: mục tiêu + lượt hoàn thành + ngày đang xem; đặt lịch nhắc.
+/// Trang Tracking: mục tiêu + lượt hoàn thành + ngày đang xem. Mỗi thay đổi
+/// gọi [TrackingReminderSync] để đặt lại bộ nhắc theo % hoàn thành.
 @injectable
 class TrackingCubit extends Cubit<TrackingState> {
   final GetTrackingOverview _getOverview;
@@ -23,6 +26,7 @@ class TrackingCubit extends Cubit<TrackingState> {
   final DeleteTrackingGoal _deleteGoal;
   final SetTrackingCheckin _setCheckin;
   final NotificationService _notifications;
+  final TrackingReminderSync _reminderSync;
 
   TrackingCubit(
     this._getOverview,
@@ -30,6 +34,7 @@ class TrackingCubit extends Cubit<TrackingState> {
     this._deleteGoal,
     this._setCheckin,
     this._notifications,
+    this._reminderSync,
   ) : super(TrackingState(selectedDay: _today()));
 
   Future<void> load() async {
@@ -51,7 +56,7 @@ class TrackingCubit extends Cubit<TrackingState> {
             doneKeys: trackingDoneKeys(overview.checkins),
           ),
         );
-        _cancelEndedReminders(overview.goals);
+        if (kShowGoalReminders) _cancelEndedReminders(overview.goals);
       },
     );
   }
@@ -88,8 +93,11 @@ class TrackingCubit extends Cubit<TrackingState> {
         ),
       ),
       (id) async {
-        await _rescheduleReminders(goal.copyWith(id: id));
+        if (kShowGoalReminders) {
+          await _rescheduleReminders(goal.copyWith(id: id));
+        }
         await load();
+        _reminderSync.sync();
       },
     );
   }
@@ -110,11 +118,15 @@ class TrackingCubit extends Cubit<TrackingState> {
           errorMessage: failure.message,
         ),
       ),
-      (_) async => load(),
+      (_) async {
+        await load();
+        // Tỉ lệ hoàn thành đổi → đặt lại bộ nhắc theo %.
+        _reminderSync.sync();
+      },
     );
   }
 
-  // ---- Nhắc nhở ----------------------------------------------------------
+  // ---- Nhắc riêng từng mục tiêu (đang ẩn — xem kShowGoalReminders) -------
   // Id thông báo: 500000000 + goalId*100 + thứ-tự-giờ*8 + thứ (0 = hằng ngày).
   // Tối đa [TrackingGoal.maxReminders] giờ × 8 = 40 < 100 → không đụng mục tiêu khác.
 

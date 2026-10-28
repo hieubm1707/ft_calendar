@@ -9,6 +9,7 @@ import '../widgets/task_source_chip.dart';
 import '../widgets/tracking_format.dart';
 import '../widgets/tracking_goal_sheet.dart';
 import 'tracking_goal_detail_page.dart';
+import 'tracking_reminder_settings_page.dart';
 
 DateTime _today() {
   final n = DateTime.now();
@@ -74,6 +75,17 @@ class _TrackingView extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+            tooltip: 'Cài đặt nhắc nhở',
+            icon: const Icon(Icons.settings_outlined),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const TrackingReminderSettingsPage(),
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Mục tiêu mới',

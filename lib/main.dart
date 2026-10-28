@@ -7,6 +7,7 @@ import 'core/home_widget/index.dart';
 import 'core/notifications/index.dart';
 import 'features/pomodoro/presentation/index.dart';
 import 'features/settings/presentation/index.dart';
+import 'features/tracking/presentation/index.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,5 +26,7 @@ Future<void> main() async {
     widgetService.refreshAll();
     getIt<PomodoroCubit>().load();
     getIt<PomodoroTrayController>().start();
+    // Đặt lại nhắc Tracking theo % hoàn thành + theo dõi app ra/vào nền.
+    getIt<TrackingReminderSync>().start();
   });
 }

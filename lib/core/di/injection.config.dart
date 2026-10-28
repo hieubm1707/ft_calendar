@@ -103,21 +103,35 @@ import 'package:example_app/features/tasks/presentation/cubit/task_cubit.dart'
     as _i553;
 import 'package:example_app/features/tracking/data/datasources/tracking_local_datasource.dart'
     as _i116;
+import 'package:example_app/features/tracking/data/datasources/tracking_reminder_local_datasource.dart'
+    as _i399;
+import 'package:example_app/features/tracking/data/repositories/tracking_reminder_repository_impl.dart'
+    as _i432;
 import 'package:example_app/features/tracking/data/repositories/tracking_repository_impl.dart'
     as _i48;
 import 'package:example_app/features/tracking/domain/index.dart' as _i231;
+import 'package:example_app/features/tracking/domain/repositories/tracking_reminder_repository.dart'
+    as _i615;
 import 'package:example_app/features/tracking/domain/repositories/tracking_repository.dart'
     as _i322;
 import 'package:example_app/features/tracking/domain/usecases/delete_tracking_goal.dart'
     as _i593;
 import 'package:example_app/features/tracking/domain/usecases/get_tracking_overview.dart'
     as _i278;
+import 'package:example_app/features/tracking/domain/usecases/get_tracking_reminder_rules.dart'
+    as _i594;
 import 'package:example_app/features/tracking/domain/usecases/save_tracking_goal.dart'
     as _i806;
+import 'package:example_app/features/tracking/domain/usecases/save_tracking_reminder_rules.dart'
+    as _i677;
 import 'package:example_app/features/tracking/domain/usecases/set_tracking_checkin.dart'
     as _i571;
 import 'package:example_app/features/tracking/presentation/cubit/tracking_cubit.dart'
     as _i392;
+import 'package:example_app/features/tracking/presentation/cubit/tracking_reminder_cubit.dart'
+    as _i503;
+import 'package:example_app/features/tracking/presentation/reminders/tracking_reminder_sync.dart'
+    as _i112;
 import 'package:example_app/features/typing/data/datasources/typing_content_datasource.dart'
     as _i682;
 import 'package:example_app/features/typing/data/datasources/typing_content_pack_datasource.dart'
@@ -178,6 +192,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i471.AppearanceLocalDataSource>(
       () => _i471.AppearanceLocalDataSourceImpl(),
     );
+    gh.lazySingleton<_i399.TrackingReminderLocalDataSource>(
+      () => _i399.TrackingReminderLocalDataSourceImpl(),
+    );
     gh.lazySingleton<_i682.TypingContentDataSource>(
       () => _i682.TypingContentAssetDataSource(),
     );
@@ -211,6 +228,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i228.AppearanceRepository>(
       () =>
           _i710.AppearanceRepositoryImpl(gh<_i471.AppearanceLocalDataSource>()),
+    );
+    gh.lazySingleton<_i231.TrackingReminderRepository>(
+      () => _i432.TrackingReminderRepositoryImpl(
+        gh<_i399.TrackingReminderLocalDataSource>(),
+      ),
     );
     gh.lazySingleton<_i985.GetThemeMode>(
       () => _i985.GetThemeMode(gh<_i197.AppearanceRepository>()),
@@ -281,6 +303,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i734.TypingContentPackDataSource>(),
       ),
     );
+    gh.lazySingleton<_i594.GetTrackingReminderRules>(
+      () => _i594.GetTrackingReminderRules(
+        gh<_i615.TrackingReminderRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i677.SaveTrackingReminderRules>(
+      () => _i677.SaveTrackingReminderRules(
+        gh<_i615.TrackingReminderRepository>(),
+      ),
+    );
     gh.lazySingleton<_i677.GetTypingContent>(
       () => _i677.GetTypingContent(gh<_i713.TypingContentRepository>()),
     );
@@ -323,12 +355,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i714.EventRepository>(
       () => _i356.EventRepositoryImpl(gh<_i630.EventLocalDataSource>()),
     );
-    gh.factory<_i392.TrackingCubit>(
-      () => _i392.TrackingCubit(
+    gh.lazySingleton<_i112.TrackingReminderSync>(
+      () => _i112.TrackingReminderSync(
         gh<_i231.GetTrackingOverview>(),
-        gh<_i231.SaveTrackingGoal>(),
-        gh<_i231.DeleteTrackingGoal>(),
-        gh<_i231.SetTrackingCheckin>(),
+        gh<_i231.GetTrackingReminderRules>(),
         gh<_i272.NotificationService>(),
       ),
     );
@@ -382,10 +412,27 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i904.RemoveTaskSchedule>(),
       ),
     );
+    gh.factory<_i503.TrackingReminderCubit>(
+      () => _i503.TrackingReminderCubit(
+        gh<_i231.GetTrackingReminderRules>(),
+        gh<_i231.SaveTrackingReminderRules>(),
+        gh<_i112.TrackingReminderSync>(),
+      ),
+    );
     gh.factory<_i677.TypingHistoryCubit>(
       () => _i677.TypingHistoryCubit(
         gh<_i885.GetTypingResults>(),
         gh<_i885.DeleteTypingResult>(),
+      ),
+    );
+    gh.factory<_i392.TrackingCubit>(
+      () => _i392.TrackingCubit(
+        gh<_i231.GetTrackingOverview>(),
+        gh<_i231.SaveTrackingGoal>(),
+        gh<_i231.DeleteTrackingGoal>(),
+        gh<_i231.SetTrackingCheckin>(),
+        gh<_i272.NotificationService>(),
+        gh<_i112.TrackingReminderSync>(),
       ),
     );
     gh.lazySingleton<_i850.DeleteFocusTag>(
