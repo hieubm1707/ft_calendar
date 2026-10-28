@@ -11,16 +11,10 @@ import '../../../../core/di/index.dart';
 import '../../../../core/theme/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 
-// Trang luôn tối → lấy màu từ bảng màu Tối, không theo chế độ đang chọn.
-const _kPalette = AppColors.dark;
-final _kFocusColor = _kPalette.accent;
-final _kBreakColor = _kPalette.breakTime;
-final _kBackground = _kPalette.background;
-final _kForeground = _kPalette.textPrimary;
-final _kMuted = _kPalette.textMuted;
 const _kSideGutter = 16.0;
 
-/// Đồng hồ tập trung toàn màn hình: nền tối, chỉ còn thời gian + thanh tiến độ ngang.
+/// Đồng hồ tập trung toàn màn hình: nền gradient theo giao diện Sáng/Tối đang
+/// chọn, chỉ còn thời gian + thanh tiến độ ngang.
 ///
 /// Luôn xoay ngang (thoát ra thì về dọc), ẩn thanh trạng thái/điều hướng, giữ
 /// màn hình sáng, macOS thì phóng cửa sổ ra toàn màn hình. Nút điều khiển gom
@@ -93,54 +87,58 @@ class _PomodoroFullscreenPageState extends State<PomodoroFullscreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _kBackground,
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: _onTap,
-        child: SafeArea(
-          child: BlocConsumer<PomodoroCubit, PomodoroState>(
-            // Chạy → hẹn giờ ẩn nút; dừng/tạm dừng/hết giờ → hiện nút ngay.
-            listenWhen: (p, c) => p.runStatus != c.runStatus,
-            listener: (context, state) =>
-                _showControls(autoHide: state.isRunning),
-            builder: (context, state) {
-              final color = state.isFocus ? _kFocusColor : _kBreakColor;
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(_kSideGutter, 4, 4, 0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _PhaseLabel(state: state, color: color),
-                        ),
-                        _Fade(
-                          visible: _controlsVisible,
-                          child: _Controls(state: state, color: color),
-                        ),
-                      ],
+    final colors = context.colors;
+    // Route tự dựng (PageRouteBuilder) không qua PageTransitionsTheme → tự gắn
+    // nền gradient; Scaffold trong suốt theo theme.
+    return AppBackground(
+      child: Scaffold(
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: _onTap,
+          child: SafeArea(
+            child: BlocConsumer<PomodoroCubit, PomodoroState>(
+              // Chạy → hẹn giờ ẩn nút; dừng/tạm dừng/hết giờ → hiện nút ngay.
+              listenWhen: (p, c) => p.runStatus != c.runStatus,
+              listener: (context, state) =>
+                  _showControls(autoHide: state.isRunning),
+              builder: (context, state) {
+                final color = state.isFocus ? colors.accent : colors.breakTime;
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(_kSideGutter, 4, 4, 0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _PhaseLabel(state: state, color: color),
+                          ),
+                          _Fade(
+                            visible: _controlsVisible,
+                            child: _Controls(state: state, color: color),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) => Center(
-                        child: _Clock(
-                          state: state,
-                          color: color,
-                          width: constraints.maxWidth - 2 * _kSideGutter,
-                          // Chừa chỗ cho thanh tiến độ bên dưới.
-                          maxTimerHeight: math.max(
-                            0,
-                            constraints.maxHeight - _Clock.chromeHeight,
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) => Center(
+                          child: _Clock(
+                            state: state,
+                            color: color,
+                            width: constraints.maxWidth - 2 * _kSideGutter,
+                            // Chừa chỗ cho thanh tiến độ bên dưới.
+                            maxTimerHeight: math.max(
+                              0,
+                              constraints.maxHeight - _Clock.chromeHeight,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -262,7 +260,7 @@ class _Clock extends StatelessWidget {
                   fontSize: 1000,
                   height: 1,
                   fontWeight: FontWeight.w800,
-                  color: _kForeground,
+                  color: context.colors.textPrimary,
                   fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
@@ -318,6 +316,7 @@ class _Controls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<PomodoroCubit>();
+    final colors = context.colors;
     final canStop = !state.isIdle || state.elapsedSeconds > 0;
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -325,8 +324,8 @@ class _Controls extends StatelessWidget {
         IconButton(
           tooltip: 'Dừng',
           iconSize: 28,
-          color: _kForeground,
-          disabledColor: _kMuted.withValues(alpha: 0.4),
+          color: colors.textPrimary,
+          disabledColor: colors.textDisabled,
           onPressed: canStop ? cubit.stop : null,
           icon: const Icon(Icons.stop_rounded),
         ),
@@ -351,7 +350,7 @@ class _Controls extends StatelessWidget {
         IconButton(
           tooltip: 'Bỏ qua',
           iconSize: 28,
-          color: _kForeground,
+          color: colors.textPrimary,
           onPressed: cubit.skip,
           icon: const Icon(Icons.skip_next_rounded),
         ),
@@ -359,7 +358,7 @@ class _Controls extends StatelessWidget {
         IconButton(
           tooltip: 'Thoát toàn màn hình',
           iconSize: 28,
-          color: _kMuted,
+          color: colors.textMuted,
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.fullscreen_exit),
         ),
