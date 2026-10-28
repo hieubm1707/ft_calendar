@@ -28,5 +28,8 @@ abstract class RegisterModule {
 
   @lazySingleton
   RemoteDeviceDao remoteDeviceDao(AppDatabase db) => db.remoteDeviceDao;
+
+  @lazySingleton
+  TrackingDao trackingDao(AppDatabase db) => db.trackingDao;
 }
 

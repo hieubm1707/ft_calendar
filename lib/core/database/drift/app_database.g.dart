@@ -3871,6 +3871,834 @@ class RemoteDeviceTableCompanion extends UpdateCompanion<RemoteDeviceEntry> {
   }
 }
 
+class $TrackingGoalTableTable extends TrackingGoalTable
+    with TableInfo<$TrackingGoalTableTable, TrackingGoalTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TrackingGoalTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 255,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0xFF3D6DF2),
+  );
+  static const VerificationMeta _weekdaysMaskMeta = const VerificationMeta(
+    'weekdaysMask',
+  );
+  @override
+  late final GeneratedColumn<int> weekdaysMask = GeneratedColumn<int>(
+    'weekdays_mask',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(127),
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+    'end_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _remindersCsvMeta = const VerificationMeta(
+    'remindersCsv',
+  );
+  @override
+  late final GeneratedColumn<String> remindersCsv = GeneratedColumn<String>(
+    'reminders_csv',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    description,
+    color,
+    weekdaysMask,
+    startDate,
+    endDate,
+    remindersCsv,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'tracking_goal_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TrackingGoalTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
+    if (data.containsKey('weekdays_mask')) {
+      context.handle(
+        _weekdaysMaskMeta,
+        weekdaysMask.isAcceptableOrUnknown(
+          data['weekdays_mask']!,
+          _weekdaysMaskMeta,
+        ),
+      );
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+      );
+    }
+    if (data.containsKey('reminders_csv')) {
+      context.handle(
+        _remindersCsvMeta,
+        remindersCsv.isAcceptableOrUnknown(
+          data['reminders_csv']!,
+          _remindersCsvMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TrackingGoalTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TrackingGoalTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}color'],
+      )!,
+      weekdaysMask: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}weekdays_mask'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_date'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_date'],
+      ),
+      remindersCsv: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reminders_csv'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $TrackingGoalTableTable createAlias(String alias) {
+    return $TrackingGoalTableTable(attachedDatabase, alias);
+  }
+}
+
+class TrackingGoalTableData extends DataClass
+    implements Insertable<TrackingGoalTableData> {
+  final int id;
+  final String name;
+
+  /// Mô tả (tuỳ chọn).
+  final String? description;
+
+  /// Màu do người dùng chọn (ARGB).
+  final int color;
+
+  /// Thứ áp dụng (bit weekday-1, Mon..Sun); 127 = hằng ngày.
+  final int weekdaysMask;
+  final DateTime startDate;
+  final DateTime? endDate;
+
+  /// Giờ nhắc (phút từ 0h) nối bằng ',' — null/rỗng = không nhắc.
+  final String? remindersCsv;
+  final DateTime createdAt;
+  const TrackingGoalTableData({
+    required this.id,
+    required this.name,
+    this.description,
+    required this.color,
+    required this.weekdaysMask,
+    required this.startDate,
+    this.endDate,
+    this.remindersCsv,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['color'] = Variable<int>(color);
+    map['weekdays_mask'] = Variable<int>(weekdaysMask);
+    map['start_date'] = Variable<DateTime>(startDate);
+    if (!nullToAbsent || endDate != null) {
+      map['end_date'] = Variable<DateTime>(endDate);
+    }
+    if (!nullToAbsent || remindersCsv != null) {
+      map['reminders_csv'] = Variable<String>(remindersCsv);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  TrackingGoalTableCompanion toCompanion(bool nullToAbsent) {
+    return TrackingGoalTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      color: Value(color),
+      weekdaysMask: Value(weekdaysMask),
+      startDate: Value(startDate),
+      endDate: endDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endDate),
+      remindersCsv: remindersCsv == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remindersCsv),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory TrackingGoalTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TrackingGoalTableData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String?>(json['description']),
+      color: serializer.fromJson<int>(json['color']),
+      weekdaysMask: serializer.fromJson<int>(json['weekdaysMask']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      endDate: serializer.fromJson<DateTime?>(json['endDate']),
+      remindersCsv: serializer.fromJson<String?>(json['remindersCsv']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String?>(description),
+      'color': serializer.toJson<int>(color),
+      'weekdaysMask': serializer.toJson<int>(weekdaysMask),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'endDate': serializer.toJson<DateTime?>(endDate),
+      'remindersCsv': serializer.toJson<String?>(remindersCsv),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  TrackingGoalTableData copyWith({
+    int? id,
+    String? name,
+    Value<String?> description = const Value.absent(),
+    int? color,
+    int? weekdaysMask,
+    DateTime? startDate,
+    Value<DateTime?> endDate = const Value.absent(),
+    Value<String?> remindersCsv = const Value.absent(),
+    DateTime? createdAt,
+  }) => TrackingGoalTableData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    description: description.present ? description.value : this.description,
+    color: color ?? this.color,
+    weekdaysMask: weekdaysMask ?? this.weekdaysMask,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate.present ? endDate.value : this.endDate,
+    remindersCsv: remindersCsv.present ? remindersCsv.value : this.remindersCsv,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  TrackingGoalTableData copyWithCompanion(TrackingGoalTableCompanion data) {
+    return TrackingGoalTableData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      color: data.color.present ? data.color.value : this.color,
+      weekdaysMask: data.weekdaysMask.present
+          ? data.weekdaysMask.value
+          : this.weekdaysMask,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      remindersCsv: data.remindersCsv.present
+          ? data.remindersCsv.value
+          : this.remindersCsv,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingGoalTableData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('color: $color, ')
+          ..write('weekdaysMask: $weekdaysMask, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('remindersCsv: $remindersCsv, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    description,
+    color,
+    weekdaysMask,
+    startDate,
+    endDate,
+    remindersCsv,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TrackingGoalTableData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.description == this.description &&
+          other.color == this.color &&
+          other.weekdaysMask == this.weekdaysMask &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.remindersCsv == this.remindersCsv &&
+          other.createdAt == this.createdAt);
+}
+
+class TrackingGoalTableCompanion
+    extends UpdateCompanion<TrackingGoalTableData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> description;
+  final Value<int> color;
+  final Value<int> weekdaysMask;
+  final Value<DateTime> startDate;
+  final Value<DateTime?> endDate;
+  final Value<String?> remindersCsv;
+  final Value<DateTime> createdAt;
+  const TrackingGoalTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.color = const Value.absent(),
+    this.weekdaysMask = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.remindersCsv = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  TrackingGoalTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.description = const Value.absent(),
+    this.color = const Value.absent(),
+    this.weekdaysMask = const Value.absent(),
+    required DateTime startDate,
+    this.endDate = const Value.absent(),
+    this.remindersCsv = const Value.absent(),
+    required DateTime createdAt,
+  }) : name = Value(name),
+       startDate = Value(startDate),
+       createdAt = Value(createdAt);
+  static Insertable<TrackingGoalTableData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? description,
+    Expression<int>? color,
+    Expression<int>? weekdaysMask,
+    Expression<DateTime>? startDate,
+    Expression<DateTime>? endDate,
+    Expression<String>? remindersCsv,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (color != null) 'color': color,
+      if (weekdaysMask != null) 'weekdays_mask': weekdaysMask,
+      if (startDate != null) 'start_date': startDate,
+      if (endDate != null) 'end_date': endDate,
+      if (remindersCsv != null) 'reminders_csv': remindersCsv,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  TrackingGoalTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String?>? description,
+    Value<int>? color,
+    Value<int>? weekdaysMask,
+    Value<DateTime>? startDate,
+    Value<DateTime?>? endDate,
+    Value<String?>? remindersCsv,
+    Value<DateTime>? createdAt,
+  }) {
+    return TrackingGoalTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      color: color ?? this.color,
+      weekdaysMask: weekdaysMask ?? this.weekdaysMask,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      remindersCsv: remindersCsv ?? this.remindersCsv,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
+    if (weekdaysMask.present) {
+      map['weekdays_mask'] = Variable<int>(weekdaysMask.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
+    }
+    if (remindersCsv.present) {
+      map['reminders_csv'] = Variable<String>(remindersCsv.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingGoalTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('color: $color, ')
+          ..write('weekdaysMask: $weekdaysMask, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('remindersCsv: $remindersCsv, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TrackingCheckinTableTable extends TrackingCheckinTable
+    with TableInfo<$TrackingCheckinTableTable, TrackingCheckinTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TrackingCheckinTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _goalIdMeta = const VerificationMeta('goalId');
+  @override
+  late final GeneratedColumn<int> goalId = GeneratedColumn<int>(
+    'goal_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, goalId, date];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'tracking_checkin_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TrackingCheckinTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('goal_id')) {
+      context.handle(
+        _goalIdMeta,
+        goalId.isAcceptableOrUnknown(data['goal_id']!, _goalIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_goalIdMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TrackingCheckinTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TrackingCheckinTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      goalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}goal_id'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+    );
+  }
+
+  @override
+  $TrackingCheckinTableTable createAlias(String alias) {
+    return $TrackingCheckinTableTable(attachedDatabase, alias);
+  }
+}
+
+class TrackingCheckinTableData extends DataClass
+    implements Insertable<TrackingCheckinTableData> {
+  final int id;
+  final int goalId;
+  final DateTime date;
+  const TrackingCheckinTableData({
+    required this.id,
+    required this.goalId,
+    required this.date,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['goal_id'] = Variable<int>(goalId);
+    map['date'] = Variable<DateTime>(date);
+    return map;
+  }
+
+  TrackingCheckinTableCompanion toCompanion(bool nullToAbsent) {
+    return TrackingCheckinTableCompanion(
+      id: Value(id),
+      goalId: Value(goalId),
+      date: Value(date),
+    );
+  }
+
+  factory TrackingCheckinTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TrackingCheckinTableData(
+      id: serializer.fromJson<int>(json['id']),
+      goalId: serializer.fromJson<int>(json['goalId']),
+      date: serializer.fromJson<DateTime>(json['date']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'goalId': serializer.toJson<int>(goalId),
+      'date': serializer.toJson<DateTime>(date),
+    };
+  }
+
+  TrackingCheckinTableData copyWith({int? id, int? goalId, DateTime? date}) =>
+      TrackingCheckinTableData(
+        id: id ?? this.id,
+        goalId: goalId ?? this.goalId,
+        date: date ?? this.date,
+      );
+  TrackingCheckinTableData copyWithCompanion(
+    TrackingCheckinTableCompanion data,
+  ) {
+    return TrackingCheckinTableData(
+      id: data.id.present ? data.id.value : this.id,
+      goalId: data.goalId.present ? data.goalId.value : this.goalId,
+      date: data.date.present ? data.date.value : this.date,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingCheckinTableData(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, goalId, date);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TrackingCheckinTableData &&
+          other.id == this.id &&
+          other.goalId == this.goalId &&
+          other.date == this.date);
+}
+
+class TrackingCheckinTableCompanion
+    extends UpdateCompanion<TrackingCheckinTableData> {
+  final Value<int> id;
+  final Value<int> goalId;
+  final Value<DateTime> date;
+  const TrackingCheckinTableCompanion({
+    this.id = const Value.absent(),
+    this.goalId = const Value.absent(),
+    this.date = const Value.absent(),
+  });
+  TrackingCheckinTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int goalId,
+    required DateTime date,
+  }) : goalId = Value(goalId),
+       date = Value(date);
+  static Insertable<TrackingCheckinTableData> custom({
+    Expression<int>? id,
+    Expression<int>? goalId,
+    Expression<DateTime>? date,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (goalId != null) 'goal_id': goalId,
+      if (date != null) 'date': date,
+    });
+  }
+
+  TrackingCheckinTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? goalId,
+    Value<DateTime>? date,
+  }) {
+    return TrackingCheckinTableCompanion(
+      id: id ?? this.id,
+      goalId: goalId ?? this.goalId,
+      date: date ?? this.date,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (goalId.present) {
+      map['goal_id'] = Variable<int>(goalId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingCheckinTableCompanion(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3888,6 +4716,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $TypingContentPackTableTable(this);
   late final $RemoteDeviceTableTable remoteDeviceTable =
       $RemoteDeviceTableTable(this);
+  late final $TrackingGoalTableTable trackingGoalTable =
+      $TrackingGoalTableTable(this);
+  late final $TrackingCheckinTableTable trackingCheckinTable =
+      $TrackingCheckinTableTable(this);
   late final EventDao eventDao = EventDao(this as AppDatabase);
   late final TaskDao taskDao = TaskDao(this as AppDatabase);
   late final PomodoroDao pomodoroDao = PomodoroDao(this as AppDatabase);
@@ -3899,6 +4731,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final RemoteDeviceDao remoteDeviceDao = RemoteDeviceDao(
     this as AppDatabase,
   );
+  late final TrackingDao trackingDao = TrackingDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3912,6 +4745,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     typingResultTable,
     typingContentPackTable,
     remoteDeviceTable,
+    trackingGoalTable,
+    trackingCheckinTable,
   ];
 }
 
@@ -5952,6 +6787,467 @@ typedef $$RemoteDeviceTableTableProcessedTableManager =
       RemoteDeviceEntry,
       PrefetchHooks Function()
     >;
+typedef $$TrackingGoalTableTableCreateCompanionBuilder =
+    TrackingGoalTableCompanion Function({
+      Value<int> id,
+      required String name,
+      Value<String?> description,
+      Value<int> color,
+      Value<int> weekdaysMask,
+      required DateTime startDate,
+      Value<DateTime?> endDate,
+      Value<String?> remindersCsv,
+      required DateTime createdAt,
+    });
+typedef $$TrackingGoalTableTableUpdateCompanionBuilder =
+    TrackingGoalTableCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String?> description,
+      Value<int> color,
+      Value<int> weekdaysMask,
+      Value<DateTime> startDate,
+      Value<DateTime?> endDate,
+      Value<String?> remindersCsv,
+      Value<DateTime> createdAt,
+    });
+
+class $$TrackingGoalTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TrackingGoalTableTable> {
+  $$TrackingGoalTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get weekdaysMask => $composableBuilder(
+    column: $table.weekdaysMask,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remindersCsv => $composableBuilder(
+    column: $table.remindersCsv,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TrackingGoalTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TrackingGoalTableTable> {
+  $$TrackingGoalTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get weekdaysMask => $composableBuilder(
+    column: $table.weekdaysMask,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remindersCsv => $composableBuilder(
+    column: $table.remindersCsv,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TrackingGoalTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TrackingGoalTableTable> {
+  $$TrackingGoalTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<int> get weekdaysMask => $composableBuilder(
+    column: $table.weekdaysMask,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<String> get remindersCsv => $composableBuilder(
+    column: $table.remindersCsv,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$TrackingGoalTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TrackingGoalTableTable,
+          TrackingGoalTableData,
+          $$TrackingGoalTableTableFilterComposer,
+          $$TrackingGoalTableTableOrderingComposer,
+          $$TrackingGoalTableTableAnnotationComposer,
+          $$TrackingGoalTableTableCreateCompanionBuilder,
+          $$TrackingGoalTableTableUpdateCompanionBuilder,
+          (
+            TrackingGoalTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TrackingGoalTableTable,
+              TrackingGoalTableData
+            >,
+          ),
+          TrackingGoalTableData,
+          PrefetchHooks Function()
+        > {
+  $$TrackingGoalTableTableTableManager(
+    _$AppDatabase db,
+    $TrackingGoalTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TrackingGoalTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TrackingGoalTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TrackingGoalTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<int> color = const Value.absent(),
+                Value<int> weekdaysMask = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<String?> remindersCsv = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => TrackingGoalTableCompanion(
+                id: id,
+                name: name,
+                description: description,
+                color: color,
+                weekdaysMask: weekdaysMask,
+                startDate: startDate,
+                endDate: endDate,
+                remindersCsv: remindersCsv,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                Value<String?> description = const Value.absent(),
+                Value<int> color = const Value.absent(),
+                Value<int> weekdaysMask = const Value.absent(),
+                required DateTime startDate,
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<String?> remindersCsv = const Value.absent(),
+                required DateTime createdAt,
+              }) => TrackingGoalTableCompanion.insert(
+                id: id,
+                name: name,
+                description: description,
+                color: color,
+                weekdaysMask: weekdaysMask,
+                startDate: startDate,
+                endDate: endDate,
+                remindersCsv: remindersCsv,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TrackingGoalTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TrackingGoalTableTable,
+      TrackingGoalTableData,
+      $$TrackingGoalTableTableFilterComposer,
+      $$TrackingGoalTableTableOrderingComposer,
+      $$TrackingGoalTableTableAnnotationComposer,
+      $$TrackingGoalTableTableCreateCompanionBuilder,
+      $$TrackingGoalTableTableUpdateCompanionBuilder,
+      (
+        TrackingGoalTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TrackingGoalTableTable,
+          TrackingGoalTableData
+        >,
+      ),
+      TrackingGoalTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$TrackingCheckinTableTableCreateCompanionBuilder =
+    TrackingCheckinTableCompanion Function({
+      Value<int> id,
+      required int goalId,
+      required DateTime date,
+    });
+typedef $$TrackingCheckinTableTableUpdateCompanionBuilder =
+    TrackingCheckinTableCompanion Function({
+      Value<int> id,
+      Value<int> goalId,
+      Value<DateTime> date,
+    });
+
+class $$TrackingCheckinTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TrackingCheckinTableTable> {
+  $$TrackingCheckinTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get goalId => $composableBuilder(
+    column: $table.goalId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TrackingCheckinTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TrackingCheckinTableTable> {
+  $$TrackingCheckinTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get goalId => $composableBuilder(
+    column: $table.goalId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TrackingCheckinTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TrackingCheckinTableTable> {
+  $$TrackingCheckinTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get goalId =>
+      $composableBuilder(column: $table.goalId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+}
+
+class $$TrackingCheckinTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TrackingCheckinTableTable,
+          TrackingCheckinTableData,
+          $$TrackingCheckinTableTableFilterComposer,
+          $$TrackingCheckinTableTableOrderingComposer,
+          $$TrackingCheckinTableTableAnnotationComposer,
+          $$TrackingCheckinTableTableCreateCompanionBuilder,
+          $$TrackingCheckinTableTableUpdateCompanionBuilder,
+          (
+            TrackingCheckinTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TrackingCheckinTableTable,
+              TrackingCheckinTableData
+            >,
+          ),
+          TrackingCheckinTableData,
+          PrefetchHooks Function()
+        > {
+  $$TrackingCheckinTableTableTableManager(
+    _$AppDatabase db,
+    $TrackingCheckinTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TrackingCheckinTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TrackingCheckinTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$TrackingCheckinTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> goalId = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+              }) => TrackingCheckinTableCompanion(
+                id: id,
+                goalId: goalId,
+                date: date,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int goalId,
+                required DateTime date,
+              }) => TrackingCheckinTableCompanion.insert(
+                id: id,
+                goalId: goalId,
+                date: date,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TrackingCheckinTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TrackingCheckinTableTable,
+      TrackingCheckinTableData,
+      $$TrackingCheckinTableTableFilterComposer,
+      $$TrackingCheckinTableTableOrderingComposer,
+      $$TrackingCheckinTableTableAnnotationComposer,
+      $$TrackingCheckinTableTableCreateCompanionBuilder,
+      $$TrackingCheckinTableTableUpdateCompanionBuilder,
+      (
+        TrackingCheckinTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TrackingCheckinTableTable,
+          TrackingCheckinTableData
+        >,
+      ),
+      TrackingCheckinTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5975,4 +7271,8 @@ class $AppDatabaseManager {
       );
   $$RemoteDeviceTableTableTableManager get remoteDeviceTable =>
       $$RemoteDeviceTableTableTableManager(_db, _db.remoteDeviceTable);
+  $$TrackingGoalTableTableTableManager get trackingGoalTable =>
+      $$TrackingGoalTableTableTableManager(_db, _db.trackingGoalTable);
+  $$TrackingCheckinTableTableTableManager get trackingCheckinTable =>
+      $$TrackingCheckinTableTableTableManager(_db, _db.trackingCheckinTable);
 }

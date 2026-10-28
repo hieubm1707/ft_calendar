@@ -101,6 +101,23 @@ import 'package:example_app/features/tasks/domain/usecases/set_task_done.dart'
     as _i1029;
 import 'package:example_app/features/tasks/presentation/cubit/task_cubit.dart'
     as _i553;
+import 'package:example_app/features/tracking/data/datasources/tracking_local_datasource.dart'
+    as _i116;
+import 'package:example_app/features/tracking/data/repositories/tracking_repository_impl.dart'
+    as _i48;
+import 'package:example_app/features/tracking/domain/index.dart' as _i231;
+import 'package:example_app/features/tracking/domain/repositories/tracking_repository.dart'
+    as _i322;
+import 'package:example_app/features/tracking/domain/usecases/delete_tracking_goal.dart'
+    as _i593;
+import 'package:example_app/features/tracking/domain/usecases/get_tracking_overview.dart'
+    as _i278;
+import 'package:example_app/features/tracking/domain/usecases/save_tracking_goal.dart'
+    as _i806;
+import 'package:example_app/features/tracking/domain/usecases/set_tracking_checkin.dart'
+    as _i571;
+import 'package:example_app/features/tracking/presentation/cubit/tracking_cubit.dart'
+    as _i392;
 import 'package:example_app/features/typing/data/datasources/typing_content_datasource.dart'
     as _i682;
 import 'package:example_app/features/typing/data/datasources/typing_content_pack_datasource.dart'
@@ -185,6 +202,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i413.RemoteDeviceDao>(
       () => registerModule.remoteDeviceDao(gh<_i413.AppDatabase>()),
     );
+    gh.lazySingleton<_i413.TrackingDao>(
+      () => registerModule.trackingDao(gh<_i413.AppDatabase>()),
+    );
     gh.lazySingleton<_i908.TypingLocalDataSource>(
       () => _i908.TypingDriftDataSource(gh<_i413.TypingDao>()),
     );
@@ -202,11 +222,20 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i734.TypingContentPackDriftDataSource(gh<_i413.TypingContentDao>()),
     );
+    gh.lazySingleton<_i116.TrackingLocalDataSource>(
+      () => _i116.TrackingDriftDataSource(
+        gh<_i413.TrackingDao>(),
+        gh<_i413.TaskDao>(),
+      ),
+    );
     gh.lazySingleton<_i137.RemoteRepository>(
       () => _i179.RemoteRepositoryImpl(gh<_i413.RemoteDeviceDao>()),
     );
     gh.lazySingleton<_i725.TaskLocalDataSource>(
       () => _i725.TaskDriftDataSource(gh<_i413.TaskDao>()),
+    );
+    gh.lazySingleton<_i231.TrackingRepository>(
+      () => _i48.TrackingRepositoryImpl(gh<_i116.TrackingLocalDataSource>()),
     );
     gh.lazySingleton<_i460.PomodoroLocalDataSource>(
       () => _i460.PomodoroDriftDataSource(gh<_i413.PomodoroDao>()),
@@ -216,6 +245,18 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i228.GetThemeMode>(),
         gh<_i228.SaveThemeMode>(),
       ),
+    );
+    gh.lazySingleton<_i593.DeleteTrackingGoal>(
+      () => _i593.DeleteTrackingGoal(gh<_i322.TrackingRepository>()),
+    );
+    gh.lazySingleton<_i278.GetTrackingOverview>(
+      () => _i278.GetTrackingOverview(gh<_i322.TrackingRepository>()),
+    );
+    gh.lazySingleton<_i806.SaveTrackingGoal>(
+      () => _i806.SaveTrackingGoal(gh<_i322.TrackingRepository>()),
+    );
+    gh.lazySingleton<_i571.SetTrackingCheckin>(
+      () => _i571.SetTrackingCheckin(gh<_i322.TrackingRepository>()),
     );
     gh.lazySingleton<_i363.FocusTagLocalDataSource>(
       () => _i363.FocusTagDriftDataSource(gh<_i413.FocusTagDao>()),
@@ -281,6 +322,15 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i714.EventRepository>(
       () => _i356.EventRepositoryImpl(gh<_i630.EventLocalDataSource>()),
+    );
+    gh.factory<_i392.TrackingCubit>(
+      () => _i392.TrackingCubit(
+        gh<_i231.GetTrackingOverview>(),
+        gh<_i231.SaveTrackingGoal>(),
+        gh<_i231.DeleteTrackingGoal>(),
+        gh<_i231.SetTrackingCheckin>(),
+        gh<_i272.NotificationService>(),
+      ),
     );
     gh.factory<_i23.TypingContentCubit>(
       () => _i23.TypingContentCubit(

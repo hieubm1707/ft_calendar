@@ -4,6 +4,7 @@ import '../../calendar/presentation/index.dart';
 import '../../pomodoro/presentation/index.dart';
 import '../../remote/presentation/pages/remote_control_page.dart';
 import '../../tasks/presentation/index.dart';
+import '../../tracking/presentation/index.dart';
 import '../../typing/presentation/index.dart';
 import 'app_tab.dart';
 
@@ -19,6 +20,8 @@ class HomePage extends StatelessWidget {
         return const CalendarPage();
       case AppTab.tasks:
         return const TasksPage();
+      case AppTab.tracking:
+        return const TrackingPage();
       case AppTab.focus:
         return const PomodoroPage();
       case AppTab.remote:

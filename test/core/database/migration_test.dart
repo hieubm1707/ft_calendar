@@ -106,4 +106,14 @@ void main() {
 
     expect(await _tables(db), contains('typing_result_table'));
   });
+
+  test('DB cũ nâng lên v10 có bảng tracking', () async {
+    final db = _openWith(setupSql: '$_v5Schema$_v6Additions', userVersion: 9);
+    addTearDown(db.close);
+
+    expect(await _tables(db),
+        containsAll(['tracking_goal_table', 'tracking_checkin_table']));
+    expect(await _columns(db, 'tracking_goal_table'),
+        containsAll(['weekdays_mask', 'end_date', 'reminders_csv']));
+  });
 }

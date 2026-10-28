@@ -101,6 +101,60 @@ class NotificationService {
     );
   }
 
+  /// Nhắc lặp lại lúc [minutes] (phút từ 0h): mỗi ngày nếu [weekday] null,
+  /// ngược lại mỗi tuần vào thứ [weekday] (1..7 = T2..CN). Lần đầu không sớm
+  /// hơn [notBefore] (vd. ngày bắt đầu của mục tiêu).
+  Future<void> scheduleRepeatingReminder({
+    required int id,
+    required String title,
+    required String body,
+    required int minutes,
+    int? weekday,
+    DateTime? notBefore,
+  }) async {
+    final now = tz.TZDateTime.now(tz.local);
+    final from = notBefore != null && notBefore.isAfter(now)
+        ? tz.TZDateTime.from(notBefore, tz.local)
+        : now;
+    var when = tz.TZDateTime(
+        tz.local, from.year, from.month, from.day, minutes ~/ 60, minutes % 60);
+    while (when.isBefore(from) ||
+        (weekday != null && when.weekday != weekday)) {
+      when = tz.TZDateTime(tz.local, when.year, when.month, when.day + 1,
+          when.hour, when.minute);
+    }
+    await _plugin.zonedSchedule(
+      id,
+      title,
+      body,
+      when,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channelId,
+          'Nhắc sự kiện',
+          channelDescription: 'Thông báo nhắc sự kiện đã lên lịch',
+          importance: Importance.max,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+        macOS: DarwinNotificationDetails(),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: weekday == null
+          ? DateTimeComponents.time
+          : DateTimeComponents.dayOfWeekAndTime,
+    );
+  }
+
   /// Huỷ nhắc của một sự kiện.
   Future<void> cancel(int id) => _plugin.cancel(id);
+
+  /// Huỷ nhiều nhắc cùng lúc.
+  Future<void> cancelMany(Iterable<int> ids) async {
+    for (final id in ids) {
+      await _plugin.cancel(id);
+    }
+  }
 }
