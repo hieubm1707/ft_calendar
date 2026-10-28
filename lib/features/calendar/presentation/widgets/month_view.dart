@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/index.dart';
+import '../../../../core/theme/index.dart';
 import 'day_cell.dart';
 import 'weekday_header.dart';
 
@@ -33,6 +34,7 @@ class MonthView extends StatelessWidget {
     final leading = DateTime(month.year, month.month, 1).weekday - 1; // Mon=0
     final totalCells = leading + daysInMonth;
     final rows = (totalCells / 7).ceil();
+    final colors = context.colors;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,18 +43,18 @@ class MonthView extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(4, 16, 4, 2),
           child: Text(
             _monthNames[month.month - 1],
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1C1C1E),
+              color: colors.textPrimary,
             ),
           ),
         ),
         WeekdayHeader(todayWeekday: today.weekday),
         for (var r = 0; r < rows; r++)
           DecoratedBox(
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: Color(0xFFEFEFF2))),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: colors.divider)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

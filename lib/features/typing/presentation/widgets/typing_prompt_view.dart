@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
-import 'typing_theme.dart';
 
 const _kFontSize = 19.0;
 const _kLineSpacing = 1.6;
@@ -99,13 +99,14 @@ class _TypingPromptViewState extends State<TypingPromptView> {
     final states = typingCharStates(widget.prompt, widget.typed);
     final chars = widget.prompt.runes.toList();
     final typedCount = widget.typed.runes.length;
+    final colors = context.colors;
 
     return Container(
       height: _kVisibleLines * _lineHeight + 28,
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: LayoutBuilder(
@@ -128,7 +129,7 @@ class _TypingPromptViewState extends State<TypingPromptView> {
                   for (var i = 0; i < chars.length; i++)
                     TextSpan(
                       text: String.fromCharCode(chars[i]),
-                      style: _styleFor(states[i], caret: i == typedCount),
+                      style: _styleFor(states[i], colors, caret: i == typedCount),
                     ),
                 ],
               ),
@@ -139,20 +140,25 @@ class _TypingPromptViewState extends State<TypingPromptView> {
     );
   }
 
-  TextStyle _styleFor(TypingCharState state, {required bool caret}) {
+  /// Màu chỉ ảnh hưởng cách vẽ, không đổi layout → cache đo dòng giữ nguyên.
+  TextStyle _styleFor(
+    TypingCharState state,
+    AppColors colors, {
+    required bool caret,
+  }) {
     final base = switch (state) {
-      TypingCharState.correct => const TextStyle(color: kTypingInk),
-      TypingCharState.wrong => const TextStyle(
-          color: kTypingWrong,
-          backgroundColor: Color(0x22E53935),
+      TypingCharState.correct => TextStyle(color: colors.textPrimary),
+      TypingCharState.wrong => TextStyle(
+          color: colors.danger,
+          backgroundColor: colors.danger.withValues(alpha: 0.13),
           decoration: TextDecoration.underline,
-          decorationColor: kTypingWrong,
+          decorationColor: colors.danger,
         ),
-      TypingCharState.pending => const TextStyle(color: Color(0xFFBDBDBD)),
+      TypingCharState.pending => TextStyle(color: colors.textDisabled),
     };
     // Con trỏ: tô nền nhạt ký tự sắp gõ để biết mình đang ở đâu.
     return caret
-        ? base.copyWith(backgroundColor: kTypingAccent.withValues(alpha: 0.18))
+        ? base.copyWith(backgroundColor: colors.typing.withValues(alpha: 0.18))
         : base;
   }
 }

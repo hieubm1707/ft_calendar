@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../cubit/calendar_cubit.dart';
 import '../widgets/add_event_sheet.dart';
 import '../widgets/color_filter_sheet.dart';
@@ -119,23 +120,19 @@ class _CalendarViewState extends State<_CalendarView> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F2),
       appBar: AppBar(
         title: ValueListenableBuilder<int>(
           valueListenable: _visibleYear,
           builder: (context, y, child) => Text(
             'Lịch $y',
-            style: const TextStyle(
-              color: Color(0xFF1C1C1E),
+            style: TextStyle(
+              color: colors.textPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0.5,
-        iconTheme: const IconThemeData(color: Color(0xFF1C1C1E)),
         actions: [
           BlocBuilder<CalendarCubit, CalendarState>(
             buildWhen: (p, c) => p.activeColors != c.activeColors,
@@ -147,7 +144,7 @@ class _CalendarViewState extends State<_CalendarView> {
                   active ? Icons.filter_alt : Icons.filter_alt_outlined,
                   color: active
                       ? Theme.of(context).colorScheme.primary
-                      : const Color(0xFF1C1C1E),
+                      : colors.textPrimary,
                 ),
               );
             },
@@ -158,15 +155,15 @@ class _CalendarViewState extends State<_CalendarView> {
               margin: const EdgeInsets.only(right: 12),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFFEDE9E4),
+                color: colors.divider,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
+              child: Text(
                 'Today',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1C1C1E),
+                  color: colors.textPrimary,
                 ),
               ),
             ),
@@ -189,9 +186,9 @@ class _CalendarViewState extends State<_CalendarView> {
                 builder: (context, state) {
                   if (state.status == CalendarStatus.loading ||
                       state.status == CalendarStatus.initial) {
-                    return const Center(
+                    return Center(
                       child: CircularProgressIndicator(
-                        color: Color(0xFFFF5252),
+                        color: colors.accent,
                       ),
                     );
                   }
@@ -215,11 +212,11 @@ class _CalendarViewState extends State<_CalendarView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
+        backgroundColor: colors.textPrimary,
         elevation: 2,
         shape: const CircleBorder(),
         onPressed: _addToday,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: colors.surface),
       ),
     );
   }

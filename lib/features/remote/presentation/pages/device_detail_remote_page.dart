@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/hardware/ir_service.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/entities/remote_device.dart';
 
 
@@ -46,14 +47,11 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F2), // Light theme đồng bộ
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0.5,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2C2F3E)),
+          icon: Icon(Icons.arrow_back, color: colors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Row(
@@ -63,8 +61,8 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
             const SizedBox(width: 8),
             Text(
               widget.device.name,
-              style: const TextStyle(
-                color: Color(0xFF2C2F3E),
+              style: TextStyle(
+                color: colors.textPrimary,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -83,12 +81,12 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
               margin: const EdgeInsets.symmetric(horizontal: 24),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFEFEFF4)),
+                border: Border.all(color: colors.border),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
+                    color: colors.shadow,
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -103,12 +101,12 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: _isTransmitting
-                          ? const Color(0xFFFF2A55)
-                          : const Color(0xFFFFEBEE),
+                          ? colors.accent
+                          : colors.accent.withValues(alpha: 0.12),
                       boxShadow: _isTransmitting
                           ? [
                               BoxShadow(
-                                color: const Color(0xFFFF2A55).withValues(alpha: 0.6),
+                                color: colors.accent.withValues(alpha: 0.6),
                                 blurRadius: 12,
                                 spreadRadius: 4,
                               )
@@ -121,7 +119,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                         height: 8,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: _isTransmitting ? Colors.white : const Color(0xFFFF5252),
+                          color: _isTransmitting ? Colors.white : colors.accent,
                         ),
                       ),
                     ),
@@ -138,8 +136,8 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                               _isPowerOn ? 'STATUS: ONLINE' : 'STATUS: OFF',
                               style: TextStyle(
                                 color: _isPowerOn
-                                    ? const Color(0xFF2E7D32)
-                                    : const Color(0xFFC62828),
+                                    ? colors.success
+                                    : colors.danger,
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1,
@@ -147,8 +145,8 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                             ),
                             Text(
                               _getStatusDetail(),
-                              style: const TextStyle(
-                                color: Color(0xFF8E8E93),
+                              style: TextStyle(
+                                color: colors.textMuted,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -158,8 +156,8 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                         const SizedBox(height: 4),
                         Text(
                           'CMD: $_lastSignal',
-                          style: const TextStyle(
-                            color: Color(0xFF2C2F3E),
+                          style: TextStyle(
+                            color: colors.textPrimary,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Courier',
@@ -167,8 +165,8 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                         ),
                         Text(
                           'HEX: $_hexCode',
-                          style: const TextStyle(
-                            color: Color(0xFFE65100),
+                          style: TextStyle(
+                            color: colors.warning,
                             fontSize: 12,
                             fontFamily: 'Courier',
                             fontWeight: FontWeight.w600,
@@ -189,12 +187,12 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colors.surface,
                   borderRadius: BorderRadius.circular(32),
-                  border: Border.all(color: const Color(0xFFEFEFF4), width: 1.5),
+                  border: Border.all(color: colors.border, width: 1.5),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
+                      color: colors.shadow,
                       blurRadius: 16,
                       offset: const Offset(0, 6),
                     ),
@@ -214,13 +212,14 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
 
 
   Widget _getDeviceIcon(RemoteType type) {
+    final colors = context.colors;
     switch (type) {
       case RemoteType.tv:
-        return const Icon(Icons.tv, color: Color(0xFFFF5252));
+        return Icon(Icons.tv, color: colors.accent);
       case RemoteType.airConditioner:
-        return const Icon(Icons.ac_unit, color: Color(0xFF448AFF));
+        return Icon(Icons.ac_unit, color: colors.typing);
       case RemoteType.fan:
-        return const Icon(Icons.toys, color: Color(0xFF69F0AE));
+        return Icon(Icons.toys, color: colors.success);
     }
   }
 
@@ -248,6 +247,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
 
   // --- TV CONTROLS ---
   Widget _buildTVControls() {
+    final colors = context.colors;
     return Column(
       children: [
         Row(
@@ -255,7 +255,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           children: [
             _buildRoundButton(
               icon: Icons.power_settings_new,
-              color: const Color(0xFFE53935),
+              color: colors.danger,
               iconColor: Colors.white,
               onPressed: () {
                 setState(() => _isPowerOn = !_isPowerOn);
@@ -264,14 +264,14 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
             ),
             _buildRoundButton(
               icon: Icons.volume_off,
-              color: const Color(0xFFF0F0F3),
-              iconColor: const Color(0xFF5A5C69),
+              color: colors.surfaceAlt,
+              iconColor: colors.textSecondary,
               onPressed: () => _sendSignal('MUTE', '0x20DF90AF'),
             ),
             _buildRoundButton(
               icon: Icons.input,
-              color: const Color(0xFFF0F0F3),
-              iconColor: const Color(0xFF5A5C69),
+              color: colors.surfaceAlt,
+              iconColor: colors.textSecondary,
               onPressed: () => _sendSignal('INPUT', '0x20DFF00F'),
             ),
           ],
@@ -327,6 +327,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
 
   // --- AIR CONDITIONER CONTROLS ---
   Widget _buildAirConditionerControls() {
+    final colors = context.colors;
     return Column(
       children: [
         Row(
@@ -334,7 +335,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           children: [
             _buildRoundButton(
               icon: Icons.power_settings_new,
-              color: const Color(0xFFE53935),
+              color: colors.danger,
               iconColor: Colors.white,
               onPressed: () {
                 setState(() => _isPowerOn = !_isPowerOn);
@@ -351,11 +352,11 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           height: 140,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: const Color(0xFFF9F9FB),
-            border: Border.all(color: const Color(0xFF448AFF), width: 3),
+            color: colors.surfaceAlt,
+            border: Border.all(color: colors.typing, width: 3),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF448AFF).withValues(alpha: 0.15),
+                color: colors.typing.withValues(alpha: 0.15),
                 blurRadius: 12,
                 spreadRadius: 2,
               ),
@@ -366,14 +367,14 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
             children: [
               Text(
                 '$_temp°C',
-                style: const TextStyle(
-                  color: Color(0xFF2C2F3E),
+                style: TextStyle(
+                  color: colors.textPrimary,
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Text('Nhiệt độ',
-                  style: TextStyle(color: Color(0xFF8E8E93), fontSize: 12)),
+              Text('Nhiệt độ',
+                  style: TextStyle(color: colors.textMuted, fontSize: 12)),
             ],
           ),
         ),
@@ -384,12 +385,12 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           children: [
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFE3F2FD),
+                backgroundColor: colors.typing.withValues(alpha: 0.12),
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               ),
-              icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF1E88E5)),
-              label: const Text('Giảm Temp', style: TextStyle(color: Color(0xFF1565C0), fontWeight: FontWeight.bold)),
+              icon: Icon(Icons.keyboard_arrow_down, color: colors.typing),
+              label: Text('Giảm Temp', style: TextStyle(color: colors.typing, fontWeight: FontWeight.bold)),
               onPressed: () {
                 setState(() => _temp > 16 ? _temp-- : null);
                 _sendSignal('TEMP DOWN', '0xAC108811');
@@ -397,12 +398,12 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
             ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFFEBEE),
+                backgroundColor: colors.danger.withValues(alpha: 0.12),
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               ),
-              icon: const Icon(Icons.keyboard_arrow_up, color: Color(0xFFE53935)),
-              label: const Text('Tăng Temp', style: TextStyle(color: Color(0xFFC62828), fontWeight: FontWeight.bold)),
+              icon: Icon(Icons.keyboard_arrow_up, color: colors.danger),
+              label: Text('Tăng Temp', style: TextStyle(color: colors.danger, fontWeight: FontWeight.bold)),
               onPressed: () {
                 setState(() => _temp < 30 ? _temp++ : null);
                 _sendSignal('TEMP UP', '0xAC108822');
@@ -437,6 +438,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
 
   // --- FAN CONTROLS ---
   Widget _buildFanControls() {
+    final colors = context.colors;
     return Column(
       children: [
         Row(
@@ -444,7 +446,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           children: [
             _buildRoundButton(
               icon: Icons.power_settings_new,
-              color: const Color(0xFFE53935),
+              color: colors.danger,
               iconColor: Colors.white,
               onPressed: () {
                 setState(() => _isPowerOn = !_isPowerOn);
@@ -454,9 +456,9 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           ],
         ),
         const SizedBox(height: 32),
-        const Text(
+        Text(
           'Tốc Độ Gió',
-          style: TextStyle(color: Color(0xFF2C2F3E), fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(color: colors.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         Row(
@@ -473,14 +475,14 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF00C853) : const Color(0xFFF0F0F3),
+                  color: isSelected ? colors.success : colors.surfaceAlt,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
                   child: Text(
                     '$speed',
                     style: TextStyle(
-                      color: isSelected ? Colors.white : const Color(0xFF2C2F3E),
+                      color: isSelected ? Colors.white : colors.textPrimary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -517,6 +519,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
     required Color iconColor,
     required VoidCallback onPressed,
   }) {
+    final colors = context.colors;
     return InkWell(
       onTap: onPressed,
       borderRadius: BorderRadius.circular(28),
@@ -528,7 +531,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: colors.shadow,
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),
@@ -540,13 +543,14 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
   }
 
   Widget _buildDPad() {
+    final colors = context.colors;
     return Container(
       width: 170,
       height: 170,
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F3),
+        color: colors.surfaceAlt,
         shape: BoxShape.circle,
-        border: Border.all(color: const Color(0xFFE0E0E6)),
+        border: Border.all(color: colors.border),
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -554,28 +558,28 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           Positioned(
             top: 4,
             child: IconButton(
-              icon: const Icon(Icons.arrow_drop_up, color: Color(0xFF2C2F3E), size: 36),
+              icon: Icon(Icons.arrow_drop_up, color: colors.textPrimary, size: 36),
               onPressed: () => _sendSignal('NAV UP', '0x20DF02FD'),
             ),
           ),
           Positioned(
             bottom: 4,
             child: IconButton(
-              icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF2C2F3E), size: 36),
+              icon: Icon(Icons.arrow_drop_down, color: colors.textPrimary, size: 36),
               onPressed: () => _sendSignal('NAV DOWN', '0x20DF827D'),
             ),
           ),
           Positioned(
             left: 4,
             child: IconButton(
-              icon: const Icon(Icons.arrow_left, color: Color(0xFF2C2F3E), size: 36),
+              icon: Icon(Icons.arrow_left, color: colors.textPrimary, size: 36),
               onPressed: () => _sendSignal('NAV LEFT', '0x20DFE01F'),
             ),
           ),
           Positioned(
             right: 4,
             child: IconButton(
-              icon: const Icon(Icons.arrow_right, color: Color(0xFF2C2F3E), size: 36),
+              icon: Icon(Icons.arrow_right, color: colors.textPrimary, size: 36),
               onPressed: () => _sendSignal('NAV RIGHT', '0x20DF609F'),
             ),
           ),
@@ -586,21 +590,21 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFD1D1D6)),
+                border: Border.all(color: colors.textDisabled),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
+                    color: colors.shadow,
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
-              child: const Center(
+              child: Center(
                 child: Text('OK',
                     style: TextStyle(
-                        color: Color(0xFF2C2F3E),
+                        color: colors.textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 14)),
               ),
@@ -616,36 +620,37 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
     required VoidCallback onUp,
     required VoidCallback onDown,
   }) {
+    final colors = context.colors;
     return Container(
       width: 50,
       height: 100,
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F3),
+        color: colors.surfaceAlt,
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: const Color(0xFFE0E0E6)),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
             onTap: onUp,
-            child: const SizedBox(
+            child: SizedBox(
               width: 50,
               height: 36,
-              child: Icon(Icons.add, color: Color(0xFF2C2F3E), size: 18),
+              child: Icon(Icons.add, color: colors.textPrimary, size: 18),
             ),
           ),
           Text(label,
-              style: const TextStyle(
-                  color: Color(0xFF8E8E93),
+              style: TextStyle(
+                  color: colors.textMuted,
                   fontSize: 10,
                   fontWeight: FontWeight.bold)),
           InkWell(
             onTap: onDown,
-            child: const SizedBox(
+            child: SizedBox(
               width: 50,
               height: 36,
-              child: Icon(Icons.remove, color: Color(0xFF2C2F3E), size: 18),
+              child: Icon(Icons.remove, color: colors.textPrimary, size: 18),
             ),
           ),
         ],
@@ -658,6 +663,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
     required String label,
     required VoidCallback onTap,
   }) {
+    final colors = context.colors;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -665,17 +671,17 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
         width: 70,
         height: 44,
         decoration: BoxDecoration(
-          color: const Color(0xFFF0F0F3),
+          color: colors.surfaceAlt,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE0E0E6)),
+          border: Border.all(color: colors.border),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: const Color(0xFF2C2F3E), size: 18),
+            Icon(icon, color: colors.textPrimary, size: 18),
             const SizedBox(height: 2),
             Text(label,
-                style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 8, fontWeight: FontWeight.bold)),
+                style: TextStyle(color: colors.textMuted, fontSize: 8, fontWeight: FontWeight.bold)),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 import '../cubit/typing_cubit.dart';
 import '../widgets/typing_prompt_view.dart';
@@ -66,30 +67,23 @@ class _TypingViewState extends State<_TypingView> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: kTypingBackground,
       appBar: AppBar(
         title: const Text(
           'Gõ phím',
-          style: TextStyle(
-            color: kTypingInk,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0.5,
-        iconTheme: const IconThemeData(color: kTypingInk),
         actions: [
           IconButton(
             tooltip: 'Kho nội dung',
             onPressed: () => _openContent(context),
-            icon: const Icon(Icons.library_add_outlined, color: kTypingInk),
+            icon: const Icon(Icons.library_add_outlined),
           ),
           IconButton(
             tooltip: 'Lịch sử',
             onPressed: () => _openHistory(context),
-            icon: const Icon(Icons.bar_chart_rounded, color: kTypingInk),
+            icon: const Icon(Icons.bar_chart_rounded),
           ),
         ],
       ),
@@ -141,7 +135,7 @@ class _TypingViewState extends State<_TypingView> {
                         child: FilledButton.icon(
                           onPressed: () => _restart(context),
                           style: FilledButton.styleFrom(
-                            backgroundColor: kTypingAccent,
+                            backgroundColor: colors.typing,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                           icon: const Icon(Icons.refresh),
@@ -177,6 +171,7 @@ class _Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final cubit = context.read<TypingCubit>();
     final enabled = state.canChangeSettings;
 
@@ -191,7 +186,7 @@ class _Settings extends StatelessWidget {
               ChoiceChip(
                 label: Text(l.label),
                 selected: state.language == l,
-                selectedColor: kTypingAccent.withValues(alpha: 0.18),
+                selectedColor: colors.typing.withValues(alpha: 0.18),
                 onSelected: enabled ? (_) => cubit.setLanguage(l) : null,
               ),
           ],
@@ -205,14 +200,14 @@ class _Settings extends StatelessWidget {
               ChoiceChip(
                 label: Text(m.label),
                 selected: state.mode == m,
-                selectedColor: kTypingAccent.withValues(alpha: 0.18),
+                selectedColor: colors.typing.withValues(alpha: 0.18),
                 onSelected: enabled ? (_) => cubit.setMode(m) : null,
               ),
             for (final s in TypingCubit.durationPresets)
               ChoiceChip(
                 label: Text('${s}s'),
                 selected: state.durationSeconds == s,
-                selectedColor: kTypingAccent.withValues(alpha: 0.18),
+                selectedColor: colors.typing.withValues(alpha: 0.18),
                 onSelected: enabled ? (_) => cubit.setDuration(s) : null,
               ),
           ],
@@ -230,10 +225,11 @@ class _LiveStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -279,6 +275,7 @@ class _Metric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Column(
       children: [
         Text(value,
@@ -286,10 +283,10 @@ class _Metric extends StatelessWidget {
             style: TextStyle(
                 fontSize: big ? 24 : 20,
                 fontWeight: FontWeight.w800,
-                color: kTypingInk,
+                color: colors.textPrimary,
                 fontFeatures: const [FontFeature.tabularFigures()])),
         Text(caption,
-            style: const TextStyle(fontSize: 11, color: kTypingMuted)),
+            style: TextStyle(fontSize: 11, color: colors.textMuted)),
       ],
     );
   }
@@ -311,6 +308,7 @@ class _InputBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return TextField(
       controller: controller,
       focusNode: focusNode,
@@ -324,14 +322,14 @@ class _InputBox extends StatelessWidget {
       enableSuggestions: false,
       textCapitalization: TextCapitalization.none,
       keyboardType: TextInputType.multiline,
-      style: const TextStyle(fontSize: 17, height: 1.5, color: kTypingInk),
+      style: TextStyle(fontSize: 17, height: 1.5, color: colors.textPrimary),
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: colors.surface,
         hintText: state.isFinished
             ? 'Hết bài — bấm "Làm lại" để gõ tiếp'
             : 'Gõ vào đây, ký tự đầu tiên bắt đầu tính giờ…',
-        hintStyle: const TextStyle(color: kTypingMuted, fontSize: 14),
+        hintStyle: TextStyle(color: colors.textMuted, fontSize: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -349,17 +347,18 @@ class _EmptyBank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         children: [
-          const Text('Chưa có nội dung để gõ.',
+          Text('Chưa có nội dung để gõ.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: kTypingMuted)),
+              style: TextStyle(color: colors.textMuted)),
           const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: onImport,
-            style: FilledButton.styleFrom(backgroundColor: kTypingAccent),
+            style: FilledButton.styleFrom(backgroundColor: colors.typing),
             icon: const Icon(Icons.library_add_outlined, size: 18),
             label: const Text('Thêm nội dung'),
           ),
@@ -377,15 +376,16 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final m = state.metrics;
     final isBest = m.wpm > 0 && m.wpm >= state.todayBestWpm;
 
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: kTypingAccent.withValues(alpha: 0.35)),
+        border: Border.all(color: colors.typing.withValues(alpha: 0.35)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -394,18 +394,18 @@ class _ResultCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(m.wpm.toStringAsFixed(1),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 44,
                       fontWeight: FontWeight.w800,
-                      color: kTypingAccent,
+                      color: colors.typing,
                       height: 1)),
-              const Padding(
-                padding: EdgeInsets.only(left: 6, bottom: 6),
+              Padding(
+                padding: const EdgeInsets.only(left: 6, bottom: 6),
                 child: Text('WPM',
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: kTypingMuted)),
+                        color: colors.textMuted)),
               ),
               const Spacer(),
               if (isBest)
@@ -413,21 +413,21 @@ class _ResultCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: kTypingAccent.withValues(alpha: 0.14),
+                    color: colors.typing.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text('Tốt nhất hôm nay 🎉',
+                  child: Text('Tốt nhất hôm nay 🎉',
                       style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: kTypingAccent)),
+                          color: colors.typing)),
                 ),
             ],
           ),
           const SizedBox(height: 4),
           Text('${m.wps.toStringAsFixed(2)} từ/giây'
               ' · thô ${m.rawWpm.toStringAsFixed(0)} WPM',
-              style: const TextStyle(fontSize: 12, color: kTypingMuted)),
+              style: TextStyle(fontSize: 12, color: colors.textMuted)),
           const Divider(height: 24),
           Wrap(
             spacing: 18,
@@ -445,8 +445,8 @@ class _ResultCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          const Text('Kết quả đã được lưu kèm ngày giờ.',
-              style: TextStyle(fontSize: 11, color: kTypingMuted)),
+          Text('Kết quả đã được lưu kèm ngày giờ.',
+              style: TextStyle(fontSize: 11, color: colors.textMuted)),
         ],
       ),
     );
@@ -461,14 +461,15 @@ class _ResultChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(value,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w700, color: kTypingInk)),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.w700, color: colors.textPrimary)),
         Text(label,
-            style: const TextStyle(fontSize: 11, color: kTypingMuted)),
+            style: TextStyle(fontSize: 11, color: colors.textMuted)),
       ],
     );
   }
@@ -482,6 +483,7 @@ class _TodayStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final results = state.todayResults;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -491,8 +493,8 @@ class _TodayStrip extends StatelessWidget {
           child: Text(
             'Hôm nay · ${results.length} bài · tốt nhất '
             '${state.todayBestWpm.toStringAsFixed(0)} WPM',
-            style: const TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w700, color: kTypingInk),
+            style: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w700, color: colors.textPrimary),
           ),
         ),
         SizedBox(
@@ -507,7 +509,7 @@ class _TodayStrip extends StatelessWidget {
                 width: 104,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colors.surface,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Column(
@@ -515,17 +517,17 @@ class _TodayStrip extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('${r.wpm.toStringAsFixed(0)} WPM',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w800,
-                            color: kTypingInk)),
+                            color: colors.textPrimary)),
                     Text('${(r.accuracy * 100).round()}% · ${r.language.code}',
-                        style: const TextStyle(
-                            fontSize: 11, color: kTypingMuted)),
+                        style: TextStyle(
+                            fontSize: 11, color: colors.textMuted)),
                     const Spacer(),
                     Text(formatClock(r.takenAt),
-                        style: const TextStyle(
-                            fontSize: 11, color: kTypingMuted)),
+                        style: TextStyle(
+                            fontSize: 11, color: colors.textMuted)),
                   ],
                 ),
               );

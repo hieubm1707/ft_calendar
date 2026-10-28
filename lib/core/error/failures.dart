@@ -16,3 +16,7 @@ class DatabaseFailure extends Failure {
 class UnexpectedFailure extends Failure {
   const UnexpectedFailure([super.message = 'Đã xảy ra lỗi không mong muốn.']);
 }
+
+class CacheFailure extends Failure {
+  const CacheFailure([super.message = 'Không lưu/đọc được cài đặt.']);
+}

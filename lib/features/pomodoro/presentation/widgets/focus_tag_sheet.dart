@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 import 'focus_tag_editor_sheet.dart';
@@ -18,7 +19,6 @@ Future<void> showFocusTagSheet(
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -57,6 +57,7 @@ class _FocusTagSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final cubit = context.read<PomodoroCubit>();
     return BlocBuilder<PomodoroCubit, PomodoroState>(
       builder: (context, state) {
@@ -122,8 +123,8 @@ class _FocusTagSheet extends StatelessWidget {
                 const SizedBox(height: 14),
                 Row(
                   children: [
-                    const Icon(Icons.check_circle_outline,
-                        size: 16, color: Color(0xFF8E8E93)),
+                    Icon(Icons.check_circle_outline,
+                        size: 16, color: colors.textMuted),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(state.label!,
@@ -136,8 +137,8 @@ class _FocusTagSheet extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: 6),
-              const Text('Chạm giữ hoặc bấm bút chì trên tag để sửa.',
-                  style: TextStyle(fontSize: 12, color: Color(0xFF8E8E93))),
+              Text('Chạm giữ hoặc bấm bút chì trên tag để sửa.',
+                  style: TextStyle(fontSize: 12, color: colors.textMuted)),
             ],
           ),
         );
@@ -161,11 +162,12 @@ class _TagChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final color = Color(tag.color);
     return GestureDetector(
       onLongPress: onEdit,
       child: Material(
-        color: selected ? color.withValues(alpha: 0.16) : Colors.white,
+        color: selected ? color.withValues(alpha: 0.16) : colors.surface,
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: onTap,
@@ -175,7 +177,7 @@ class _TagChip extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: selected ? color : const Color(0xFFE5E5EA),
+                color: selected ? color : colors.border,
                 width: selected ? 1.5 : 1,
               ),
             ),
@@ -191,7 +193,7 @@ class _TagChip extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                    color: selected ? color : const Color(0xFF1C1C1E),
+                    color: selected ? color : colors.textPrimary,
                   ),
                 ),
                 const SizedBox(width: 6),
@@ -201,7 +203,7 @@ class _TagChip extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: selected
                             ? color.withValues(alpha: 0.8)
-                            : const Color(0xFF8E8E93))),
+                            : colors.textMuted)),
                 IconButton(
                   tooltip: 'Sửa tag',
                   padding: EdgeInsets.zero,
@@ -210,7 +212,7 @@ class _TagChip extends StatelessWidget {
                   iconSize: 15,
                   onPressed: onEdit,
                   icon: Icon(Icons.edit_outlined,
-                      color: selected ? color : const Color(0xFFBDBDBD)),
+                      color: selected ? color : colors.textDisabled),
                 ),
               ],
             ),
@@ -228,6 +230,7 @@ class _AddTagChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Material(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(20),
@@ -238,15 +241,15 @@ class _AddTagChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFFBDBDBD)),
+            border: Border.all(color: colors.textDisabled),
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.add, size: 16, color: Color(0xFF8E8E93)),
+              Icon(Icons.add, size: 16, color: colors.textMuted),
               SizedBox(width: 4),
               Text('Tag mới',
-                  style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
+                  style: TextStyle(fontSize: 14, color: colors.textMuted)),
             ],
           ),
         ),

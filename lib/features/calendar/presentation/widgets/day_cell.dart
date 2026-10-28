@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../../../core/utils/index.dart';
 import 'event_chip.dart';
 
@@ -27,6 +28,7 @@ class DayCell extends StatelessWidget {
     // Ngày mùng 1 âm lịch hiển thị "1/<tháng>" để dễ nhận biết.
     final lunarLabel = lunar.day == 1 ? '${lunar.day}/${lunar.month}' : '${lunar.day}';
     final accent = Theme.of(context).colorScheme.primary;
+    final colors = context.colors;
 
     final chips = events.take(_maxChips).toList();
     final extra = events.length - chips.length;
@@ -63,16 +65,16 @@ class DayCell extends StatelessWidget {
                 else
                   Text(
                     '${day.day}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1C1C1E),
+                      color: colors.textPrimary,
                     ),
                   ),
                 const SizedBox(width: 3),
                 Text(
                   lunarLabel,
-                  style: const TextStyle(fontSize: 9, color: Color(0xFFB0B0B5)),
+                  style: TextStyle(fontSize: 9, color: colors.textMuted),
                 ),
               ],
             ),
@@ -83,7 +85,7 @@ class DayCell extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 2),
                 child: Text(
                   '+$extra',
-                  style: const TextStyle(fontSize: 8, color: Color(0xFF8E8E93)),
+                  style: TextStyle(fontSize: 8, color: colors.textMuted),
                 ),
               ),
           ],

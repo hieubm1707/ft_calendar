@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 import '../cubit/typing_content_cubit.dart';
 import '../widgets/typing_theme.dart';
@@ -72,6 +73,7 @@ class _ContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return BlocConsumer<TypingContentCubit, TypingContentState>(
       listenWhen: (p, c) =>
           (c.message != null && p.message != c.message) ||
@@ -90,13 +92,12 @@ class _ContentView extends StatelessWidget {
             if (!didPop) Navigator.of(context).pop(cubit.changed);
           },
           child: Scaffold(
-            backgroundColor: kTypingBackground,
             appBar: AppBar(
-              backgroundColor: kTypingBackground,
+              backgroundColor: colors.background,
               elevation: 0,
-              title: const Text('Kho nội dung',
+              title: Text('Kho nội dung',
                   style: TextStyle(
-                      fontWeight: FontWeight.w800, color: kTypingInk)),
+                      fontWeight: FontWeight.w800, color: colors.textPrimary)),
             ),
             body: ListView(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
@@ -108,7 +109,7 @@ class _ContentView extends StatelessWidget {
                       ChoiceChip(
                         label: Text(l.label),
                         selected: state.language == l,
-                        selectedColor: kTypingAccent.withValues(alpha: 0.18),
+                        selectedColor: colors.typing.withValues(alpha: 0.18),
                         onSelected: (_) => cubit.changeLanguage(l),
                       ),
                   ],
@@ -122,7 +123,7 @@ class _ContentView extends StatelessWidget {
                       child: FilledButton.icon(
                         onPressed: () => _pickFile(context),
                         style: FilledButton.styleFrom(
-                          backgroundColor: kTypingAccent,
+                          backgroundColor: colors.typing,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         icon: const Icon(Icons.folder_open, size: 18),
@@ -134,7 +135,7 @@ class _ContentView extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: () => _pasteContent(context),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: kTypingAccent,
+                          foregroundColor: colors.typing,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         icon: const Icon(Icons.content_paste, size: 18),
@@ -147,19 +148,19 @@ class _ContentView extends StatelessWidget {
                 const _FormatHint(),
                 const SizedBox(height: 20),
                 Text('Gói đã thêm (${state.packs.length})',
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: kTypingInk)),
+                        color: colors.textPrimary)),
                 const SizedBox(height: 8),
                 if (state.packs.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Text(
                       'Chưa thêm gói nào.\n'
                       'Bài test đang dùng nội dung có sẵn của app.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: kTypingMuted),
+                      style: TextStyle(color: colors.textMuted),
                     ),
                   )
                 else
@@ -205,11 +206,12 @@ class _BankSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final bank = state.bank;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -247,18 +249,19 @@ class _Stat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Column(
       children: [
         Text(value,
-            style: const TextStyle(
-                fontSize: 26, fontWeight: FontWeight.w800, color: kTypingInk)),
+            style: TextStyle(
+                fontSize: 26, fontWeight: FontWeight.w800, color: colors.textPrimary)),
         Text(caption,
-            style: const TextStyle(fontSize: 12, color: kTypingMuted)),
+            style: TextStyle(fontSize: 12, color: colors.textMuted)),
         if (extra != null)
           Text(extra!,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 11,
-                  color: kTypingAccent,
+                  color: colors.typing,
                   fontWeight: FontWeight.w600)),
       ],
     );
@@ -270,12 +273,13 @@ class _FormatHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
+    final colors = context.colors;
+    return Text(
       'Nhận file .json, .csv, .txt.\n'
       '• JSON: {"words": [...], "paragraphs": [...]}\n'
       '• Văn bản/CSV: mỗi dòng một câu = đoạn văn; dòng ngăn bằng dấu phẩy'
       ' (the, and, people) = danh sách từ.',
-      style: TextStyle(fontSize: 11, color: kTypingMuted, height: 1.5),
+      style: TextStyle(fontSize: 11, color: colors.textMuted, height: 1.5),
     );
   }
 }
@@ -288,13 +292,14 @@ class _PackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final d = pack.addedAt;
     return Card(
       elevation: 0,
-      color: Colors.white,
+      color: colors.surface,
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: ListTile(
-        leading: const Icon(Icons.inventory_2_outlined, color: kTypingAccent),
+        leading: Icon(Icons.inventory_2_outlined, color: colors.typing),
         title: Text(pack.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -303,11 +308,11 @@ class _PackTile extends StatelessWidget {
         subtitle: Text(
           '${pack.words.length} từ · ${pack.paragraphs.length} đoạn'
           ' · ${formatDayShort(d)} ${formatClock(d)}',
-          style: const TextStyle(fontSize: 12, color: kTypingMuted),
+          style: TextStyle(fontSize: 12, color: colors.textMuted),
         ),
         trailing: IconButton(
-          icon: const Icon(Icons.delete_outline,
-              size: 20, color: Color(0xFFBDBDBD)),
+          icon: Icon(Icons.delete_outline,
+              size: 20, color: colors.textDisabled),
           onPressed: onDelete,
         ),
       ),
@@ -336,31 +341,32 @@ class _PasteSheetState extends State<_PasteSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Padding(
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-        decoration: const BoxDecoration(
-          color: kTypingBackground,
+        decoration: BoxDecoration(
+          color: colors.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('Dán nội dung',
+            Text('Dán nội dung',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: kTypingInk)),
+                    color: colors.textPrimary)),
             const SizedBox(height: 12),
             TextField(
               controller: _name,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Tên gói',
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: colors.surface,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -370,17 +376,17 @@ class _PasteSheetState extends State<_PasteSheet> {
               minLines: 6,
               maxLines: 10,
               autocorrect: false,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Dán JSON, CSV hoặc mỗi dòng một từ / một đoạn văn…',
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: colors.surface,
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 14),
             FilledButton(
               style: FilledButton.styleFrom(
-                backgroundColor: kTypingAccent,
+                backgroundColor: colors.typing,
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               onPressed: () => Navigator.of(context)

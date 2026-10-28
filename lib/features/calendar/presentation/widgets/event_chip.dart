@@ -28,7 +28,7 @@ class EventChip extends StatelessWidget {
           fontSize: 8,
           height: 1.1,
           fontWeight: FontWeight.w500,
-          color: readableOn(base),
+          color: readableOn(base, Theme.of(context).brightness),
         ),
       ),
     );

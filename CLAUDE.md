@@ -144,6 +144,14 @@ result.fold(
 - `copyWith` của state để `errorMessage` **không** null-coalesce (`errorMessage: errorMessage`) → cho phép xoá lỗi cũ khi chuyển sang success/loading.
 - Mapping Drift ↔ entity chỉ đặt ở `data/models/*_mapper.dart` dưới dạng extension (`toEntity()` / `toCompanion()`); KHÔNG map rải rác trong repository hay bloc.
 
+## Giao diện Sáng/Tối + bảng màu (`core/theme/`)
+
+Cài đặt → **GIAO DIỆN** chọn **Sáng / Tối**. Toàn app lấy màu từ **bảng màu chung** (color template), KHÔNG viết mã hex trong UI.
+- **Bảng màu**: `AppColors` (`ThemeExtension`, có `AppColors.light` / `AppColors.dark`). Token: `background` (nền trang), `surface` (thẻ/AppBar/nav/sheet), `surfaceAlt` (ô nhập, chip), `border`, `divider`, `textPrimary`/`textSecondary`/`textMuted`/`textDisabled`, `accent` (coral thương hiệu), `focus`/`breakTime` (pomodoro), `typing`, `danger`/`success`/`warning`, `shadow`. Dùng `context.colors.<token>` (import `core/theme/index.dart`, chỉ tầng presentation).
+- **`AppTheme.light()/dark()`** dựng `ThemeData` từ token và đã đặt sẵn nền Scaffold, AppBar, NavigationBar, sheet, dialog, ô nhập… → trang mới KHÔNG tự set `backgroundColor: Colors.white`/`surfaceTintColor`. Thêm màu mới: thêm token vào `AppColors` (cả `light` + `dark` + `copyWith` + `lerp`), đừng rải hex.
+- **Ngoại lệ được giữ hex**: màu là *dữ liệu người dùng* (màu sự kiện, tag, cờ ưu tiên, bảng chọn màu); chữ/icon trắng trên nút màu; `PomodoroFullscreenPage` (luôn tối); `WidgetCalendarView` (ảnh PNG cho widget OS, có kiểu tối riêng).
+- **Lưu lựa chọn**: feature `settings` theo Clean Architecture — `AppThemeMode` + `AppearanceRepository` (domain) → `AppearanceLocalDataSource` (SharedPreferences, key `app_theme_mode`, lỗi → `CacheException`/`CacheFailure`) → `AppearanceCubit` (`@lazySingleton`, cung cấp ở gốc `app.dart`, `MaterialApp.themeMode` theo state). `main.dart` gọi `AppearanceCubit.load()` **trước `runApp`** để không chớp nền sáng. Test: `test/features/settings/appearance_repository_impl_test.dart`.
+
 ## Widget home/lock screen (`core/home_widget/`)
 
 Hiển thị lịch + sự kiện ra widget. **Kiến trúc: render UI bằng Dart → ảnh PNG** (`HomeWidget.renderFlutterWidget`), native chỉ hiện ảnh → 1 codebase UI cho cả 2 nền tảng.

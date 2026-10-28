@@ -1,11 +1,5 @@
-import 'package:flutter/material.dart';
-
-/// Bảng màu dùng chung cho trang gõ phím và lịch sử.
-const kTypingAccent = Color(0xFF4C8DFF);
-const kTypingBackground = Color(0xFFFDF7F2);
-const kTypingInk = Color(0xFF1C1C1E);
-const kTypingMuted = Color(0xFF8E8E93);
-const kTypingWrong = Color(0xFFE53935);
+// Màu của trang gõ phím lấy từ `context.colors` (typing / textPrimary /
+// textMuted / danger) — file này chỉ còn các hàm định dạng dùng chung.
 
 /// "1h 25m" / "25m" / "40s" cho thời lượng đã luyện.
 String formatTypingDuration(int seconds) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/index.dart';
 import '../../calendar/presentation/index.dart';
 import '../../pomodoro/presentation/index.dart';
 import '../../remote/presentation/pages/remote_control_page.dart';
@@ -36,17 +37,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final availableTabs = AppTab.getAvailableTabs();
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F2),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0.5,
-        title: const Text(
+        title: Text(
           'Trang chủ',
           style: TextStyle(
-            color: Color(0xFF2C2C2E),
+            color: colors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -64,10 +62,10 @@ class HomePage extends StatelessWidget {
           itemBuilder: (context, index) {
             final tab = availableTabs[index];
             return Material(
-              color: Colors.white,
+              color: colors.surface,
               borderRadius: BorderRadius.circular(16),
               elevation: 1,
-              shadowColor: Colors.black.withAlpha(15),
+              shadowColor: colors.shadow,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: () => _navigateToFeature(context, tab),
@@ -77,22 +75,22 @@ class HomePage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFF5252).withAlpha(20),
+                        color: colors.accent.withAlpha(20),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         tab.iconData,
                         size: 28,
-                        color: const Color(0xFFFF5252),
+                        color: colors.accent,
                       ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       tab.label,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF2C2C2E),
+                        color: colors.textPrimary,
                       ),
                       textAlign: TextAlign.center,
                     ),

@@ -71,6 +71,19 @@ import 'package:example_app/features/remote/data/repositories/remote_repository_
     as _i179;
 import 'package:example_app/features/remote/domain/repositories/remote_repository.dart'
     as _i137;
+import 'package:example_app/features/settings/data/datasources/appearance_local_datasource.dart'
+    as _i471;
+import 'package:example_app/features/settings/data/repositories/appearance_repository_impl.dart'
+    as _i710;
+import 'package:example_app/features/settings/domain/index.dart' as _i228;
+import 'package:example_app/features/settings/domain/repositories/appearance_repository.dart'
+    as _i197;
+import 'package:example_app/features/settings/domain/usecases/get_theme_mode.dart'
+    as _i985;
+import 'package:example_app/features/settings/domain/usecases/save_theme_mode.dart'
+    as _i364;
+import 'package:example_app/features/settings/presentation/cubit/appearance_cubit.dart'
+    as _i8;
 import 'package:example_app/features/tasks/data/datasources/task_local_datasource.dart'
     as _i725;
 import 'package:example_app/features/tasks/data/repositories/task_repository_impl.dart'
@@ -145,6 +158,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i815.NotificationService>(
       () => _i815.NotificationService(),
     );
+    gh.lazySingleton<_i471.AppearanceLocalDataSource>(
+      () => _i471.AppearanceLocalDataSourceImpl(),
+    );
     gh.lazySingleton<_i682.TypingContentDataSource>(
       () => _i682.TypingContentAssetDataSource(),
     );
@@ -172,6 +188,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i908.TypingLocalDataSource>(
       () => _i908.TypingDriftDataSource(gh<_i413.TypingDao>()),
     );
+    gh.lazySingleton<_i228.AppearanceRepository>(
+      () =>
+          _i710.AppearanceRepositoryImpl(gh<_i471.AppearanceLocalDataSource>()),
+    );
+    gh.lazySingleton<_i985.GetThemeMode>(
+      () => _i985.GetThemeMode(gh<_i197.AppearanceRepository>()),
+    );
+    gh.lazySingleton<_i364.SaveThemeMode>(
+      () => _i364.SaveThemeMode(gh<_i197.AppearanceRepository>()),
+    );
     gh.lazySingleton<_i734.TypingContentPackDataSource>(
       () =>
           _i734.TypingContentPackDriftDataSource(gh<_i413.TypingContentDao>()),
@@ -184,6 +210,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i460.PomodoroLocalDataSource>(
       () => _i460.PomodoroDriftDataSource(gh<_i413.PomodoroDao>()),
+    );
+    gh.lazySingleton<_i8.AppearanceCubit>(
+      () => _i8.AppearanceCubit(
+        gh<_i228.GetThemeMode>(),
+        gh<_i228.SaveThemeMode>(),
+      ),
     );
     gh.lazySingleton<_i363.FocusTagLocalDataSource>(
       () => _i363.FocusTagDriftDataSource(gh<_i413.FocusTagDao>()),

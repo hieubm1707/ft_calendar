@@ -6,6 +6,7 @@ import 'core/di/injection.dart';
 import 'core/home_widget/index.dart';
 import 'core/notifications/index.dart';
 import 'features/pomodoro/presentation/index.dart';
+import 'features/settings/presentation/index.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +16,8 @@ Future<void> main() async {
   await getIt<DesktopWindowService>().init();
   final widgetService = getIt<HomeWidgetService>();
   await widgetService.init();
+  // Đọc chế độ Sáng/Tối trước khi dựng UI → không chớp nền sáng khi mở app.
+  await getIt<AppearanceCubit>().load();
   runApp(const FtCalendarApp());
   // renderFlutterWidget cần có frame/view → render sau khi UI dựng xong.
   // setIcon của menu bar cũng đọc asset qua rootBundle nên chờ frame đầu.

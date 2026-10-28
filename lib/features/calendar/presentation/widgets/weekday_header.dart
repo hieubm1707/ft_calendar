@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/index.dart';
+
 /// Hàng nhãn thứ (Mon..Sun). Thứ trùng "hôm nay" được tô màu nhấn.
 class WeekdayHeader extends StatelessWidget {
   final int todayWeekday; // 1 = Mon .. 7 = Sun
@@ -11,6 +13,7 @@ class WeekdayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = Theme.of(context).colorScheme.primary;
+    final colors = context.colors;
     return Row(
       children: List.generate(7, (i) {
         final isToday = (i + 1) == todayWeekday;
@@ -23,7 +26,7 @@ class WeekdayHeader extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: isToday ? accent : const Color(0xFF8E8E93),
+                color: isToday ? accent : colors.textMuted,
               ),
             ),
           ),

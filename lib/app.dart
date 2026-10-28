@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/di/index.dart';
-import 'features/pomodoro/presentation/index.dart';
+import 'core/theme/index.dart';
 import 'features/home/presentation/home.dart';
+import 'features/pomodoro/presentation/index.dart';
+import 'features/settings/domain/index.dart';
+import 'features/settings/presentation/index.dart';
 
 class FtCalendarApp extends StatelessWidget {
   const FtCalendarApp({super.key});
@@ -12,16 +15,23 @@ class FtCalendarApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Đồng hồ pomodoro là singleton, cung cấp ở gốc để trang Focus, cửa sổ nổi
     // và menu bar macOS cùng nhìn một trạng thái. `.value` → không bị đóng.
-    return BlocProvider<PomodoroCubit>.value(
-      value: getIt<PomodoroCubit>(),
-      child: MaterialApp(
-        title: 'FT Calendar',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00B3A6)),
-          useMaterial3: true,
+    // Chế độ Sáng/Tối cũng là singleton, đã `load()` trước runApp.
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PomodoroCubit>.value(value: getIt<PomodoroCubit>()),
+        BlocProvider<AppearanceCubit>.value(value: getIt<AppearanceCubit>()),
+      ],
+      child: BlocBuilder<AppearanceCubit, AppThemeMode>(
+        builder: (context, mode) => MaterialApp(
+          title: 'FT Calendar',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          themeMode: mode == AppThemeMode.dark
+              ? ThemeMode.dark
+              : ThemeMode.light,
+          home: const Home(),
         ),
-        home: const Home(),
       ),
     );
   }

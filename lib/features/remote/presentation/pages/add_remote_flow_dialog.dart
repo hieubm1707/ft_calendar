@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/hardware/ir_service.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/entities/remote_brand_data.dart';
 import '../../domain/entities/remote_device.dart';
+
+/// Màu tím của chế độ quét mã tự động — chế độ Tối dùng tông sáng hơn để đọc được.
+Color _autoScanColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFCE93D8)
+        : const Color(0xFF7B1FA2);
 
 /// 1. Dialog chọn Loại thiết bị (TV, Máy lạnh, Quạt) - Light Mode
 class SelectDeviceTypeDialog extends StatelessWidget {
@@ -12,9 +19,8 @@ class SelectDeviceTypeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Dialog(
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -24,41 +30,41 @@ class SelectDeviceTypeDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Chọn Loại Thiết Bị',
                   style: TextStyle(
-                    color: Color(0xFF2C2F3E),
+                    color: colors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close, color: Color(0xFF8E8E93)),
+                  icon: Icon(Icons.close, color: colors.textMuted),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
             ),
-            const Divider(color: Color(0xFFEFEFF4)),
+            Divider(color: colors.divider),
             const SizedBox(height: 12),
             _buildTypeTile(
               context: context,
               type: RemoteType.tv,
               icon: Icons.tv,
-              color: const Color(0xFFFF5252),
+              color: colors.accent,
             ),
             const SizedBox(height: 10),
             _buildTypeTile(
               context: context,
               type: RemoteType.airConditioner,
               icon: Icons.ac_unit,
-              color: const Color(0xFF448AFF),
+              color: colors.typing,
             ),
             const SizedBox(height: 10),
             _buildTypeTile(
               context: context,
               type: RemoteType.fan,
               icon: Icons.toys,
-              color: const Color(0xFF00C853),
+              color: colors.success,
             ),
           ],
         ),
@@ -72,6 +78,7 @@ class SelectDeviceTypeDialog extends StatelessWidget {
     required IconData icon,
     required Color color,
   }) {
+    final colors = context.colors;
     return InkWell(
       onTap: () {
         Navigator.of(context).pop();
@@ -81,9 +88,9 @@ class SelectDeviceTypeDialog extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF9F9FB),
+          color: colors.surfaceAlt,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFEFEFF4)),
+          border: Border.all(color: colors.border),
         ),
         child: Row(
           children: [
@@ -102,21 +109,21 @@ class SelectDeviceTypeDialog extends StatelessWidget {
                 children: [
                   Text(
                     type.displayName,
-                    style: const TextStyle(
-                      color: Color(0xFF2C2F3E),
+                    style: TextStyle(
+                      color: colors.textPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 2),
-                  const Text(
+                  Text(
                     'Xem danh sách hãng / Quét OEM',
-                    style: TextStyle(color: Color(0xFF8E8E93), fontSize: 12),
+                    style: TextStyle(color: colors.textMuted, fontSize: 12),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Color(0xFFC7C7CC)),
+            Icon(Icons.chevron_right, color: colors.textDisabled),
           ],
         ),
       ),
@@ -138,6 +145,7 @@ class SelectBrandBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brands = RemoteBrandData.brandsByType[type.code] ?? [];
+    final colors = context.colors;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.65,
@@ -146,9 +154,9 @@ class SelectBrandBottomSheet extends StatelessWidget {
       expand: false,
       builder: (context, scrollController) {
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: colors.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
             children: [
@@ -157,7 +165,7 @@ class SelectBrandBottomSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD1D1D6),
+                  color: colors.textDisabled,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -169,20 +177,20 @@ class SelectBrandBottomSheet extends StatelessWidget {
                   children: [
                     Text(
                       'Chọn Thương Hiệu ${type.displayName}',
-                      style: const TextStyle(
-                        color: Color(0xFF2C2F3E),
+                      style: TextStyle(
+                        color: colors.textPrimary,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Color(0xFF8E8E93)),
+                      icon: Icon(Icons.close, color: colors.textMuted),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ],
                 ),
               ),
-              const Divider(color: Color(0xFFEFEFF4)),
+              Divider(color: colors.divider),
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
@@ -206,13 +214,13 @@ class SelectBrandBottomSheet extends StatelessWidget {
                               horizontal: 16, vertical: 14),
                           decoration: BoxDecoration(
                             color: isAutoScan
-                                ? const Color(0xFFF3E5F5)
-                                : const Color(0xFFF9F9FB),
+                                ? const Color(0xFF7B1FA2).withValues(alpha: 0.12)
+                                : colors.surfaceAlt,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
                               color: isAutoScan
-                                  ? const Color(0xFFCE93D8)
-                                  : const Color(0xFFEFEFF4),
+                                  ? const Color(0xFF7B1FA2).withValues(alpha: 0.4)
+                                  : colors.border,
                             ),
                           ),
                           child: Row(
@@ -225,8 +233,8 @@ class SelectBrandBottomSheet extends StatelessWidget {
                                     brand.name,
                                     style: TextStyle(
                                       color: isAutoScan
-                                          ? const Color(0xFF7B1FA2)
-                                          : const Color(0xFF2C2F3E),
+                                          ? _autoScanColor(context)
+                                          : colors.textPrimary,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
@@ -234,8 +242,8 @@ class SelectBrandBottomSheet extends StatelessWidget {
                                   const SizedBox(height: 2),
                                   Text(
                                     'Giao thức: ${brand.protocol}',
-                                    style: const TextStyle(
-                                        color: Color(0xFF8E8E93), fontSize: 12),
+                                    style: TextStyle(
+                                        color: colors.textMuted, fontSize: 12),
                                   ),
                                 ],
                               ),
@@ -243,16 +251,16 @@ class SelectBrandBottomSheet extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: colors.surface,
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: const Color(0xFFE0E0E0)),
+                                  border: Border.all(color: colors.border),
                                 ),
                                 child: Text(
                                   isAutoScan ? 'AUTOSCAN' : brand.hexCode,
                                   style: TextStyle(
                                     color: isAutoScan
-                                        ? const Color(0xFF8E24AA)
-                                        : const Color(0xFFF57C00),
+                                        ? _autoScanColor(context)
+                                        : colors.warning,
                                     fontFamily: 'Courier',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -353,9 +361,8 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Dialog(
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -370,19 +377,19 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                     _step == 1
                         ? (_isAutoScanMode ? 'Quét 20 Mã Tự Động' : 'Kiểm Tra Mã IR')
                         : (_step == 2 ? 'Đặt Tên Remote' : 'Không Thấy Mã Khớp'),
-                    style: const TextStyle(
-                      color: Color(0xFF2C2F3E),
+                    style: TextStyle(
+                      color: colors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: Color(0xFF8E8E93)),
+                    icon: Icon(Icons.close, color: colors.textMuted),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
-              const Divider(color: Color(0xFFEFEFF4)),
+              Divider(color: colors.divider),
               const SizedBox(height: 12),
 
               if (_step == 1) ...[
@@ -391,13 +398,13 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF3E5F5),
+                      color: const Color(0xFF7B1FA2).withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       'QUÉT MÃ MẪU (${_scanIndex + 1}/20)',
-                      style: const TextStyle(
-                        color: Color(0xFF7B1FA2),
+                      style: TextStyle(
+                        color: _autoScanColor(context),
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
@@ -410,7 +417,7 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                       ? 'Hướng mắt IR về ${widget.type.displayName} và bấm nút phát thử mã #${_scanIndex + 1}:'
                       : 'Thử phát mã hồng ngoại $_currentHexCode (${widget.brand.name}) tới thiết bị:',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Color(0xFF5A5C69), fontSize: 14),
+                  style: TextStyle(color: colors.textSecondary, fontSize: 14),
                 ),
                 const SizedBox(height: 20),
 
@@ -421,12 +428,12 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _isTransmitting
-                        ? const Color(0xFFFF2A55)
-                        : const Color(0xFFFFEBEE),
+                        ? colors.accent
+                        : colors.accent.withValues(alpha: 0.12),
                     boxShadow: _isTransmitting
                         ? [
                             BoxShadow(
-                              color: const Color(0xFFFF2A55).withValues(alpha: 0.6),
+                              color: colors.accent.withValues(alpha: 0.6),
                               blurRadius: 18,
                               spreadRadius: 6,
                             )
@@ -436,7 +443,7 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                   child: Center(
                     child: Icon(
                       Icons.sensors,
-                      color: _isTransmitting ? Colors.white : const Color(0xFFFF5252),
+                      color: _isTransmitting ? Colors.white : colors.accent,
                       size: 18,
                     ),
                   ),
@@ -450,11 +457,11 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                     width: 88,
                     height: 88,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE53935),
+                      color: colors.danger,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFE53935).withValues(alpha: 0.3),
+                          color: colors.danger.withValues(alpha: 0.3),
                           blurRadius: 14,
                           offset: const Offset(0, 4),
                         ),
@@ -467,15 +474,15 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                 const SizedBox(height: 8),
                 Text(
                   'Mã phát IR: $_currentHexCode',
-                  style: const TextStyle(color: Color(0xFFE65100), fontSize: 12, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: colors.warning, fontSize: 12, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 24),
 
-                const Text(
+                Text(
                   'Thiết bị của bạn có phản hồi (bật/tắt) không?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Color(0xFF2C2F3E),
+                      color: colors.textPrimary,
                       fontSize: 15,
                       fontWeight: FontWeight.w600),
                 ),
@@ -486,7 +493,7 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Color(0xFFD1D1D6)),
+                          side: BorderSide(color: colors.textDisabled),
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         onPressed: () {
@@ -500,7 +507,7 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                           _isAutoScanMode
                               ? 'Mã kế tiếp (${_scanIndex + 1}/20)'
                               : 'Không phản hồi',
-                          style: const TextStyle(color: Color(0xFF5A5C69)),
+                          style: TextStyle(color: colors.textSecondary),
                         ),
                       ),
                     ),
@@ -508,7 +515,7 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4CAF50),
+                          backgroundColor: colors.success,
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
@@ -528,33 +535,33 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
               ],
 
               if (_step == 2) ...[
-                const Text(
+                Text(
                   'Khớp mã hồng ngoại thành công! Nhập tên ghi nhớ:',
-                  style: TextStyle(color: Color(0xFF5A5C69), fontSize: 14),
+                  style: TextStyle(color: colors.textSecondary, fontSize: 14),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: _nameController,
                   autofocus: true,
-                  style: const TextStyle(color: Color(0xFF2C2F3E)),
+                  style: TextStyle(color: colors.textPrimary),
                   decoration: InputDecoration(
                     labelText: 'Tên thiết bị',
-                    labelStyle: const TextStyle(color: Color(0xFF8E8E93)),
+                    labelStyle: TextStyle(color: colors.textMuted),
                     filled: true,
-                    fillColor: const Color(0xFFF9F9FB),
+                    fillColor: colors.surfaceAlt,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFEFEFF4)),
+                      borderSide: BorderSide(color: colors.border),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFEFEFF4)),
+                      borderSide: BorderSide(color: colors.border),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFFF5252)),
+                      borderSide: BorderSide(color: colors.accent),
                     ),
-                    prefixIcon: const Icon(Icons.edit, color: Color(0xFFFF5252)),
+                    prefixIcon: Icon(Icons.edit, color: colors.accent),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -562,7 +569,7 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF5252),
+                      backgroundColor: colors.accent,
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -585,35 +592,35 @@ class _TestIrSignalDialogState extends State<TestIrSignalDialog> {
               if (_step == 3) ...[
                 Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFFEBEE),
+                  decoration: BoxDecoration(
+                    color: colors.danger.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.sentiment_dissatisfied,
-                      color: Color(0xFFE53935), size: 48),
+                  child: Icon(Icons.sentiment_dissatisfied,
+                      color: colors.danger, size: 48),
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'Đã thử hết 20 mẫu mã phổ thông',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color(0xFF2C2F3E),
+                    color: colors.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Rất tiếc thiết bị của bạn chưa nằm trong tập 20 mã quét phổ thông này.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
+                  style: TextStyle(color: colors.textMuted, fontSize: 13),
                 ),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8E8E93),
+                      backgroundColor: colors.textMuted,
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),

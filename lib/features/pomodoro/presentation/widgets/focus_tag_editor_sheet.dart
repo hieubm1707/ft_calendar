@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 
 /// Kết quả của sheet: [saved] = tag cần lưu, [deletedId] = tag cần xoá.
@@ -25,7 +26,6 @@ Future<FocusTagEditResult?> showFocusTagEditor(
   return showModalBottomSheet<FocusTagEditResult>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -33,7 +33,6 @@ Future<FocusTagEditResult?> showFocusTagEditor(
   );
 }
 
-const _kAccent = Color(0xFF00B3A6);
 const _kMinutePresets = [5, 10, 15, 20, 25, 30, 45, 60, 90];
 const _kColors = [
   0xFF00B3A6,
@@ -124,6 +123,7 @@ class _FocusTagEditorSheetState extends State<_FocusTagEditorSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -163,7 +163,7 @@ class _FocusTagEditorSheetState extends State<_FocusTagEditorSheet> {
                   ChoiceChip(
                     label: Text('${m}p'),
                     selected: _parsedMinutes == m,
-                    selectedColor: _kAccent.withValues(alpha: 0.18),
+                    selectedColor: colors.focus.withValues(alpha: 0.18),
                     onSelected: (_) => setState(() {
                       _minutes.text = '$m';
                     }),
@@ -207,7 +207,7 @@ class _FocusTagEditorSheetState extends State<_FocusTagEditorSheet> {
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: _color == c
-                              ? const Color(0xFF1C1C1E)
+                              ? colors.textPrimary
                               : Colors.transparent,
                           width: 2,
                         ),
@@ -234,10 +234,10 @@ class _FocusTagEditorSheetState extends State<_FocusTagEditorSheet> {
               Center(
                 child: TextButton.icon(
                   onPressed: _confirmDelete,
-                  icon: const Icon(Icons.delete_outline,
-                      size: 18, color: Color(0xFFEF5350)),
-                  label: const Text('Xoá tag',
-                      style: TextStyle(color: Color(0xFFEF5350))),
+                  icon: Icon(Icons.delete_outline,
+                      size: 18, color: colors.danger),
+                  label: Text('Xoá tag',
+                      style: TextStyle(color: colors.danger)),
                 ),
               ),
           ],
@@ -249,7 +249,7 @@ class _FocusTagEditorSheetState extends State<_FocusTagEditorSheet> {
   InputDecoration _decoration(String hint) => InputDecoration(
         hintText: hint,
         filled: true,
-        fillColor: const Color(0xFFF5F5F5),
+        fillColor: context.colors.surfaceAlt,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -264,10 +264,10 @@ class _Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(text,
-      style: const TextStyle(
+      style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF8E8E93)));
+          color: context.colors.textMuted));
 }
 
 class _EmojiOption extends StatelessWidget {
@@ -280,6 +280,7 @@ class _EmojiOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -287,14 +288,14 @@ class _EmojiOption extends StatelessWidget {
         height: 38,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? _kAccent.withValues(alpha: 0.15) : const Color(0xFFF5F5F5),
+          color: selected ? colors.focus.withValues(alpha: 0.15) : colors.surfaceAlt,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: selected ? _kAccent : Colors.transparent,
+            color: selected ? colors.focus : Colors.transparent,
           ),
         ),
         child: emoji == null
-            ? const Icon(Icons.block, size: 16, color: Color(0xFF8E8E93))
+            ? Icon(Icons.block, size: 16, color: colors.textMuted)
             : Text(emoji!, style: const TextStyle(fontSize: 18)),
       ),
     );

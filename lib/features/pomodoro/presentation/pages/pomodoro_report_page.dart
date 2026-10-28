@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 import '../cubit/pomodoro_report_cubit.dart';
 import '../widgets/duration_format.dart';
-
-const _kAccent = Color(0xFF00B3A6);
-const _kBackground = Color(0xFFFDF7F2);
-const _kMuted = Color(0xFF8E8E93);
 
 /// Báo cáo thời gian đã tập trung (pomodoro): tổng hợp theo ngày, lọc theo
 /// tuần/tháng/năm/khoảng tuỳ chọn, kèm "focus trend" theo tag.
@@ -56,14 +53,14 @@ class _ReportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: _kBackground,
       appBar: AppBar(
-        backgroundColor: _kBackground,
+        backgroundColor: colors.background,
         elevation: 0,
-        title: const Text('Báo cáo tập trung',
+        title: Text('Báo cáo tập trung',
             style: TextStyle(
-                fontWeight: FontWeight.w800, color: Color(0xFF1C1C1E))),
+                fontWeight: FontWeight.w800, color: colors.textPrimary)),
       ),
       body: BlocConsumer<PomodoroReportCubit, PomodoroReportState>(
         listenWhen: (p, c) => c.status == PomodoroReportStatus.failure,
@@ -82,7 +79,7 @@ class _ReportView extends StatelessWidget {
                     ChoiceChip(
                       label: Text(_rangeLabels[r]!),
                       selected: state.range == r,
-                      selectedColor: _kAccent.withValues(alpha: 0.18),
+                      selectedColor: colors.focus.withValues(alpha: 0.18),
                       onSelected: (_) => r == PomodoroRange.custom
                           ? _pickCustomRange(context, state)
                           : context.read<PomodoroReportCubit>().changeRange(r),
@@ -92,13 +89,13 @@ class _ReportView extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(Icons.date_range, size: 15, color: _kMuted),
+                  Icon(Icons.date_range, size: 15, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       '${_formatDay(state.from)} – ${_formatDay(state.to)}'
                       ' · ${report.dayCount} ngày',
-                      style: const TextStyle(fontSize: 12, color: _kMuted),
+                      style: TextStyle(fontSize: 12, color: colors.textMuted),
                     ),
                   ),
                   if (state.range == PomodoroRange.custom)
@@ -112,11 +109,11 @@ class _ReportView extends StatelessWidget {
               _SummaryGrid(report: report),
               const SizedBox(height: 20),
               if (report.totalSessions == 0)
-                const Padding(
-                  padding: EdgeInsets.only(top: 40),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40),
                   child: Text('Chưa có phiên tập trung nào trong khoảng này.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: _kMuted)),
+                      style: TextStyle(color: colors.textMuted)),
                 )
               else ...[
                 const _SectionTitle('Theo ngày'),
@@ -151,13 +148,14 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8, left: 4),
       child: Text(text,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1C1C1E))),
+              color: colors.textPrimary)),
     );
   }
 }
@@ -216,27 +214,28 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 18, color: _kAccent),
+          Icon(icon, size: 18, color: colors.focus),
           const SizedBox(height: 6),
           Text(value,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1C1C1E))),
+                  color: colors.textPrimary)),
           Text(caption,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11, color: _kMuted)),
+              style: TextStyle(fontSize: 11, color: colors.textMuted)),
         ],
       ),
     );
@@ -259,13 +258,14 @@ class _FocusChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final buckets = bucketDaySummaries(days, autoBucketUnit(days.length));
     final peak =
         buckets.fold(0, (m, b) => b.focusSeconds > m ? b.focusSeconds : m);
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 16, 12, 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: SizedBox(
@@ -283,10 +283,10 @@ class _FocusChart extends StatelessWidget {
               children: [
                 Text(
                   b.focusSeconds == 0 ? '' : '${b.focusSeconds ~/ 60}',
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
-                      color: _kMuted),
+                      color: colors.textMuted),
                 ),
                 const SizedBox(height: 4),
                 Container(
@@ -294,14 +294,14 @@ class _FocusChart extends StatelessWidget {
                   height: (_maxHeight * ratio).clamp(3.0, _maxHeight),
                   decoration: BoxDecoration(
                     color: b.focusSeconds == 0
-                        ? const Color(0xFFEEEEEE)
-                        : _kAccent.withValues(alpha: 0.35 + 0.65 * ratio),
+                        ? colors.divider
+                        : colors.focus.withValues(alpha: 0.35 + 0.65 * ratio),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(_label(b),
-                    style: const TextStyle(fontSize: 10, color: _kMuted)),
+                    style: TextStyle(fontSize: 10, color: colors.textMuted)),
               ],
             );
           },
@@ -342,6 +342,7 @@ class _FocusTrend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final report = state.report;
     final tags = report.tags;
     final top = report.topTag;
@@ -350,7 +351,7 @@ class _FocusTrend extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -359,7 +360,7 @@ class _FocusTrend extends StatelessWidget {
           if (top != null) ...[
             Text.rich(
               TextSpan(
-                style: const TextStyle(fontSize: 13, color: Color(0xFF1C1C1E)),
+                style: TextStyle(fontSize: 13, color: colors.textPrimary),
                 children: [
                   const TextSpan(text: 'Tập trung nhiều nhất vào '),
                   TextSpan(
@@ -422,7 +423,7 @@ class _FocusTrend extends StatelessWidget {
                       Text(
                         '${formatFocusDuration(shown[i].focusSeconds)}'
                         ' · ${(report.shareOf(shown[i]) * 100).round()}%',
-                        style: const TextStyle(fontSize: 12, color: _kMuted),
+                        style: TextStyle(fontSize: 12, color: colors.textMuted),
                       ),
                     ],
                   ),
@@ -432,14 +433,14 @@ class _FocusTrend extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: report.shareOf(shown[i]),
                       minHeight: 6,
-                      backgroundColor: const Color(0xFFF0F0F0),
+                      backgroundColor: colors.surfaceAlt,
                       valueColor: AlwaysStoppedAnimation<Color>(
                           _colorFor(shown[i], i)),
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text('${shown[i].sessions} phiên',
-                      style: const TextStyle(fontSize: 11, color: _kMuted)),
+                      style: TextStyle(fontSize: 11, color: colors.textMuted)),
                 ],
               ),
             ),
@@ -465,16 +466,16 @@ class _SessionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final s = session;
-    final accent = color == null ? _kAccent : Color(color!);
+    final accent = color == null ? colors.focus : Color(color!);
     return Card(
       elevation: 0,
-      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: ListTile(
         leading: Icon(
           s.completed ? Icons.check_circle : Icons.pause_circle_filled,
-          color: s.completed ? accent : const Color(0xFFFFA726),
+          color: s.completed ? accent : colors.warning,
         ),
         title: Text(
           (s.label == null || s.label!.isEmpty) ? 'Không đặt tên' : s.label!,
@@ -485,16 +486,16 @@ class _SessionTile extends StatelessWidget {
         subtitle: Text(
           '${s.startedAt.day}/${s.startedAt.month} · '
           '${_time(s.startedAt)}–${_time(s.endedAt)}',
-          style: const TextStyle(fontSize: 12, color: _kMuted),
+          style: TextStyle(fontSize: 12, color: colors.textMuted),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(formatFocusDuration(s.focusSeconds),
-                style: const TextStyle(
-                    fontWeight: FontWeight.w700, color: Color(0xFF1C1C1E))),
+                style: TextStyle(
+                    fontWeight: FontWeight.w700, color: colors.textPrimary)),
             IconButton(
-              icon: const Icon(Icons.close, size: 18, color: Color(0xFFBDBDBD)),
+              icon: Icon(Icons.close, size: 18, color: colors.textDisabled),
               onPressed: s.id == null ? null : onDelete,
             ),
           ],

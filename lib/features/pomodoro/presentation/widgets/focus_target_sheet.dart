@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/index.dart';
 import '../../../tasks/domain/index.dart';
 
 /// Việc được chọn để tập trung.
@@ -19,7 +20,6 @@ Future<FocusTarget?> showFocusTargetSheet(
   return showModalBottomSheet<FocusTarget>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -34,6 +34,7 @@ class _FocusTargetSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final pending = todayTasks.where((t) => !t.done).toList();
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
@@ -45,10 +46,10 @@ class _FocusTargetSheet extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           if (pending.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Text('Hôm nay chưa có công việc nào cần làm.',
-                  style: TextStyle(color: Color(0xFF8E8E93))),
+                  style: TextStyle(color: colors.textMuted)),
             )
           else
             ConstrainedBox(

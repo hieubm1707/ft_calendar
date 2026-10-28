@@ -17,18 +17,16 @@ class AppBottomNav extends StatelessWidget {
       selectedIndex: currentIndex,
       onDestinationSelected: onTap,
       height: 64,
-      backgroundColor: Colors.white,
-      indicatorColor: const Color(0xFFFF5252).withValues(alpha: 0.15),
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       destinations: const [
         NavigationDestination(
           icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home, color: Color(0xFFFF5252)),
+          selectedIcon: Icon(Icons.home),
           label: 'Trang chủ',
         ),
         NavigationDestination(
           icon: Icon(Icons.settings_outlined),
-          selectedIcon: Icon(Icons.settings, color: Color(0xFFFF5252)),
+          selectedIcon: Icon(Icons.settings),
           label: 'Cài đặt',
         ),
       ],

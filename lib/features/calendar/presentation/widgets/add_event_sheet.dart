@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/index.dart';
+import '../../../../core/theme/index.dart';
 import 'event_colors.dart';
 
 /// Mở bottom sheet thêm/sửa sự kiện.
@@ -15,7 +16,6 @@ Future<Event?> showAddEventSheet(
   return showModalBottomSheet<Event>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -130,6 +130,7 @@ class _AddEventSheetState extends State<_AddEventSheet> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final colors = context.colors;
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 16, 20, 16 + bottomInset),
       child: Column(
@@ -165,7 +166,7 @@ class _AddEventSheetState extends State<_AddEventSheet> {
             onTap: _pickDate,
             child: Row(
               children: [
-                const Icon(Icons.event, size: 20, color: Color(0xFF8E8E93)),
+                Icon(Icons.event, size: 20, color: colors.textMuted),
                 const SizedBox(width: 8),
                 Text(
                   '${_date.day}/${_date.month}/${_date.year}',
@@ -177,18 +178,18 @@ class _AddEventSheetState extends State<_AddEventSheet> {
           const SizedBox(height: 14),
           Row(
             children: [
-              const Icon(Icons.schedule, size: 20, color: Color(0xFF8E8E93)),
+              Icon(Icons.schedule, size: 20, color: colors.textMuted),
               const SizedBox(width: 8),
               _TimeChip(label: 'Bắt đầu', time: _fmt(_startTime), onTap: _pickStartTime),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text('–', style: TextStyle(color: Color(0xFF8E8E93))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text('–', style: TextStyle(color: colors.textMuted)),
               ),
               _TimeChip(label: 'Kết thúc', time: _fmt(_endTime), onTap: _pickEndTime),
             ],
           ),
           const SizedBox(height: 16),
-          const Text('Màu', style: TextStyle(color: Color(0xFF8E8E93))),
+          Text('Màu', style: TextStyle(color: colors.textMuted)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 12,
@@ -204,7 +205,7 @@ class _AddEventSheetState extends State<_AddEventSheet> {
                     color: Color(c),
                     shape: BoxShape.circle,
                     border: selected
-                        ? Border.all(color: Colors.black87, width: 2)
+                        ? Border.all(color: colors.textPrimary, width: 2)
                         : null,
                   ),
                   child: selected
@@ -238,13 +239,14 @@ class _TimeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: const Color(0xFFEDE9E4),
+          color: colors.surfaceAlt,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
@@ -252,7 +254,7 @@ class _TimeChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(label,
-                style: const TextStyle(fontSize: 10, color: Color(0xFF8E8E93))),
+                style: TextStyle(fontSize: 10, color: colors.textMuted)),
             Text(time,
                 style:
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),

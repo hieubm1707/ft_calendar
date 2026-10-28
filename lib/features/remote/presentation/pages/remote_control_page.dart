@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/entities/remote_device.dart';
 import '../../domain/repositories/remote_repository.dart';
 import 'add_remote_flow_dialog.dart';
@@ -55,21 +56,19 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        title: const Text('Xoá Remote', style: TextStyle(color: Color(0xFF2C2F3E), fontWeight: FontWeight.bold)),
+        title: Text('Xoá Remote', style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold)),
         content: Text(
           'Bạn có chắc chắn muốn xoá "${device.name}" khỏi danh sách?',
-          style: const TextStyle(color: Color(0xFF5A5C69)),
+          style: TextStyle(color: context.colors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Hủy', style: TextStyle(color: Color(0xFF8E8E93))),
+            child: Text('Hủy', style: TextStyle(color: context.colors.textMuted)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFE53935),
+              backgroundColor: context.colors.danger,
               elevation: 0,
             ),
             onPressed: () async {
@@ -86,21 +85,18 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F2), // Light theme background đồng bộ
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0.5,
-        title: const Row(
+        title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.settings_remote, color: Color(0xFFFF5252)),
-            SizedBox(width: 8),
+            Icon(Icons.settings_remote, color: colors.accent),
+            const SizedBox(width: 8),
             Text(
               'Danh Sách Remote',
               style: TextStyle(
-                color: Color(0xFF2C2F3E),
+                color: colors.textPrimary,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -110,7 +106,7 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_circle, color: Color(0xFFFF5252), size: 28),
+            icon: Icon(Icons.add_circle, color: colors.accent, size: 28),
             onPressed: _openAddRemoteDialog,
             tooltip: 'Thêm Remote Mới',
           ),
@@ -121,8 +117,8 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
         stream: _remoteRepository.watchAllDevices(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFF5252)),
+            return Center(
+              child: CircularProgressIndicator(color: colors.accent),
             );
           }
 
@@ -136,40 +132,40 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colors.surface,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: colors.shadow,
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.settings_remote_outlined,
                       size: 64,
-                      color: Color(0xFF8E8E93),
+                      color: colors.textMuted,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'Chưa có Remote nào được kết nối',
                     style: TextStyle(
-                      color: Color(0xFF2C2F3E),
+                      color: colors.textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Bấm nút bên dưới để thêm TV, Máy lạnh hoặc Quạt',
-                    style: TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
+                    style: TextStyle(color: colors.textMuted, fontSize: 13),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF5252),
+                      backgroundColor: colors.accent,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24, vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -207,15 +203,16 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
   }
 
   Widget _buildDeviceCard(RemoteDevice device) {
+    final colors = context.colors;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFEFEFF4)),
+        border: Border.all(color: colors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: colors.shadow,
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -235,8 +232,8 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
         ),
         title: Text(
           device.name,
-          style: const TextStyle(
-            color: Color(0xFF2C2F3E),
+          style: TextStyle(
+            color: colors.textPrimary,
 
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -244,16 +241,16 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
         ),
         subtitle: Text(
           'Loại: ${device.type.displayName}',
-          style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
+          style: TextStyle(color: colors.textMuted, fontSize: 13),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.delete_outline, color: Color(0xFFC7C7CC)),
+              icon: Icon(Icons.delete_outline, color: colors.textDisabled),
               onPressed: () => _deleteDevice(device),
             ),
-            const Icon(Icons.chevron_right, color: Color(0xFFC7C7CC)),
+            Icon(Icons.chevron_right, color: colors.textDisabled),
           ],
         ),
         onTap: () {
@@ -280,13 +277,14 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
   }
 
   Color _getDeviceColor(RemoteType type) {
+    final colors = context.colors;
     switch (type) {
       case RemoteType.tv:
-        return const Color(0xFFFF5252);
+        return colors.accent;
       case RemoteType.airConditioner:
-        return const Color(0xFF448AFF);
+        return colors.typing;
       case RemoteType.fan:
-        return const Color(0xFF69F0AE);
+        return colors.success;
     }
   }
 }

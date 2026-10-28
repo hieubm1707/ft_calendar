@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/desktop/index.dart';
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 import '../widgets/duration_format.dart';
 import '../widgets/focus_tag_sheet.dart';
@@ -10,9 +11,6 @@ import '../widgets/pomodoro_ring.dart';
 import 'pomodoro_fullscreen_page.dart';
 import 'pomodoro_report_page.dart';
 
-const _kFocusColor = Color(0xFF00B3A6);
-const _kBreakColor = Color(0xFF5C6BC0);
-const _kBackground = Color(0xFFFDF7F2);
 
 /// Trang "Focus". Cubit là singleton do `app.dart` cung cấp — trang chỉ hiển thị,
 /// không tạo/đóng đồng hồ (đổi tab hay ẩn cửa sổ không được reset phiên).
@@ -44,45 +42,29 @@ class _PomodoroView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: _kBackground,
       appBar: AppBar(
         title: const Text(
           'Tập trung',
-          style: TextStyle(
-            color: Color(0xFF1C1C1E),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0.5,
-        iconTheme: const IconThemeData(color: Color(0xFF1C1C1E)),
         actions: [
           if (getIt<DesktopWindowService>().isSupported)
             IconButton(
               tooltip: 'Cửa sổ nổi nhỏ',
               onPressed: () => getIt<DesktopWindowService>().setMiniMode(true),
-              icon: const Icon(
-                Icons.picture_in_picture_alt_outlined,
-                color: Color(0xFF1C1C1E),
-              ),
+              icon: const Icon(Icons.picture_in_picture_alt_outlined),
             ),
           IconButton(
             tooltip: 'Toàn màn hình',
             onPressed: () => _openFullscreen(context),
-            icon: const Icon(
-              Icons.fullscreen,
-              color: Color(0xFF1C1C1E),
-            ),
+            icon: const Icon(Icons.fullscreen),
           ),
           IconButton(
             tooltip: 'Báo cáo',
             onPressed: () => _openReport(context),
-            icon: const Icon(
-              Icons.bar_chart_rounded,
-              color: Color(0xFF1C1C1E),
-            ),
+            icon: const Icon(Icons.bar_chart_rounded),
           ),
         ],
       ),
@@ -93,7 +75,7 @@ class _PomodoroView extends StatelessWidget {
           listener: (context, state) => ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.errorMessage!))),
           builder: (context, state) {
-            final color = state.isFocus ? _kFocusColor : _kBreakColor;
+            final color = state.isFocus ? colors.focus : colors.breakTime;
             return SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
               child: Column(
@@ -113,10 +95,10 @@ class _PomodoroView extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(state.remainingLabel,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 52,
                                   fontWeight: FontWeight.w800,
-                                  color: Color(0xFF1C1C1E),
+                                  color: colors.textPrimary,
                                   fontFeatures: [
                                     FontFeature.tabularFigures()
                                   ])),
@@ -266,6 +248,7 @@ class _Controls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final cubit = context.read<PomodoroCubit>();
     final canStop = !state.isIdle || state.elapsedSeconds > 0;
     return Row(
@@ -274,7 +257,7 @@ class _Controls extends StatelessWidget {
         IconButton(
           tooltip: 'Dừng',
           iconSize: 28,
-          color: canStop ? const Color(0xFF1C1C1E) : const Color(0xFFBDBDBD),
+          color: canStop ? colors.textPrimary : colors.textDisabled,
           onPressed: canStop ? cubit.stop : null,
           icon: const Icon(Icons.stop_circle_outlined),
         ),
@@ -302,7 +285,7 @@ class _Controls extends StatelessWidget {
         IconButton(
           tooltip: 'Bỏ qua',
           iconSize: 28,
-          color: const Color(0xFF1C1C1E),
+          color: colors.textPrimary,
           onPressed: cubit.skip,
           icon: const Icon(Icons.skip_next_outlined),
         ),
@@ -324,10 +307,11 @@ class _TodayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -337,7 +321,7 @@ class _TodayCard extends StatelessWidget {
                 value: formatFocusDuration(focusSeconds),
                 caption: 'Hôm nay'),
           ),
-          Container(width: 1, height: 34, color: const Color(0xFFEEEEEE)),
+          Container(width: 1, height: 34, color: colors.divider),
           Expanded(
             child: _Stat(value: '$sessions', caption: 'Phiên'),
           ),
@@ -359,16 +343,17 @@ class _Stat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Column(
       children: [
         Text(value,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF1C1C1E))),
+                color: colors.textPrimary)),
         const SizedBox(height: 2),
         Text(caption,
-            style: const TextStyle(fontSize: 12, color: Color(0xFF8E8E93))),
+            style: TextStyle(fontSize: 12, color: colors.textMuted)),
       ],
     );
   }

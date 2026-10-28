@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 import '../cubit/typing_history_cubit.dart';
 import '../widgets/typing_theme.dart';
@@ -52,13 +53,13 @@ class _HistoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: kTypingBackground,
       appBar: AppBar(
-        backgroundColor: kTypingBackground,
+        backgroundColor: colors.background,
         elevation: 0,
-        title: const Text('Lịch sử gõ phím',
-            style: TextStyle(fontWeight: FontWeight.w800, color: kTypingInk)),
+        title: Text('Lịch sử gõ phím',
+            style: TextStyle(fontWeight: FontWeight.w800, color: colors.textPrimary)),
       ),
       body: BlocConsumer<TypingHistoryCubit, TypingHistoryState>(
         listenWhen: (p, c) => c.status == TypingHistoryStatus.failure,
@@ -77,7 +78,7 @@ class _HistoryView extends StatelessWidget {
                     ChoiceChip(
                       label: Text(_rangeLabels[r]!),
                       selected: state.range == r,
-                      selectedColor: kTypingAccent.withValues(alpha: 0.18),
+                      selectedColor: colors.typing.withValues(alpha: 0.18),
                       onSelected: (_) => r == TypingRange.custom
                           ? _pickCustomRange(context, state)
                           : context.read<TypingHistoryCubit>().changeRange(r),
@@ -87,14 +88,14 @@ class _HistoryView extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(Icons.date_range, size: 15, color: kTypingMuted),
+                  Icon(Icons.date_range, size: 15, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       '${formatDayShort(state.from)} – ${formatDayShort(state.to)}'
                       ' · ${report.dayCount} ngày',
                       style:
-                          const TextStyle(fontSize: 12, color: kTypingMuted),
+                          TextStyle(fontSize: 12, color: colors.textMuted),
                     ),
                   ),
                   if (state.range == TypingRange.custom)
@@ -108,11 +109,11 @@ class _HistoryView extends StatelessWidget {
               _SummaryGrid(report: report),
               const SizedBox(height: 20),
               if (report.totalTests == 0)
-                const Padding(
-                  padding: EdgeInsets.only(top: 40),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40),
                   child: Text('Chưa có bài test nào trong khoảng này.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: kTypingMuted)),
+                      style: TextStyle(color: colors.textMuted)),
                 )
               else ...[
                 const _SectionTitle('WPM tốt nhất theo ngày'),
@@ -143,11 +144,12 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8, left: 4),
       child: Text(text,
-          style: const TextStyle(
-              fontSize: 15, fontWeight: FontWeight.w700, color: kTypingInk)),
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w700, color: colors.textPrimary)),
     );
   }
 }
@@ -206,27 +208,28 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 18, color: kTypingAccent),
+          Icon(icon, size: 18, color: colors.typing),
           const SizedBox(height: 6),
           Text(value,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: kTypingInk)),
+                  color: colors.textPrimary)),
           Text(caption,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11, color: kTypingMuted)),
+              style: TextStyle(fontSize: 11, color: colors.textMuted)),
         ],
       ),
     );
@@ -249,13 +252,14 @@ class _WpmChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final buckets = bucketTypingDays(days, autoTypingBucketUnit(days.length));
     final peak = buckets.fold(0.0, (m, b) => b.bestWpm > m ? b.bestWpm : m);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 16, 12, 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: SizedBox(
@@ -273,10 +277,10 @@ class _WpmChart extends StatelessWidget {
               children: [
                 Text(
                   b.tests == 0 ? '' : b.bestWpm.toStringAsFixed(0),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
-                      color: kTypingMuted),
+                      color: colors.textMuted),
                 ),
                 const SizedBox(height: 4),
                 Container(
@@ -284,14 +288,14 @@ class _WpmChart extends StatelessWidget {
                   height: (_maxHeight * ratio).clamp(3.0, _maxHeight),
                   decoration: BoxDecoration(
                     color: b.tests == 0
-                        ? const Color(0xFFEEEEEE)
-                        : kTypingAccent.withValues(alpha: 0.35 + 0.65 * ratio),
+                        ? colors.divider
+                        : colors.typing.withValues(alpha: 0.35 + 0.65 * ratio),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(_label(b),
-                    style: const TextStyle(fontSize: 10, color: kTypingMuted)),
+                    style: TextStyle(fontSize: 10, color: colors.textMuted)),
               ],
             );
           },
@@ -309,13 +313,14 @@ class _LanguageBreakdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final peak = report.languages
         .fold(0.0, (m, l) => l.averageWpm > m ? l.averageWpm : m);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -336,8 +341,8 @@ class _LanguageBreakdown extends StatelessWidget {
                       Text(
                         'TB ${l.averageWpm.toStringAsFixed(0)}'
                         ' · tốt nhất ${l.bestWpm.toStringAsFixed(0)} WPM',
-                        style: const TextStyle(
-                            fontSize: 12, color: kTypingMuted),
+                        style: TextStyle(
+                            fontSize: 12, color: colors.textMuted),
                       ),
                     ],
                   ),
@@ -347,17 +352,17 @@ class _LanguageBreakdown extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: peak == 0 ? 0 : l.averageWpm / peak,
                       minHeight: 6,
-                      backgroundColor: const Color(0xFFF0F0F0),
+                      backgroundColor: colors.surfaceAlt,
                       valueColor:
-                          const AlwaysStoppedAnimation<Color>(kTypingAccent),
+                          AlwaysStoppedAnimation<Color>(colors.typing),
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                       '${l.tests} bài · chính xác '
                       '${(l.averageAccuracy * 100).round()}%',
-                      style: const TextStyle(
-                          fontSize: 11, color: kTypingMuted)),
+                      style: TextStyle(
+                          fontSize: 11, color: colors.textMuted)),
                 ],
               ),
             ),
@@ -375,13 +380,13 @@ class _ResultTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final r = result;
     return Card(
       elevation: 0,
-      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: ListTile(
-        leading: const Icon(Icons.keyboard_alt_outlined, color: kTypingAccent),
+        leading: Icon(Icons.keyboard_alt_outlined, color: colors.typing),
         title: Text(
           '${r.wpm.toStringAsFixed(1)} WPM'
           ' · ${(r.accuracy * 100).round()}%',
@@ -390,10 +395,10 @@ class _ResultTile extends StatelessWidget {
         subtitle: Text(
           '${formatDayShort(r.takenAt)} ${formatClock(r.takenAt)}'
           ' · ${r.language.label} · ${r.mode.label} · ${r.elapsedSeconds}s',
-          style: const TextStyle(fontSize: 12, color: kTypingMuted),
+          style: TextStyle(fontSize: 12, color: colors.textMuted),
         ),
         trailing: IconButton(
-          icon: const Icon(Icons.close, size: 18, color: Color(0xFFBDBDBD)),
+          icon: Icon(Icons.close, size: 18, color: colors.textDisabled),
           onPressed: r.id == null ? null : onDelete,
         ),
       ),
