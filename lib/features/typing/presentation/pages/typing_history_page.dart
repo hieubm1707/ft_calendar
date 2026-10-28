@@ -78,7 +78,7 @@ class _HistoryView extends StatelessWidget {
                     ChoiceChip(
                       label: Text(_rangeLabels[r]!),
                       selected: state.range == r,
-                      selectedColor: colors.typing.withValues(alpha: 0.18),
+                      selectedColor: colors.accent.withValues(alpha: 0.18),
                       onSelected: (_) => r == TypingRange.custom
                           ? _pickCustomRange(context, state)
                           : context.read<TypingHistoryCubit>().changeRange(r),
@@ -219,7 +219,7 @@ class _SummaryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 18, color: colors.typing),
+          Icon(icon, size: 18, color: colors.accent),
           const SizedBox(height: 6),
           Text(value,
               style: TextStyle(
@@ -289,7 +289,7 @@ class _WpmChart extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: b.tests == 0
                         ? colors.divider
-                        : colors.typing.withValues(alpha: 0.35 + 0.65 * ratio),
+                        : colors.accent.withValues(alpha: 0.35 + 0.65 * ratio),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
@@ -354,7 +354,7 @@ class _LanguageBreakdown extends StatelessWidget {
                       minHeight: 6,
                       backgroundColor: colors.surfaceAlt,
                       valueColor:
-                          AlwaysStoppedAnimation<Color>(colors.typing),
+                          AlwaysStoppedAnimation<Color>(colors.accent),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -386,7 +386,7 @@ class _ResultTile extends StatelessWidget {
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: ListTile(
-        leading: Icon(Icons.keyboard_alt_outlined, color: colors.typing),
+        leading: Icon(Icons.keyboard_alt_outlined, color: colors.accent),
         title: Text(
           '${r.wpm.toStringAsFixed(1)} WPM'
           ' · ${(r.accuracy * 100).round()}%',

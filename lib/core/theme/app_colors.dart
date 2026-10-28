@@ -26,15 +26,15 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color textMuted;
   final Color textDisabled;
 
-  /// Màu thương hiệu (coral) — nút chính, icon đang chọn, điểm nhấn.
+  /// Màu thương hiệu (coral) — DÙNG CHUNG cho mọi tính năng: nút chính, chip
+  /// đang chọn, icon đang chọn, ngày hôm nay, tiến độ…
   final Color accent;
 
-  /// Pomodoro: giai đoạn tập trung / nghỉ.
-  final Color focus;
+  /// Pomodoro: giai đoạn nghỉ (để phân biệt với giai đoạn tập trung = accent).
   final Color breakTime;
 
-  /// Điểm nhấn của tính năng gõ phím.
-  final Color typing;
+  /// Thông tin / mát lạnh (xanh dương) — vd. máy lạnh, nút giảm nhiệt độ.
+  final Color info;
 
   final Color danger;
   final Color success;
@@ -54,9 +54,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.textMuted,
     required this.textDisabled,
     required this.accent,
-    required this.focus,
     required this.breakTime,
-    required this.typing,
+    required this.info,
     required this.danger,
     required this.success,
     required this.warning,
@@ -74,9 +73,8 @@ class AppColors extends ThemeExtension<AppColors> {
     textMuted: Color(0xFF8E8E93),
     textDisabled: Color(0xFFC7C7CC),
     accent: Color(0xFFFF5252),
-    focus: Color(0xFF00B3A6),
     breakTime: Color(0xFF5C6BC0),
-    typing: Color(0xFF4C8DFF),
+    info: Color(0xFF448AFF),
     danger: Color(0xFFE53935),
     success: Color(0xFF00C853),
     warning: Color(0xFFF57C00),
@@ -94,9 +92,8 @@ class AppColors extends ThemeExtension<AppColors> {
     textMuted: Color(0xFF98989F),
     textDisabled: Color(0xFF6C6C73),
     accent: Color(0xFFFF6B6B),
-    focus: Color(0xFF1FC7B9),
     breakTime: Color(0xFF7986CB),
-    typing: Color(0xFF6FA4FF),
+    info: Color(0xFF6FA4FF),
     danger: Color(0xFFEF5350),
     success: Color(0xFF3DDC84),
     warning: Color(0xFFFFA726),
@@ -115,9 +112,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? textMuted,
     Color? textDisabled,
     Color? accent,
-    Color? focus,
     Color? breakTime,
-    Color? typing,
+    Color? info,
     Color? danger,
     Color? success,
     Color? warning,
@@ -134,9 +130,8 @@ class AppColors extends ThemeExtension<AppColors> {
       textMuted: textMuted ?? this.textMuted,
       textDisabled: textDisabled ?? this.textDisabled,
       accent: accent ?? this.accent,
-      focus: focus ?? this.focus,
       breakTime: breakTime ?? this.breakTime,
-      typing: typing ?? this.typing,
+      info: info ?? this.info,
       danger: danger ?? this.danger,
       success: success ?? this.success,
       warning: warning ?? this.warning,
@@ -159,9 +154,8 @@ class AppColors extends ThemeExtension<AppColors> {
       textMuted: l(textMuted, other.textMuted),
       textDisabled: l(textDisabled, other.textDisabled),
       accent: l(accent, other.accent),
-      focus: l(focus, other.focus),
       breakTime: l(breakTime, other.breakTime),
-      typing: l(typing, other.typing),
+      info: l(info, other.info),
       danger: l(danger, other.danger),
       success: l(success, other.success),
       warning: l(warning, other.warning),

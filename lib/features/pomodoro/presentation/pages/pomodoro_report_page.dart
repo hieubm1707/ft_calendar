@@ -79,7 +79,7 @@ class _ReportView extends StatelessWidget {
                     ChoiceChip(
                       label: Text(_rangeLabels[r]!),
                       selected: state.range == r,
-                      selectedColor: colors.focus.withValues(alpha: 0.18),
+                      selectedColor: colors.accent.withValues(alpha: 0.18),
                       onSelected: (_) => r == PomodoroRange.custom
                           ? _pickCustomRange(context, state)
                           : context.read<PomodoroReportCubit>().changeRange(r),
@@ -225,7 +225,7 @@ class _SummaryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 18, color: colors.focus),
+          Icon(icon, size: 18, color: colors.accent),
           const SizedBox(height: 6),
           Text(value,
               style: TextStyle(
@@ -295,7 +295,7 @@ class _FocusChart extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: b.focusSeconds == 0
                         ? colors.divider
-                        : colors.focus.withValues(alpha: 0.35 + 0.65 * ratio),
+                        : colors.accent.withValues(alpha: 0.35 + 0.65 * ratio),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
@@ -468,7 +468,7 @@ class _SessionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final s = session;
-    final accent = color == null ? colors.focus : Color(color!);
+    final accent = color == null ? colors.accent : Color(color!);
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 3),

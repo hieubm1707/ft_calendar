@@ -158,7 +158,7 @@ class _TypingPromptViewState extends State<TypingPromptView> {
     };
     // Con trỏ: tô nền nhạt ký tự sắp gõ để biết mình đang ở đâu.
     return caret
-        ? base.copyWith(backgroundColor: colors.typing.withValues(alpha: 0.18))
+        ? base.copyWith(backgroundColor: colors.accent.withValues(alpha: 0.18))
         : base;
   }
 }

@@ -57,7 +57,7 @@ class SelectDeviceTypeDialog extends StatelessWidget {
               context: context,
               type: RemoteType.airConditioner,
               icon: Icons.ac_unit,
-              color: colors.typing,
+              color: colors.info,
             ),
             const SizedBox(height: 10),
             _buildTypeTile(

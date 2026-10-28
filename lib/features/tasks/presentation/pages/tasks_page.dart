@@ -115,7 +115,7 @@ class _TasksView extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
-                                    color: colors.focus)),
+                                    color: colors.accent)),
                           ),
                           ...items.map((t) => _TaskRow(
                                 task: t,
@@ -231,7 +231,7 @@ class _TaskRow extends StatelessWidget {
           Text(time,
               style: TextStyle(
                   fontSize: 12,
-                  color: colors.focus,
+                  color: colors.accent,
                   fontWeight: FontWeight.w600)),
         if (_hasDescription)
           Text(task.description!,

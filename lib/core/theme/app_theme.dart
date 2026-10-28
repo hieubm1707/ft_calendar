@@ -13,15 +13,14 @@ class AppTheme {
 
   static ThemeData _build(AppColors c, Brightness brightness) {
     final isDark = brightness == Brightness.dark;
-    final seeded = ColorScheme.fromSeed(
-      seedColor: c.focus,
+    final scheme = ColorScheme.fromSeed(
+      seedColor: c.accent,
       brightness: brightness,
-    );
-    final scheme = seeded.copyWith(
-      // Tối: primary sinh từ seed là tông nhạt + chữ đậm → nút đặc tô màu riêng
-      // sẽ ra chữ tối. Ghim lại để nút giữ chữ trắng như chế độ Sáng.
-      primary: isDark ? c.focus : seeded.primary,
-      onPrimary: isDark ? Colors.white : seeded.onPrimary,
+    ).copyWith(
+      // Ghim đúng màu thương hiệu (seed tự sinh ra tông khác) + chữ trắng trên
+      // nút đặc ở cả 2 chế độ → mọi tính năng cùng một màu nhấn.
+      primary: c.accent,
+      onPrimary: Colors.white,
       surface: c.surface,
       onSurface: c.textPrimary,
       onSurfaceVariant: c.textMuted,

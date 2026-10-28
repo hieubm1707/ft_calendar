@@ -109,7 +109,7 @@ class _ContentView extends StatelessWidget {
                       ChoiceChip(
                         label: Text(l.label),
                         selected: state.language == l,
-                        selectedColor: colors.typing.withValues(alpha: 0.18),
+                        selectedColor: colors.accent.withValues(alpha: 0.18),
                         onSelected: (_) => cubit.changeLanguage(l),
                       ),
                   ],
@@ -123,7 +123,7 @@ class _ContentView extends StatelessWidget {
                       child: FilledButton.icon(
                         onPressed: () => _pickFile(context),
                         style: FilledButton.styleFrom(
-                          backgroundColor: colors.typing,
+                          backgroundColor: colors.accent,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         icon: const Icon(Icons.folder_open, size: 18),
@@ -135,7 +135,7 @@ class _ContentView extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: () => _pasteContent(context),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: colors.typing,
+                          foregroundColor: colors.accent,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         icon: const Icon(Icons.content_paste, size: 18),
@@ -261,7 +261,7 @@ class _Stat extends StatelessWidget {
           Text(extra!,
               style: TextStyle(
                   fontSize: 11,
-                  color: colors.typing,
+                  color: colors.accent,
                   fontWeight: FontWeight.w600)),
       ],
     );
@@ -299,7 +299,7 @@ class _PackTile extends StatelessWidget {
       color: colors.surface,
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: ListTile(
-        leading: Icon(Icons.inventory_2_outlined, color: colors.typing),
+        leading: Icon(Icons.inventory_2_outlined, color: colors.accent),
         title: Text(pack.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -386,7 +386,7 @@ class _PasteSheetState extends State<_PasteSheet> {
             const SizedBox(height: 14),
             FilledButton(
               style: FilledButton.styleFrom(
-                backgroundColor: colors.typing,
+                backgroundColor: colors.accent,
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               onPressed: () => Navigator.of(context)

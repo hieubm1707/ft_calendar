@@ -75,7 +75,7 @@ class _PomodoroView extends StatelessWidget {
           listener: (context, state) => ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.errorMessage!))),
           builder: (context, state) {
-            final color = state.isFocus ? colors.focus : colors.breakTime;
+            final color = state.isFocus ? colors.accent : colors.breakTime;
             return SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
               child: Column(

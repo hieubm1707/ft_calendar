@@ -135,7 +135,7 @@ class _TypingViewState extends State<_TypingView> {
                         child: FilledButton.icon(
                           onPressed: () => _restart(context),
                           style: FilledButton.styleFrom(
-                            backgroundColor: colors.typing,
+                            backgroundColor: colors.accent,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                           icon: const Icon(Icons.refresh),
@@ -186,7 +186,7 @@ class _Settings extends StatelessWidget {
               ChoiceChip(
                 label: Text(l.label),
                 selected: state.language == l,
-                selectedColor: colors.typing.withValues(alpha: 0.18),
+                selectedColor: colors.accent.withValues(alpha: 0.18),
                 onSelected: enabled ? (_) => cubit.setLanguage(l) : null,
               ),
           ],
@@ -200,14 +200,14 @@ class _Settings extends StatelessWidget {
               ChoiceChip(
                 label: Text(m.label),
                 selected: state.mode == m,
-                selectedColor: colors.typing.withValues(alpha: 0.18),
+                selectedColor: colors.accent.withValues(alpha: 0.18),
                 onSelected: enabled ? (_) => cubit.setMode(m) : null,
               ),
             for (final s in TypingCubit.durationPresets)
               ChoiceChip(
                 label: Text('${s}s'),
                 selected: state.durationSeconds == s,
-                selectedColor: colors.typing.withValues(alpha: 0.18),
+                selectedColor: colors.accent.withValues(alpha: 0.18),
                 onSelected: enabled ? (_) => cubit.setDuration(s) : null,
               ),
           ],
@@ -358,7 +358,7 @@ class _EmptyBank extends StatelessWidget {
           const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: onImport,
-            style: FilledButton.styleFrom(backgroundColor: colors.typing),
+            style: FilledButton.styleFrom(backgroundColor: colors.accent),
             icon: const Icon(Icons.library_add_outlined, size: 18),
             label: const Text('Thêm nội dung'),
           ),
@@ -385,7 +385,7 @@ class _ResultCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: colors.typing.withValues(alpha: 0.35)),
+        border: Border.all(color: colors.accent.withValues(alpha: 0.35)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,7 +397,7 @@ class _ResultCard extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 44,
                       fontWeight: FontWeight.w800,
-                      color: colors.typing,
+                      color: colors.accent,
                       height: 1)),
               Padding(
                 padding: const EdgeInsets.only(left: 6, bottom: 6),
@@ -413,14 +413,14 @@ class _ResultCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: colors.typing.withValues(alpha: 0.14),
+                    color: colors.accent.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text('Tốt nhất hôm nay 🎉',
                       style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: colors.typing)),
+                          color: colors.accent)),
                 ),
             ],
           ),

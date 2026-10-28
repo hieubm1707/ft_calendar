@@ -8,10 +8,12 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../core/desktop/index.dart';
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 
-const _kFocusColor = Color(0xFF00B3A6);
-const _kBreakColor = Color(0xFF5C6BC0);
+// Trang luôn tối → lấy màu từ bảng màu Tối, không theo chế độ đang chọn.
+final _kFocusColor = AppColors.dark.accent;
+final _kBreakColor = AppColors.dark.breakTime;
 const _kBackground = Color(0xFF101418);
 const _kForeground = Color(0xFFF2F2F7);
 const _kMuted = Color(0xFF8E8E93);

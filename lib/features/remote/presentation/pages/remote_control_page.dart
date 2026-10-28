@@ -282,7 +282,7 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
       case RemoteType.tv:
         return colors.accent;
       case RemoteType.airConditioner:
-        return colors.typing;
+        return colors.info;
       case RemoteType.fan:
         return colors.success;
     }

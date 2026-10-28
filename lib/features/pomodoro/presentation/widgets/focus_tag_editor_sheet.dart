@@ -163,7 +163,7 @@ class _FocusTagEditorSheetState extends State<_FocusTagEditorSheet> {
                   ChoiceChip(
                     label: Text('${m}p'),
                     selected: _parsedMinutes == m,
-                    selectedColor: colors.focus.withValues(alpha: 0.18),
+                    selectedColor: colors.accent.withValues(alpha: 0.18),
                     onSelected: (_) => setState(() {
                       _minutes.text = '$m';
                     }),
@@ -288,10 +288,10 @@ class _EmojiOption extends StatelessWidget {
         height: 38,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? colors.focus.withValues(alpha: 0.15) : colors.surfaceAlt,
+          color: selected ? colors.accent.withValues(alpha: 0.15) : colors.surfaceAlt,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: selected ? colors.focus : Colors.transparent,
+            color: selected ? colors.accent : Colors.transparent,
           ),
         ),
         child: emoji == null

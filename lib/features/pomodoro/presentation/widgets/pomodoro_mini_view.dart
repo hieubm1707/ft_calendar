@@ -31,7 +31,7 @@ class PomodoroMiniView extends StatelessWidget {
       body: BlocBuilder<PomodoroCubit, PomodoroState>(
         builder: (context, state) {
           final cubit = context.read<PomodoroCubit>();
-          final color = state.isFocus ? colors.focus : colors.breakTime;
+          final color = state.isFocus ? colors.accent : colors.breakTime;
           return Column(
             children: [
               Align(

@@ -217,7 +217,7 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
       case RemoteType.tv:
         return Icon(Icons.tv, color: colors.accent);
       case RemoteType.airConditioner:
-        return Icon(Icons.ac_unit, color: colors.typing);
+        return Icon(Icons.ac_unit, color: colors.info);
       case RemoteType.fan:
         return Icon(Icons.toys, color: colors.success);
     }
@@ -353,10 +353,10 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: colors.surfaceAlt,
-            border: Border.all(color: colors.typing, width: 3),
+            border: Border.all(color: colors.info, width: 3),
             boxShadow: [
               BoxShadow(
-                color: colors.typing.withValues(alpha: 0.15),
+                color: colors.info.withValues(alpha: 0.15),
                 blurRadius: 12,
                 spreadRadius: 2,
               ),
@@ -385,12 +385,12 @@ class _DeviceDetailRemotePageState extends State<DeviceDetailRemotePage> {
           children: [
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: colors.typing.withValues(alpha: 0.12),
+                backgroundColor: colors.info.withValues(alpha: 0.12),
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               ),
-              icon: Icon(Icons.keyboard_arrow_down, color: colors.typing),
-              label: Text('Giảm Temp', style: TextStyle(color: colors.typing, fontWeight: FontWeight.bold)),
+              icon: Icon(Icons.keyboard_arrow_down, color: colors.info),
+              label: Text('Giảm Temp', style: TextStyle(color: colors.info, fontWeight: FontWeight.bold)),
               onPressed: () {
                 setState(() => _temp > 16 ? _temp-- : null);
                 _sendSignal('TEMP DOWN', '0xAC108811');
