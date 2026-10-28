@@ -56,7 +56,6 @@ class _HistoryView extends StatelessWidget {
     final colors = context.colors;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colors.background,
         elevation: 0,
         title: Text('Lịch sử gõ phím',
             style: TextStyle(fontWeight: FontWeight.w800, color: colors.textPrimary)),

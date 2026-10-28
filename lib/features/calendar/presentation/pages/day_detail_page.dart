@@ -59,7 +59,6 @@ class DayDetailPage extends StatelessWidget {
     final colors = context.colors;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colors.background,
         elevation: 0,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,10 +156,8 @@ class DayDetailPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: colors.textPrimary,
-        shape: const CircleBorder(),
         onPressed: () => _add(context),
-        child: Icon(Icons.add, color: colors.surface),
+        child: const Icon(Icons.add),
       ),
     );
   }

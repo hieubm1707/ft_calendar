@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
 /// Bảng màu chung của app (color template) — mỗi token có 1 giá trị Sáng + 1 Tối.
+/// Phong cách "soft-tech pastels": nền gradient hồng → oải hương, thẻ trắng ngả
+/// tím, chữ đen ánh chàm, một màu nhấn xanh hoàng gia.
 ///
 /// UI lấy màu qua `context.colors.<token>`, KHÔNG viết mã hex trực tiếp. Ngoại lệ:
 /// màu do người dùng chọn (màu sự kiện, tag, cờ ưu tiên) vì đó là dữ liệu.
 @immutable
 class AppColors extends ThemeExtension<AppColors> {
-  /// Nền trang.
+  /// Nền trang (màu đặc — dùng khi không vẽ được gradient).
   final Color background;
 
-  /// Thẻ, AppBar, thanh điều hướng, bottom sheet.
+  /// Nền gradient phía sau mọi trang (vẽ ở `AppBackground`).
+  final LinearGradient backgroundGradient;
+
+  /// Thẻ, thanh điều hướng, bottom sheet, dialog.
   final Color surface;
 
   /// Nền phụ: ô nhập, chip, hàng danh sách nằm trong thẻ.
@@ -26,14 +31,14 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color textMuted;
   final Color textDisabled;
 
-  /// Màu thương hiệu (coral) — DÙNG CHUNG cho mọi tính năng: nút chính, chip
+  /// Màu thương hiệu (xanh hoàng gia) — DÙNG CHUNG cho mọi tính năng: nút chính, chip
   /// đang chọn, icon đang chọn, ngày hôm nay, tiến độ…
   final Color accent;
 
   /// Pomodoro: giai đoạn nghỉ (để phân biệt với giai đoạn tập trung = accent).
   final Color breakTime;
 
-  /// Thông tin / mát lạnh (xanh dương) — vd. máy lạnh, nút giảm nhiệt độ.
+  /// Thông tin / mát lạnh (xanh da trời) — vd. máy lạnh, nút giảm nhiệt độ.
   final Color info;
 
   final Color danger;
@@ -45,6 +50,7 @@ class AppColors extends ThemeExtension<AppColors> {
 
   const AppColors({
     required this.background,
+    required this.backgroundGradient,
     required this.surface,
     required this.surfaceAlt,
     required this.border,
@@ -63,46 +69,57 @@ class AppColors extends ThemeExtension<AppColors> {
   });
 
   static const light = AppColors(
-    background: Color(0xFFFDF7F2),
-    surface: Color(0xFFFFFFFF),
-    surfaceAlt: Color(0xFFF5F5F7),
-    border: Color(0xFFEFEFF4),
-    divider: Color(0xFFEEEEEE),
-    textPrimary: Color(0xFF1C1C1E),
-    textSecondary: Color(0xFF5A5C69),
-    textMuted: Color(0xFF8E8E93),
-    textDisabled: Color(0xFFC7C7CC),
-    accent: Color(0xFFFF5252),
-    breakTime: Color(0xFF5C6BC0),
-    info: Color(0xFF448AFF),
-    danger: Color(0xFFE53935),
-    success: Color(0xFF00C853),
-    warning: Color(0xFFF57C00),
-    shadow: Color(0x0D000000),
+    background: Color(0xFFF3EDFC),
+    backgroundGradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFFFBEAF6), Color(0xFFF0E8FD), Color(0xFFE6E2FC)],
+    ),
+    surface: Color(0xFFFCFAFF),
+    surfaceAlt: Color(0xFFEEE8FC),
+    border: Color(0xFFE9E2F8),
+    divider: Color(0xFFEDE8F7),
+    textPrimary: Color(0xFF17142B),
+    textSecondary: Color(0xFF4A4566),
+    textMuted: Color(0xFF8A86A3),
+    textDisabled: Color(0xFFC3BED8),
+    accent: Color(0xFF3D6DF2),
+    breakTime: Color(0xFF9B7BF0),
+    info: Color(0xFF22A9E0),
+    danger: Color(0xFFEF5B78),
+    success: Color(0xFF2DBE8F),
+    warning: Color(0xFFF2A33A),
+    shadow: Color(0x147C5CC4),
   );
 
   static const dark = AppColors(
-    background: Color(0xFF121214),
-    surface: Color(0xFF1E1E22),
-    surfaceAlt: Color(0xFF2A2A30),
-    border: Color(0xFF34343A),
-    divider: Color(0xFF34343A),
-    textPrimary: Color(0xFFF2F2F7),
-    textSecondary: Color(0xFFC7C7CC),
-    textMuted: Color(0xFF98989F),
-    textDisabled: Color(0xFF6C6C73),
-    accent: Color(0xFFFF6B6B),
-    breakTime: Color(0xFF7986CB),
-    info: Color(0xFF6FA4FF),
-    danger: Color(0xFFEF5350),
-    success: Color(0xFF3DDC84),
-    warning: Color(0xFFFFA726),
-    shadow: Color(0x4D000000),
+    background: Color(0xFF16122B),
+    backgroundGradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFF241A3D), Color(0xFF1A1533), Color(0xFF121027)],
+    ),
+    surface: Color(0xFF231E3D),
+    surfaceAlt: Color(0xFF2E2852),
+    border: Color(0xFF3A3360),
+    divider: Color(0xFF332D57),
+    textPrimary: Color(0xFFF3F0FF),
+    textSecondary: Color(0xFFC9C3E6),
+    textMuted: Color(0xFF9A94BC),
+    textDisabled: Color(0xFF625C86),
+    accent: Color(0xFF7B9BFF),
+    breakTime: Color(0xFFB79CFF),
+    info: Color(0xFF5CCBF5),
+    danger: Color(0xFFFF7A93),
+    success: Color(0xFF4FD8AA),
+    warning: Color(0xFFFFB547),
+    shadow: Color(0x66000000),
   );
 
   @override
   AppColors copyWith({
     Color? background,
+    LinearGradient? backgroundGradient,
     Color? surface,
     Color? surfaceAlt,
     Color? border,
@@ -121,6 +138,7 @@ class AppColors extends ThemeExtension<AppColors> {
   }) {
     return AppColors(
       background: background ?? this.background,
+      backgroundGradient: backgroundGradient ?? this.backgroundGradient,
       surface: surface ?? this.surface,
       surfaceAlt: surfaceAlt ?? this.surfaceAlt,
       border: border ?? this.border,
@@ -145,6 +163,11 @@ class AppColors extends ThemeExtension<AppColors> {
     Color l(Color a, Color b) => Color.lerp(a, b, t)!;
     return AppColors(
       background: l(background, other.background),
+      backgroundGradient: LinearGradient.lerp(
+        backgroundGradient,
+        other.backgroundGradient,
+        t,
+      )!,
       surface: l(surface, other.surface),
       surfaceAlt: l(surfaceAlt, other.surfaceAlt),
       border: l(border, other.border),

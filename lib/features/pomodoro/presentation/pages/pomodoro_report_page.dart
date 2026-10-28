@@ -56,7 +56,6 @@ class _ReportView extends StatelessWidget {
     final colors = context.colors;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colors.background,
         elevation: 0,
         title: Text('Báo cáo tập trung',
             style: TextStyle(

@@ -93,7 +93,6 @@ class _ContentView extends StatelessWidget {
           },
           child: Scaffold(
             appBar: AppBar(
-              backgroundColor: colors.background,
               elevation: 0,
               title: Text('Kho nội dung',
                   style: TextStyle(

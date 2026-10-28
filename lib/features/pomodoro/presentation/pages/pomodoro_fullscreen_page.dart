@@ -12,11 +12,12 @@ import '../../../../core/theme/index.dart';
 import '../cubit/pomodoro_cubit.dart';
 
 // Trang luôn tối → lấy màu từ bảng màu Tối, không theo chế độ đang chọn.
-final _kFocusColor = AppColors.dark.accent;
-final _kBreakColor = AppColors.dark.breakTime;
-const _kBackground = Color(0xFF101418);
-const _kForeground = Color(0xFFF2F2F7);
-const _kMuted = Color(0xFF8E8E93);
+const _kPalette = AppColors.dark;
+final _kFocusColor = _kPalette.accent;
+final _kBreakColor = _kPalette.breakTime;
+final _kBackground = _kPalette.background;
+final _kForeground = _kPalette.textPrimary;
+final _kMuted = _kPalette.textMuted;
 const _kSideGutter = 16.0;
 
 /// Đồng hồ tập trung toàn màn hình: nền tối, chỉ còn thời gian + thanh tiến độ ngang.
@@ -257,12 +258,12 @@ class _Clock extends StatelessWidget {
             child: FittedBox(
               child: Text(
                 state.remainingLabel,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 1000,
                   height: 1,
                   fontWeight: FontWeight.w800,
                   color: _kForeground,
-                  fontFeatures: [FontFeature.tabularFigures()],
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
             ),

@@ -212,11 +212,8 @@ class _CalendarViewState extends State<_CalendarView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: colors.textPrimary,
-        elevation: 2,
-        shape: const CircleBorder(),
         onPressed: _addToday,
-        child: Icon(Icons.add, color: colors.surface),
+        child: const Icon(Icons.add),
       ),
     );
   }

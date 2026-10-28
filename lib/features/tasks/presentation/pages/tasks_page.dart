@@ -135,10 +135,8 @@ class _TasksView extends StatelessWidget {
       ),
       floatingActionButton: Builder(
         builder: (context) => FloatingActionButton(
-          backgroundColor: colors.textPrimary,
-          shape: const CircleBorder(),
           onPressed: () => _add(context),
-          child: Icon(Icons.add, color: colors.surface),
+          child: const Icon(Icons.add),
         ),
       ),
     );
