@@ -171,70 +171,54 @@ class _TrackingView extends StatelessWidget {
   }
 }
 
-/// Dải 7 ngày: mặc định hôm nay ở giữa (3 ngày trước, 3 ngày sau). Mũi tên ‹ lùi
-/// về tuần trước để xem lại; › tiến lại, không vượt quá cửa sổ chứa hôm nay.
-class _WeekStrip extends StatefulWidget {
+/// Dải 7 ngày: mặc định hôm nay ở giữa (3 ngày trước, 3 ngày sau). Vuốt sang
+/// phải để lùi về tuần trước; trang đầu là cửa sổ chứa hôm nay nên không vuốt
+/// được tới tương lai.
+class _WeekStrip extends StatelessWidget {
   final TrackingState state;
   final DateTime today;
 
   const _WeekStrip({required this.state, required this.today});
 
-  @override
-  State<_WeekStrip> createState() => _WeekStripState();
-}
-
-class _WeekStripState extends State<_WeekStrip> {
-  int _weeksBack = 0;
-
   /// Hoàn thành hết mục tiêu của [day] chưa (ngày có mục tiêu).
   bool _allDone(DateTime day) {
-    final due = goalsDueOn(widget.state.goals, day);
-    return due.isNotEmpty && due.every((g) => widget.state.isDone(g, day));
+    final due = goalsDueOn(state.goals, day);
+    return due.isNotEmpty && due.every((g) => state.isDone(g, day));
   }
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final center = DateTime(
-      widget.today.year,
-      widget.today.month,
-      widget.today.day - 7 * _weeksBack,
-    );
-    final days = [
-      for (var i = -3; i <= 3; i++)
-        DateTime(center.year, center.month, center.day + i),
-    ];
-    return Row(
-      children: [
-        IconButton(
-          visualDensity: VisualDensity.compact,
-          tooltip: 'Tuần trước',
-          color: colors.textSecondary,
-          icon: const Icon(Icons.chevron_left),
-          onPressed: () => setState(() => _weeksBack++),
-        ),
-        for (final d in days)
-          Expanded(
-            child: _DayCell(
-              day: d,
-              selected: d == widget.state.selectedDay,
-              isToday: d == widget.today,
-              enabled: !d.isAfter(widget.today),
-              allDone: _allDone(d),
-              onTap: () => context.read<TrackingCubit>().selectDay(d),
-            ),
-          ),
-        IconButton(
-          visualDensity: VisualDensity.compact,
-          tooltip: 'Tuần sau',
-          color: colors.textSecondary,
-          disabledColor: colors.textDisabled,
-          icon: const Icon(Icons.chevron_right),
-          onPressed: _weeksBack == 0
-              ? null
-              : () => setState(() => _weeksBack--),
-        ),
-      ],
+    // PageView cần chiều cao cố định → tính theo cỡ chữ hệ thống để ô không bị
+    // cắt: 2 dòng chữ + padding/khoảng cách/chấm (33) + viền hôm nay (3) + dư.
+    final scaler = MediaQuery.textScalerOf(context);
+    final height = scaler.scale(11) * 1.4 + scaler.scale(16) * 1.4 + 40;
+    return SizedBox(
+      height: height,
+      // reverse: trang 0 = tuần hiện tại ở mép phải, trang `i` = lùi `i` tuần.
+      child: PageView.builder(
+        reverse: true,
+        itemBuilder: (context, weeksBack) {
+          final days = [
+            for (var i = -3; i <= 3; i++)
+              DateTime(today.year, today.month, today.day - 7 * weeksBack + i),
+          ];
+          return Row(
+            children: [
+              for (final d in days)
+                Expanded(
+                  child: _DayCell(
+                    day: d,
+                    selected: d == state.selectedDay,
+                    isToday: d == today,
+                    enabled: !d.isAfter(today),
+                    allDone: _allDone(d),
+                    onTap: () => context.read<TrackingCubit>().selectDay(d),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
