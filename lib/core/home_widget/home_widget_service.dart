@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:injectable/injectable.dart';
@@ -23,7 +24,7 @@ class HomeWidgetService {
   /// Widget home/lock screen chỉ có trên iOS/Android. Trên macOS/desktop bỏ qua:
   /// plugin home_widget không có bản macOS, và App Group (bắt buộc cho widget)
   /// cần tài khoản Apple Developer trả phí để ký.
-  bool get _supported => Platform.isIOS || Platform.isAndroid;
+  bool get _supported => !kIsWeb && (Platform.isIOS || Platform.isAndroid);
 
   Future<void> init() async {
     if (!_supported) return;

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:injectable/injectable.dart';
@@ -14,6 +15,7 @@ class NotificationService {
 
   /// Gọi 1 lần lúc khởi động app.
   Future<void> init() async {
+    if (kIsWeb) return; // flutter_local_notifications không hỗ trợ web.
     tz.initializeTimeZones();
     try {
       final localName = await FlutterTimezone.getLocalTimezone();
@@ -54,6 +56,7 @@ class NotificationService {
     required String title,
     required DateTime when,
   }) async {
+    if (kIsWeb) return;
     if (!when.isAfter(DateTime.now())) return;
     await _plugin.zonedSchedule(
       id,
@@ -83,6 +86,7 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
+    if (kIsWeb) return;
     await _plugin.show(
       id,
       title,
@@ -112,6 +116,7 @@ class NotificationService {
     int? weekday,
     DateTime? notBefore,
   }) async {
+    if (kIsWeb) return;
     final now = tz.TZDateTime.now(tz.local);
     final from = notBefore != null && notBefore.isAfter(now)
         ? tz.TZDateTime.from(notBefore, tz.local)
@@ -155,6 +160,7 @@ class NotificationService {
     required String body,
     required DateTime when,
   }) async {
+    if (kIsWeb) return;
     if (!when.isAfter(DateTime.now())) return;
     await _plugin.zonedSchedule(
       id,
@@ -179,14 +185,19 @@ class NotificationService {
   }
 
   /// Id các thông báo đang chờ nổ.
-  Future<List<int>> pendingIds() async =>
-      (await _plugin.pendingNotificationRequests()).map((r) => r.id).toList();
+  Future<List<int>> pendingIds() async => kIsWeb
+      ? const []
+      : (await _plugin.pendingNotificationRequests()).map((r) => r.id).toList();
 
   /// Huỷ nhắc của một sự kiện.
-  Future<void> cancel(int id) => _plugin.cancel(id);
+  Future<void> cancel(int id) async {
+    if (kIsWeb) return;
+    await _plugin.cancel(id);
+  }
 
   /// Huỷ nhiều nhắc cùng lúc.
   Future<void> cancelMany(Iterable<int> ids) async {
+    if (kIsWeb) return;
     for (final id in ids) {
       await _plugin.cancel(id);
     }

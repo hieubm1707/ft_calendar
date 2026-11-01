@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,14 +24,15 @@ class FtCalendarApp extends StatelessWidget {
       ],
       child: BlocBuilder<AppearanceCubit, AppThemeMode>(
         builder: (context, mode) => MaterialApp(
-          title: 'FT Calendar',
+          title: kIsWeb ? 'FT Focus' : 'FT Calendar',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: mode == AppThemeMode.dark
               ? ThemeMode.dark
               : ThemeMode.light,
-          home: const Home(),
+          // Web chỉ mở tính năng Focus (các tính năng khác cần API native).
+          home: kIsWeb ? const PomodoroPage() : const Home(),
         ),
       ),
     );

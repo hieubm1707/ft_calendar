@@ -217,6 +217,12 @@ Trên macOS pomodoro chạy như một app menu bar, đồng hồ không phụ t
 - **Thông báo**: macOS có implementation riêng — phải xin quyền qua `MacOSFlutterLocalNotificationsPlugin` (resolve theo `IOSFlutterLocalNotificationsPlugin` trả null → thông báo im lặng).
 - **Verify trên macOS**: terminal thường không có quyền Screen Recording nên `screencapture` chỉ chụp được hình nền. Kiểm tra bằng `CGWindowListCopyWindowInfo` (script Swift): cửa sổ chính = layer 0, ghim trên cùng = layer 3, status item menu bar = layer 25 (bề rộng item tăng khi có title mm:ss).
 
+## Bản web — chỉ tính năng Focus
+
+`flutter build web` / `flutter run -d chrome`: web **chỉ mở trang Focus** (`app.dart`: `kIsWeb ? PomodoroPage() : Home()`; `main.dart` → `_runWebFocus()` bỏ qua thông báo, widget OS, menu bar, nhắc Tracking).
+- **DB**: `core/database/drift/connection/` chọn theo nền tảng bằng conditional import — native giữ nguyên file `ft_calender.sqlite`, web dùng `WasmDatabase` (lưu trong trình duyệt, OPFS/IndexedDB). Cần `web/sqlite3.wasm` + `web/drift_worker.js` **khớp phiên bản** `sqlite3`/`drift` trong pubspec.lock — nâng cấp 2 package này thì tải lại từ GitHub release tương ứng (`sqlite3-<ver>/sqlite3.wasm`, `drift-<ver>/drift_worker.js`).
+- `NotificationService` no-op trên web (plugin không hỗ trợ) → hết giờ không có thông báo. Code native mới phải chặn `kIsWeb` **trước** khi gọi `Platform.*` (trên web `Platform` ném lỗi).
+
 ## Thêm feature mới
 
 1. Table + DAO vào `core/database/drift/` → `--force-jit` để sinh code.

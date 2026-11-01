@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
+import 'connection/connection.dart';
 import 'daos/event_dao.dart';
 import 'daos/focus_tag_dao.dart';
 import 'daos/pomodoro_dao.dart';
@@ -50,7 +46,7 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  AppDatabase() : super(openConnection());
 
   /// Constructor cho test (in-memory / executor tùy biến).
   AppDatabase.forTesting(super.executor);
@@ -135,12 +131,4 @@ class AppDatabase extends _$AppDatabase {
       ]);
     });
   }
-}
-
-LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'ft_calender.sqlite'));
-    return NativeDatabase.createInBackground(file);
-  });
 }

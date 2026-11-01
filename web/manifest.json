@@ -1,11 +1,11 @@
 {
-    "name": "example_app",
-    "short_name": "example_app",
+    "name": "FT Focus",
+    "short_name": "FT Focus",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "FT Focus — đồng hồ tập trung",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
