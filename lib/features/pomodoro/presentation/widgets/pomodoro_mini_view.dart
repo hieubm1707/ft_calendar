@@ -65,7 +65,7 @@ class PomodoroMiniView extends StatelessWidget {
                           fontSize: 34,
                           fontWeight: FontWeight.w800,
                           color: colors.textPrimary,
-                          fontFeatures: [FontFeature.tabularFigures()]),
+                          fontFamily: AppFonts.tabular),
                     ),
                   ),
                 ),

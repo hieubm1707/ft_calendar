@@ -24,7 +24,7 @@ class FtCalendarApp extends StatelessWidget {
       ],
       child: BlocBuilder<AppearanceCubit, AppThemeMode>(
         builder: (context, mode) => MaterialApp(
-          title: kIsWeb ? 'FT Focus' : 'FT Calendar',
+          title: kIsWeb ? 'Habitool Focus' : 'Habitool',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),

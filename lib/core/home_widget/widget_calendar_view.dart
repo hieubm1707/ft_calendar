@@ -78,17 +78,21 @@ class WidgetCalendarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.ltr,
-      child: SizedBox(
-        width: size.width,
-        height: size.height,
-        child: Container(
-          decoration: BoxDecoration(
-            color: _bg,
-            borderRadius: BorderRadius.circular(20),
+      // Render ngoài MaterialApp nên không nhận font từ theme.
+      child: DefaultTextStyle(
+        style: const TextStyle(fontFamily: AppFonts.primary),
+        child: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Container(
+            decoration: BoxDecoration(
+              color: _bg,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: EdgeInsets.fromLTRB(
+                11, 11, 11, mode == WidgetMode.month ? 9 : 11),
+            child: mode == WidgetMode.day ? _buildDay() : _buildGrid(),
           ),
-          padding: EdgeInsets.fromLTRB(
-              11, 11, 11, mode == WidgetMode.month ? 9 : 11),
-          child: mode == WidgetMode.day ? _buildDay() : _buildGrid(),
         ),
       ),
     );

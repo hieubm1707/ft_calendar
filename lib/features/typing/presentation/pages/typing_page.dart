@@ -284,7 +284,7 @@ class _Metric extends StatelessWidget {
                 fontSize: big ? 24 : 20,
                 fontWeight: FontWeight.w800,
                 color: colors.textPrimary,
-                fontFeatures: const [FontFeature.tabularFigures()])),
+                fontFamily: AppFonts.tabular)),
         Text(caption,
             style: TextStyle(fontSize: 11, color: colors.textMuted)),
       ],

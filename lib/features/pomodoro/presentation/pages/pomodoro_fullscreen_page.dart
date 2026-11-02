@@ -261,7 +261,7 @@ class _Clock extends StatelessWidget {
                   height: 1,
                   fontWeight: FontWeight.w800,
                   color: context.colors.textPrimary,
-                  fontFeatures: const [FontFeature.tabularFigures()],
+                  fontFamily: AppFonts.tabular,
                 ),
               ),
             ),

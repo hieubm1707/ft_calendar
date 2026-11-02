@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'app_background.dart';
 import 'app_colors.dart';
+import 'app_fonts.dart';
 
 /// Dựng `ThemeData` Sáng/Tối từ bảng màu [AppColors]. Các mặc định ở đây (AppBar,
 /// NavigationBar, sheet, dialog, ô nhập…) giúp trang không phải tự tô màu nền.
@@ -40,6 +41,7 @@ class AppTheme {
     );
     return ThemeData(
       useMaterial3: true,
+      fontFamily: AppFonts.primary,
       brightness: brightness,
       colorScheme: scheme,
       scaffoldBackgroundColor: Colors.transparent,

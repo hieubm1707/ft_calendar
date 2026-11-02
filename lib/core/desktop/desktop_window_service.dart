@@ -36,7 +36,7 @@ class DesktopWindowService with WindowListener {
       const WindowOptions(
         size: normalSize,
         minimumSize: Size(360, 480),
-        title: 'FT Calendar',
+        title: 'Habitool',
         center: true,
       ),
       () async {

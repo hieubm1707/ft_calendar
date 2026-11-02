@@ -99,9 +99,7 @@ class _PomodoroView extends StatelessWidget {
                                   fontSize: 52,
                                   fontWeight: FontWeight.w800,
                                   color: colors.textPrimary,
-                                  fontFeatures: [
-                                    FontFeature.tabularFigures()
-                                  ])),
+                                  fontFamily: AppFonts.tabular)),
                           const SizedBox(height: 6),
                           _RoundDots(
                             total: state.roundsBeforeLongBreak,
@@ -122,6 +120,8 @@ class _PomodoroView extends StatelessWidget {
                         for (final m in _focusPresets)
                           ChoiceChip(
                             label: Text('$m phút'),
+                            labelPadding:
+                                const EdgeInsets.symmetric(horizontal: 2),
                             selected: state.focusMinutes == m,
                             selectedColor: color.withValues(alpha: 0.18),
                             onSelected: (_) => context

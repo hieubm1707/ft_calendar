@@ -181,7 +181,7 @@ class _RuleTile extends StatelessWidget {
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
                         color: on ? colors.textPrimary : colors.textDisabled,
-                        fontFeatures: const [FontFeature.tabularFigures()],
+                        fontFamily: AppFonts.tabular,
                       ),
                     ),
                     const SizedBox(height: 2),

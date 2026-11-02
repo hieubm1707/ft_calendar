@@ -1,5 +1,5 @@
 name: example_app
-description: "A new Flutter project."
+description: "Habitool: small tools for daily habits."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -99,6 +99,26 @@ flutter:
     # đây là app tự nạp, không phải sửa pubspec (xem assets/typing/README.md).
     - assets/typing/en/
     - assets/typing/vi/
+
+  # Be Vietnam Pro (giấy phép ở assets/fonts/OFL.txt). Bản Tabular là số đều, sinh
+  # bằng branding/tools/make_tabular_font.py.
+  fonts:
+    - family: BeVietnamPro
+      fonts:
+        - asset: assets/fonts/BeVietnamPro-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/BeVietnamPro-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/BeVietnamPro-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/BeVietnamPro-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/BeVietnamPro-ExtraBold.ttf
+          weight: 800
+    - family: BeVietnamProTabular
+      fonts:
+        - asset: assets/fonts/BeVietnamProTabular-ExtraBold.ttf
+          weight: 800
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

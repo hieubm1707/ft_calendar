@@ -100,7 +100,7 @@ class _ReminderRuleSheetState extends State<_ReminderRuleSheet> {
                       fontSize: 44,
                       fontWeight: FontWeight.w800,
                       color: colors.accent,
-                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontFamily: AppFonts.tabular,
                     ),
                   ),
                 ),

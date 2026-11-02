@@ -153,6 +153,12 @@ Cài đặt → **GIAO DIỆN** chọn **Sáng / Tối**. Toàn app lấy màu t
 - **Ngoại lệ được giữ hex**: màu là *dữ liệu người dùng* (màu sự kiện, tag, cờ ưu tiên, bảng chọn màu); chữ/icon trắng trên nút màu; `WidgetCalendarView` (ảnh PNG cho widget OS) không theo chế độ đang chọn mà lấy cố định `AppColors.dark.*`.
 - **Lưu lựa chọn**: feature `settings` theo Clean Architecture — `AppThemeMode` + `AppearanceRepository` (domain) → `AppearanceLocalDataSource` (SharedPreferences, key `app_theme_mode`, lỗi → `CacheException`/`CacheFailure`) → `AppearanceCubit` (`@lazySingleton`, cung cấp ở gốc `app.dart`, `MaterialApp.themeMode` theo state). `main.dart` gọi `AppearanceCubit.load()` **trước `runApp`** để không chớp nền sáng. Test: `test/features/settings/appearance_repository_impl_test.dart`.
 
+## Thương hiệu Habitool (`branding/`) + font
+
+Tên hiển thị là **Habitool** (web: Habitool Focus). Logo, icon gốc và hướng dẫn nhận diện nằm ở `branding/` (mở `brand-book.html`). Đổi icon thì xuất lại từ `branding/app-icon/`, KHÔNG sửa tay ảnh trong từng nền tảng. `pubspec name`, bundle ID và App Group vẫn là giá trị mẫu (`example_app`, `com.example.exampleApp`).
+- **Font**: `AppTheme` đặt sẵn `AppFonts.primary` (Be Vietnam Pro) cho toàn app, trang KHÔNG tự set. `WidgetCalendarView` render ngoài `MaterialApp` nên tự bọc `DefaultTextStyle`.
+- ⚠️ **Số đều**: Be Vietnam Pro không có `tnum` nên `FontFeature.tabularFigures()` không có tác dụng. Đồng hồ và số liệu thay đổi liên tục dùng `fontFamily: AppFonts.tabular` (chỉ có w800 và chữ Latin cơ bản, sinh bằng `branding/tools/make_tabular_font.py`, có test ở `test/core/theme/app_fonts_test.dart`).
+
 ## Widget home/lock screen (`core/home_widget/`)
 
 Hiển thị lịch + sự kiện ra widget. **Kiến trúc: render UI bằng Dart → ảnh PNG** (`HomeWidget.renderFlutterWidget`), native chỉ hiện ảnh → 1 codebase UI cho cả 2 nền tảng.
