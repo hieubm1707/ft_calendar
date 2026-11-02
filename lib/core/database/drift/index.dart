@@ -2,4 +2,11 @@
 // KHÔNG re-export barrel này từ core/domain để tránh domain chạm vào Drift.
 export 'app_database.dart';
 export 'daos/event_dao.dart';
+export 'daos/focus_tag_dao.dart';
+export 'daos/pomodoro_dao.dart';
 export 'daos/task_dao.dart';
+export 'daos/tracking_dao.dart';
+export 'daos/typing_content_dao.dart';
+export 'daos/typing_dao.dart';
+export 'daos/remote_device_dao.dart';
+

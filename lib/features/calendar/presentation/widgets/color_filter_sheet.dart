@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/index.dart';
+
 import 'event_colors.dart';
 
 /// Bottom sheet chọn màu để lọc. Trả về tập màu đang bật (rỗng = tất cả).
@@ -9,7 +11,6 @@ Future<Set<int>?> showColorFilterSheet(
 }) {
   return showModalBottomSheet<Set<int>>(
     context: context,
-    backgroundColor: Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -31,6 +32,7 @@ class _ColorFilterSheetState extends State<_ColorFilterSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
@@ -71,7 +73,7 @@ class _ColorFilterSheetState extends State<_ColorFilterSheet> {
                       color: Color(c),
                       shape: BoxShape.circle,
                       border: _selected.contains(c)
-                          ? Border.all(color: Colors.black87, width: 2)
+                          ? Border.all(color: colors.textPrimary, width: 2)
                           : null,
                     ),
                     child: _selected.contains(c)

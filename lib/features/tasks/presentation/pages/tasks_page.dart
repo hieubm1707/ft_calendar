@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 import '../cubit/task_cubit.dart';
 import '../widgets/add_task_sheet.dart';
@@ -68,21 +69,22 @@ class _TasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F2),
+      appBar: AppBar(
+        title: Text(
+          'Công việc',
+          style: TextStyle(
+            color: colors.textPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 12, 20, 8),
-              child: Text('Công việc',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF1C1C1E))),
-            ),
             Expanded(
               child: BlocConsumer<TaskCubit, TaskState>(
                 listenWhen: (p, c) => c.status == TaskStatus.failure,
@@ -92,10 +94,10 @@ class _TasksView extends StatelessWidget {
                 builder: (context, state) {
                   final days = state.sortedDays;
                   if (state.status == TaskStatus.success && days.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text('Chưa có công việc.\nNhấn + để thêm.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Color(0xFF8E8E93))),
+                          style: TextStyle(color: colors.textMuted)),
                     );
                   }
                   return ListView.builder(
@@ -110,10 +112,10 @@ class _TasksView extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(8, 14, 8, 4),
                             child: Text(_dayLabel(day),
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
-                                    color: Color(0xFF00B3A6))),
+                                    color: colors.accent)),
                           ),
                           ...items.map((t) => _TaskRow(
                                 task: t,
@@ -133,10 +135,8 @@ class _TasksView extends StatelessWidget {
       ),
       floatingActionButton: Builder(
         builder: (context) => FloatingActionButton(
-          backgroundColor: Colors.black,
-          shape: const CircleBorder(),
           onPressed: () => _add(context),
-          child: const Icon(Icons.add, color: Colors.white),
+          child: const Icon(Icons.add),
         ),
       ),
     );
@@ -157,11 +157,12 @@ class _TaskRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Color(task.color);
+    final colors = context.colors;
     return Dismissible(
       key: ValueKey('${task.scheduleId}-${task.date.toIso8601String()}'),
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Colors.red,
+        color: colors.danger,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         child: const Icon(Icons.delete, color: Colors.white),
@@ -172,24 +173,23 @@ class _TaskRow extends StatelessWidget {
       },
       child: Card(
         elevation: 0,
-        color: Colors.white,
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
         child: ListTile(
           leading: GestureDetector(
             onTap: onToggle,
             child: Icon(
               task.done ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: task.done ? color : const Color(0xFFBDBDBD),
+              color: task.done ? color : colors.textDisabled,
             ),
           ),
           title: Text(
             task.title,
             style: TextStyle(
               decoration: task.done ? TextDecoration.lineThrough : null,
-              color: task.done ? const Color(0xFF9E9E9E) : null,
+              color: task.done ? colors.textMuted : null,
             ),
           ),
-          subtitle: _subtitle(),
+          subtitle: _subtitle(colors),
           isThreeLine: _hasDescription && task.timeMinutes != null,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -198,7 +198,7 @@ class _TaskRow extends StatelessWidget {
               Icon(Icons.flag, size: 18, color: color),
               if (task.isRecurring) ...[
                 const SizedBox(width: 6),
-                const Icon(Icons.repeat, size: 18, color: Color(0xFF8E8E93)),
+                Icon(Icons.repeat, size: 18, color: colors.textMuted),
               ],
             ],
           ),
@@ -219,7 +219,7 @@ class _TaskRow extends StatelessWidget {
     return '$h:$mm';
   }
 
-  Widget? _subtitle() {
+  Widget? _subtitle(AppColors colors) {
     final time = _timeLabel;
     if (time == null && !_hasDescription) return null;
     return Column(
@@ -227,15 +227,15 @@ class _TaskRow extends StatelessWidget {
       children: [
         if (time != null)
           Text(time,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 12,
-                  color: Color(0xFF00B3A6),
+                  color: colors.accent,
                   fontWeight: FontWeight.w600)),
         if (_hasDescription)
           Text(task.description!,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12, color: Color(0xFF8E8E93))),
+              style: TextStyle(fontSize: 12, color: colors.textMuted)),
       ],
     );
   }

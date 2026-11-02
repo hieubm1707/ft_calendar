@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../../core/di/index.dart';
+import '../../../../core/theme/index.dart';
 import '../cubit/calendar_cubit.dart';
 import '../widgets/add_event_sheet.dart';
 import '../widgets/color_filter_sheet.dart';
@@ -19,37 +19,15 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
-    final start = DateTime(today.year, today.month - _monthsBefore, 1);
-    final months = List.generate(
-      _monthsBefore + 1 + _monthsAfter,
-      (i) => DateTime(start.year, start.month + i, 1),
-    );
-    final last = months.last;
-    final rangeEnd = DateTime(last.year, last.month,
-        DateUtils.getDaysInMonth(last.year, last.month), 23, 59, 59);
-
     return BlocProvider(
-      create: (_) => getIt<CalendarCubit>()..loadRange(start, rangeEnd),
-      child: _CalendarView(
-        today: today,
-        months: months,
-        todayIndex: _monthsBefore,
-      ),
+      create: (_) => getIt<CalendarCubit>(),
+      child: const _CalendarView(),
     );
   }
 }
 
 class _CalendarView extends StatefulWidget {
-  final DateTime today;
-  final List<DateTime> months;
-  final int todayIndex;
-
-  const _CalendarView({
-    required this.today,
-    required this.months,
-    required this.todayIndex,
-  });
+  const _CalendarView();
 
   @override
   State<_CalendarView> createState() => _CalendarViewState();
@@ -58,13 +36,33 @@ class _CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<_CalendarView> {
   final _itemScrollController = ItemScrollController();
   final _positionsListener = ItemPositionsListener.create();
-  late final ValueNotifier<int> _visibleYear =
-      ValueNotifier(widget.months[widget.todayIndex].year);
+  
+  late final DateTime _today;
+  late final List<DateTime> _months;
+  late final int _todayIndex;
+  late final ValueNotifier<int> _visibleYear;
 
   @override
   void initState() {
     super.initState();
+    _today = DateTime.now();
+    _todayIndex = CalendarPage._monthsBefore;
+    final start = DateTime(_today.year, _today.month - CalendarPage._monthsBefore, 1);
+    _months = List.generate(
+      CalendarPage._monthsBefore + 1 + CalendarPage._monthsAfter,
+      (i) => DateTime(start.year, start.month + i, 1),
+    );
+    _visibleYear = ValueNotifier(_months[_todayIndex].year);
     _positionsListener.itemPositions.addListener(_onScroll);
+
+    // Hoãn việc load DB sang microtask/postFrame sau khi route animation hoàn tất
+    Future.microtask(() {
+      if (!mounted) return;
+      final last = _months.last;
+      final rangeEnd = DateTime(last.year, last.month,
+          DateUtils.getDaysInMonth(last.year, last.month), 23, 59, 59);
+      context.read<CalendarCubit>().loadRange(start, rangeEnd);
+    });
   }
 
   @override
@@ -74,7 +72,7 @@ class _CalendarViewState extends State<_CalendarView> {
     super.dispose();
   }
 
-  void _onScroll() {
+    void _onScroll() {
     final positions = _positionsListener.itemPositions.value;
     if (positions.isEmpty) return;
     // Tháng trên cùng đang hiển thị.
@@ -82,12 +80,12 @@ class _CalendarViewState extends State<_CalendarView> {
         .where((p) => p.itemTrailingEdge > 0)
         .reduce((a, b) => a.itemLeadingEdge < b.itemLeadingEdge ? a : b)
         .index;
-    _visibleYear.value = widget.months[topIndex].year;
+    _visibleYear.value = _months[topIndex].year;
   }
 
   void _scrollToToday() {
     _itemScrollController.scrollTo(
-      index: widget.todayIndex,
+      index: _todayIndex,
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeOut,
     );
@@ -116,24 +114,67 @@ class _CalendarViewState extends State<_CalendarView> {
 
   Future<void> _addToday() async {
     final cubit = context.read<CalendarCubit>();
-    final event = await showAddEventSheet(context, initialDate: widget.today);
+    final event = await showAddEventSheet(context, initialDate: _today);
     if (event != null) await cubit.addEvent(event);
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F2),
+      appBar: AppBar(
+        title: ValueListenableBuilder<int>(
+          valueListenable: _visibleYear,
+          builder: (context, y, child) => Text(
+            'Lịch $y',
+            style: TextStyle(
+              color: colors.textPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        actions: [
+          BlocBuilder<CalendarCubit, CalendarState>(
+            buildWhen: (p, c) => p.activeColors != c.activeColors,
+            builder: (context, state) {
+              final active = state.activeColors.isNotEmpty;
+              return IconButton(
+                onPressed: _openFilter,
+                icon: Icon(
+                  active ? Icons.filter_alt : Icons.filter_alt_outlined,
+                  color: active
+                      ? Theme.of(context).colorScheme.primary
+                      : colors.textPrimary,
+                ),
+              );
+            },
+          ),
+          GestureDetector(
+            onTap: _scrollToToday,
+            child: Container(
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              decoration: BoxDecoration(
+                color: colors.divider,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Today',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: colors.textPrimary,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _Header(
-              year: _visibleYear,
-              onToday: _scrollToToday,
-              onFilter: _openFilter,
-            ),
             Expanded(
               child: BlocConsumer<CalendarCubit, CalendarState>(
                 listenWhen: (p, c) => c.status == CalendarStatus.failure,
@@ -143,15 +184,23 @@ class _CalendarViewState extends State<_CalendarView> {
                   );
                 },
                 builder: (context, state) {
+                  if (state.status == CalendarStatus.loading ||
+                      state.status == CalendarStatus.initial) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: colors.accent,
+                      ),
+                    );
+                  }
                   return ScrollablePositionedList.builder(
                     itemScrollController: _itemScrollController,
                     itemPositionsListener: _positionsListener,
-                    initialScrollIndex: widget.todayIndex,
+                    initialScrollIndex: _todayIndex,
                     padding: const EdgeInsets.fromLTRB(16, 0, 12, 24),
-                    itemCount: widget.months.length,
+                    itemCount: _months.length,
                     itemBuilder: (_, i) => MonthView(
-                      month: widget.months[i],
-                      today: widget.today,
+                      month: _months[i],
+                      today: _today,
                       eventsOf: state.eventsOf,
                       onTapDay: _openDay,
                     ),
@@ -163,80 +212,10 @@ class _CalendarViewState extends State<_CalendarView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        elevation: 2,
-        shape: const CircleBorder(),
         onPressed: _addToday,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-class _Header extends StatelessWidget {
-  final ValueListenable<int> year;
-  final VoidCallback onToday;
-  final VoidCallback onFilter;
-
-  const _Header({
-    required this.year,
-    required this.onToday,
-    required this.onFilter,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 12, 4),
-      child: Row(
-        children: [
-          ValueListenableBuilder<int>(
-            valueListenable: year,
-            builder: (context, y, child) => Text(
-              '$y',
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF1C1C1E),
-              ),
-            ),
-          ),
-          const Spacer(),
-          BlocBuilder<CalendarCubit, CalendarState>(
-            buildWhen: (p, c) => p.activeColors != c.activeColors,
-            builder: (context, state) {
-              final active = state.activeColors.isNotEmpty;
-              return IconButton(
-                onPressed: onFilter,
-                icon: Icon(
-                  active ? Icons.filter_alt : Icons.filter_alt_outlined,
-                  color: active
-                      ? Theme.of(context).colorScheme.primary
-                      : const Color(0xFF1C1C1E),
-                ),
-              );
-            },
-          ),
-          GestureDetector(
-            onTap: onToday,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEDE9E4),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'Today',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1C1C1E),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

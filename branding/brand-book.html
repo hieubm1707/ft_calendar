@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body style="margin:0">
+<title>Habitool Brand Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout concept: the page sits on the logo's own 28/6 tile rhythm; a pastel hero, then quiet sections where the marks do the talking. */
+:root{
+  --bg:#F3EDFC;--hero:linear-gradient(135deg,#FBEAF6,#F0E8FD 55%,#E6E2FC);--surface:#FCFAFF;--alt:#EEE8FC;--line:#E0D8F4;
+  --fg:#17142B;--fg2:#4A4566;--fg3:#6F6A8C;--accent:#3D6DF2;--on-accent:#fff;
+  --a:#3D6DF2;--b:#94AFF9;--c:#fff;--ink:#17142B;
+  --display:"Be Vietnam Pro",ui-rounded,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --u:34px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16122B;--hero:linear-gradient(135deg,#241A3D,#1A1533 55%,#121027);--surface:#231E3D;--alt:#2E2852;--line:#3A3360;
+  --fg:#F3F0FF;--fg2:#C9C3E6;--fg3:#A59FC6;--accent:#7B9BFF;--on-accent:#121027;
+  --a:#7B9BFF;--b:#4A5FAF;--c:#16122B;--ink:#F3F0FF;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#16122B;--hero:linear-gradient(135deg,#241A3D,#1A1533 55%,#121027);--surface:#231E3D;--alt:#2E2852;--line:#3A3360;
+  --fg:#F3F0FF;--fg2:#C9C3E6;--fg3:#A59FC6;--accent:#7B9BFF;--on-accent:#121027;
+  --a:#7B9BFF;--b:#4A5FAF;--c:#16122B;--ink:#F3F0FF;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--display);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+.wrap{max-width:1120px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,p{margin:0}
+h2{font-size:clamp(26px,4vw,36px);line-height:1.2;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+h3{font-size:17px;line-height:1.35;font-weight:700}
+.lede{color:var(--fg2);max-width:62ch}
+.small{font-size:14px;line-height:1.5;color:var(--fg2)}
+.cap{font-size:13px;line-height:1.45;color:var(--fg3)}
+code,.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:-.01em}
+section{padding-block:clamp(48px,7vw,84px);border-top:1px solid var(--line)}
+.head{display:grid;gap:10px;margin-bottom:32px}
+.on-light{--a:#3D6DF2;--b:#94AFF9;--c:#fff;--ink:#17142B;background:#FCFAFF;color:#17142B}
+.on-pastel{--a:#3D6DF2;--b:#94AFF9;--c:#fff;--ink:#17142B;background:linear-gradient(135deg,#FBEAF6,#F0E8FD 55%,#E6E2FC);color:#17142B}
+.on-dark{--a:#7B9BFF;--b:#4A5FAF;--c:#16122B;--ink:#F3F0FF;background:#16122B;color:#F3F0FF}
+.on-blue{--a:#fff;--b:#A9C0FB;--c:#2C53D8;--ink:#fff;background:linear-gradient(135deg,#5B86F7,#2C53D8);color:#fff}
+svg{display:block}
+.t-a{fill:var(--a)}.t-b{fill:var(--b)}.t-c{fill:none;stroke:var(--c);stroke-width:4.8;stroke-linecap:round;stroke-linejoin:round}
+.w-i{fill:var(--ink)}.w-d{fill:var(--a)}
+/* hero */
+.hero{background:var(--hero);padding-block:clamp(36px,6vw,72px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.hero .lock{width:min(100%,310px);margin-bottom:28px}
+.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.1;font-weight:800;letter-spacing:-.03em;text-wrap:balance;margin-bottom:14px}
+.morph{width:100%;max-width:560px;margin-inline:auto}
+.morph .tile{transition:transform .55s cubic-bezier(.3,1.2,.4,1)}
+.morph .lbl{font:600 7.5px var(--display);fill:var(--fg2);text-anchor:middle;transition:opacity .3s;opacity:0}
+.morph.strip .lbl{opacity:1}
+.morph.strip .tile{transform:translate(var(--sx),var(--sy))}
+.btn{appearance:none;border:0;border-radius:999px;background:var(--accent);color:var(--on-accent);font:600 14px var(--display);padding:11px 20px;cursor:pointer}
+.btn:focus-visible,.swatch:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.morph-ui{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 16px;margin-top:18px}
+/* idea */
+.idea{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.idea .num{font-size:38px;line-height:1;font-weight:800;letter-spacing:-.03em;color:var(--accent);margin-bottom:10px;font-variant-numeric:tabular-nums}
+/* logo variants */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.plate{border-radius:24px;padding:clamp(24px,4vw,44px);display:grid;place-items:center;min-height:190px;border:1px solid var(--line)}
+.plate svg{width:min(100%,280px)}
+.plate.m svg{width:92px}
+figure{margin:0;display:grid;gap:10px;min-width:0;align-content:start}
+.grid2 figure{grid-template-rows:1fr auto;align-content:stretch}
+figcaption{font-size:13px;color:var(--fg3);line-height:1.45}
+.ladder{display:flex;flex-wrap:wrap;align-items:flex-end;gap:18px 26px;padding:28px;border-radius:24px;background:var(--surface);border:1px solid var(--line)}
+.ladder div{display:grid;gap:8px;justify-items:start}
+.ladder .sep{align-self:stretch;width:1px;background:var(--line)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start;margin-top:40px}
+.stack{display:grid;gap:16px}
+ul.tight{margin:0;padding:0 0 0 18px;display:grid;gap:6px;color:var(--fg2);font-size:15px}
+.guide{padding:18px;border-radius:24px;background:var(--surface);border:1px solid var(--line);overflow-x:auto}
+.guide svg{min-width:400px;width:100%}
+.g-line{stroke:var(--accent);stroke-width:.6;stroke-dasharray:3 2.4;fill:none}
+.g-txt{font:600 7px var(--display);fill:var(--accent)}
+.bad{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-top:40px}
+.bad .box{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;aspect-ratio:1;display:grid;place-items:center}
+.bad svg{width:100%;max-width:74px;overflow:visible}
+/* icons */
+.icons{display:flex;flex-wrap:wrap;gap:22px}
+.icon{--s:136px;width:var(--s);height:var(--s);border-radius:22.4%;display:grid;place-items:center;flex:none}
+.icon svg{width:56%}
+.icon.round{border-radius:50%}.icon.round svg{width:44%}
+.icon-black{background:#000;--a:#fff;--b:#8E8E8E;--c:#000}
+.icon-dark{background:linear-gradient(135deg,#241A3D,#121027);--a:#7B9BFF;--b:#4A5FAF;--c:#1A1533}
+.walls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:28px}
+.wall{border-radius:24px;padding:26px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+.wall-a{background:linear-gradient(135deg,#1F2A55,#4B2F6E);color:#fff}.wall-b{background:linear-gradient(135deg,#F6D9C9,#CFE3F5);color:#17142B}
+.hs{display:grid;gap:6px;justify-items:center;font-size:12px;font-weight:500}
+.hs .icon{--s:66px}
+.ph-i{--s:66px;background:rgba(255,255,255,.35)}
+/* colour */
+.swatches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.swatch{appearance:none;border:1px solid var(--line);text-align:left;border-radius:18px;padding:14px;min-height:124px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;cursor:pointer;font:inherit}
+.swatch b{font-size:14px;font-weight:700;display:block}
+.swatch .mono{display:block;margin-top:2px}
+.swatch em{font-style:normal;font-size:12px;opacity:.85}
+.sw-wide{grid-column:span 2}
+.sub{margin:30px 0 12px;font-size:15px;font-weight:700}
+/* type */
+.spec{padding:clamp(22px,4vw,40px);border-radius:24px;background:var(--surface);border:1px solid var(--line);display:grid;gap:18px}
+.row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:baseline}
+@font-face{font-family:"Be Vietnam Pro Tabular";src:url("../assets/fonts/BeVietnamProTabular-ExtraBold.ttf") format("truetype");font-weight:800}
+.timer{font-family:"Be Vietnam Pro Tabular",var(--display)}
+/* voice */
+.voice{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.say{padding:22px;border-radius:22px;background:var(--surface);border:1px solid var(--line);display:grid;gap:10px;align-content:start}
+.say .yes,.say .no{font-size:14px;line-height:1.45;display:grid;gap:2px}
+.say span.k{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.say .yes .k{color:var(--accent)}.say .no .k{color:var(--fg3)}.say .no{color:var(--fg3)}
+.tag{padding:clamp(26px,5vw,44px);border-radius:24px;margin-bottom:16px}
+.tag strong{display:block;font-size:clamp(28px,5.4vw,52px);line-height:1.12;font-weight:800;letter-spacing:-.03em;text-wrap:balance;margin-bottom:8px}
+/* mockups */
+.phones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.phone{border-radius:34px;padding:16px;min-height:500px;display:flex;flex-direction:column;gap:12px;overflow:hidden;border:6px solid #17142B;min-width:0}
+.card{background:#FCFAFF;border-radius:18px;padding:12px;box-shadow:0 6px 18px rgba(124,92,196,.1);color:#17142B}
+.statusbar{display:flex;justify-content:space-between;font-size:11px;font-weight:600}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.day{display:grid;justify-items:center;gap:1px;font-size:10px;padding:5px 0;border-radius:10px;color:#4A4566}
+.day b{font-size:12px;color:#17142B}
+.day.on{background:#3D6DF2;color:#fff}.day.on b{color:#fff}
+.day i{width:4px;height:4px;border-radius:50%;background:#3D6DF2}.day.on i{background:#fff}.day.none i{background:transparent}
+.bar{height:6px;border-radius:9px;background:#EEE8FC;overflow:hidden}.bar i{display:block;height:100%;width:60%;background:#3D6DF2;border-radius:9px}
+.goal{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600}
+.goal .mini{margin-left:auto;font-size:11px;font-weight:500;color:#6F6A8C;white-space:nowrap}
+.ck{width:20px;height:20px;border-radius:7px;flex:none;background:#EEE8FC;display:grid;place-items:center}
+.ck.ok{background:#3D6DF2}
+.ck svg{width:12px}
+.notif{background:rgba(255,255,255,.88);color:#17142B;border-radius:18px;padding:11px;display:grid;grid-template-columns:30px minmax(0,1fr);gap:9px;font-size:11.5px;line-height:1.35}
+.notif .icon{--s:30px}
+.lockclock{text-align:center;font-weight:700;font-size:44px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:6px}
+.menubar{display:flex;justify-content:flex-end;align-items:center;gap:16px;padding:8px 16px;border-radius:14px;background:#E9E5F5;color:#17142B;font-size:13px;font-weight:500;margin-top:16px;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.menubar span.it{display:flex;align-items:center;gap:7px;padding:3px 8px;border-radius:7px;background:rgba(61,109,242,.14)}
+.menubar svg{width:15px}
+/* handoff */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}th{font-size:12.5px;color:var(--fg3);font-weight:600}
+footer{padding-block:32px;border-top:1px solid var(--line);color:var(--fg3);font-size:13px}
+@media (max-width:860px){
+  .hero-grid,.split,.walls{grid-template-columns:minmax(0,1fr)}
+  .swatches{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bad{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .voice,.idea{grid-template-columns:minmax(0,1fr)}
+  .phones{grid-template-columns:minmax(0,300px);justify-content:center}
+  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){.grid2{grid-template-columns:minmax(0,1fr)}.row{grid-template-columns:minmax(0,1fr);gap:2px}.plate{min-height:150px}}
+@media (prefers-reduced-motion:reduce){.morph .tile,.morph .lbl{transition:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="m" viewBox="0 0 96 96">
+  <rect class="t-a" width="28" height="28" rx="9"/><rect class="t-a" y="34" width="28" height="28" rx="9"/><rect class="t-a" y="68" width="28" height="28" rx="9"/>
+  <rect class="t-a" x="34" y="34" width="28" height="28" rx="9"/>
+  <rect class="t-b" x="68" width="28" height="28" rx="9"/><rect class="t-b" x="68" y="34" width="28" height="28" rx="9"/><rect class="t-b" x="68" y="68" width="28" height="28" rx="9"/>
+  <path class="t-c" d="M40.6 48.4 46 53.8 55.6 43"/>
+</symbol>
+<symbol id="mm" viewBox="0 0 96 96">
+  <rect class="t-a" width="28" height="28" rx="9"/><rect class="t-a" y="34" width="28" height="28" rx="9"/><rect class="t-a" y="68" width="28" height="28" rx="9"/>
+  <rect class="t-a" x="34" y="34" width="28" height="28" rx="9"/>
+  <rect class="t-a" x="68" width="28" height="28" rx="9"/><rect class="t-a" x="68" y="34" width="28" height="28" rx="9"/><rect class="t-a" x="68" y="68" width="28" height="28" rx="9"/>
+</symbol>
+<symbol id="w" viewBox="0 0 223.6 42.5"><g transform="translate(0 41.90) scale(0.05283)"><path class="w-i" d="M64 0V-760H235V-455H240Q250 -471 267.5 -491Q285 -511 314.5 -525.5Q344 -540 388 -540Q452 -540 490.5 -511Q529 -482 546 -437.5Q563 -393 563 -346V0H392V-314Q392 -348 374 -374.5Q356 -401 315 -401Q270 -401 252.5 -371.5Q235 -342 235 -307V0Z M881 -540Q933 -540 965.5 -523Q998 -506 1014.5 -488.5Q1031 -471 1033 -467H1041V-530H1212V0H1041V-63H1033Q1031 -59 1014.5 -41Q998 -23 965.5 -6.5Q933 10 881 10Q823 10 780 -13.5Q737 -37 708 -76.5Q679 -116 665 -165Q651 -214 651 -265Q651 -316 665 -365Q679 -414 708 -453.5Q737 -493 780 -516.5Q823 -540 881 -540ZM935 -403Q898 -403 873 -382.5Q848 -362 836 -330.5Q824 -299 824 -265Q824 -231 836 -199.5Q848 -168 873 -147.5Q898 -127 935 -127Q972 -127 996.5 -147.5Q1021 -168 1033.5 -199.5Q1046 -231 1046 -265Q1046 -299 1033.5 -330.5Q1021 -362 996.5 -382.5Q972 -403 935 -403Z M1646 10Q1595 10 1562 -7Q1529 -24 1513 -41.5Q1497 -59 1495 -63H1487V0H1316V-760H1487V-467H1495Q1497 -471 1513 -489Q1529 -507 1562 -523.5Q1595 -540 1646 -540Q1705 -540 1748 -516.5Q1791 -493 1819.5 -453.5Q1848 -414 1862.5 -365Q1877 -316 1877 -265Q1877 -214 1862.5 -165Q1848 -116 1819.5 -76.5Q1791 -37 1748 -13.5Q1705 10 1646 10ZM1593 -127Q1630 -127 1655 -147.5Q1680 -168 1692 -199.5Q1704 -231 1704 -265Q1704 -299 1692 -330.5Q1680 -362 1655 -382.5Q1630 -403 1593 -403Q1556 -403 1531 -382.5Q1506 -362 1494 -330.5Q1482 -299 1482 -265Q1482 -231 1494 -199.5Q1506 -168 1531 -147.5Q1556 -127 1593 -127Z M1981 0V-530H2152V0Z M2516 10Q2448 10 2408.5 -11Q2369 -32 2351 -63.5Q2333 -95 2328 -127.5Q2323 -160 2323 -183V-394H2235V-530H2323V-661H2494V-530H2602V-394H2494V-188Q2494 -158 2510.5 -140.5Q2527 -123 2567 -123Q2584 -123 2597 -125.5Q2610 -128 2610 -128V0Q2610 0 2581.5 5Q2553 10 2516 10Z M2966 10Q2876 10 2813 -28Q2750 -66 2716.5 -129Q2683 -192 2683 -265Q2683 -338 2716.5 -401Q2750 -464 2813 -502Q2876 -540 2966 -540Q3057 -540 3120 -502Q3183 -464 3216.5 -401Q3250 -338 3250 -265Q3250 -192 3216.5 -129Q3183 -66 3120 -28Q3057 10 2966 10ZM2966 -128Q3019 -128 3048.5 -168.5Q3078 -209 3078 -265Q3078 -321 3048.5 -361.5Q3019 -402 2966 -402Q2914 -402 2884 -361.5Q2854 -321 2854 -265Q2854 -209 2884 -168.5Q2914 -128 2966 -128Z M3615 10Q3525 10 3462 -28Q3399 -66 3365.5 -129Q3332 -192 3332 -265Q3332 -338 3365.5 -401Q3399 -464 3462 -502Q3525 -540 3615 -540Q3706 -540 3769 -502Q3832 -464 3865.5 -401Q3899 -338 3899 -265Q3899 -192 3865.5 -129Q3832 -66 3769 -28Q3706 10 3615 10ZM3615 -128Q3668 -128 3697.5 -168.5Q3727 -209 3727 -265Q3727 -321 3697.5 -361.5Q3668 -402 3615 -402Q3563 -402 3533 -361.5Q3503 -321 3503 -265Q3503 -209 3533 -168.5Q3563 -128 3615 -128Z M3997 0V-760H4168V0Z"/><rect class="w-d" x="1963.9" y="-793.2" width="205.2" height="205.2" rx="65.7"/></g></symbol>
+<symbol id="lh" viewBox="0 0 343.6 96"><use href="#m" width="96" height="96"/><g transform="translate(120 62) scale(0.05283)"><path class="w-i" d="M64 0V-760H235V-455H240Q250 -471 267.5 -491Q285 -511 314.5 -525.5Q344 -540 388 -540Q452 -540 490.5 -511Q529 -482 546 -437.5Q563 -393 563 -346V0H392V-314Q392 -348 374 -374.5Q356 -401 315 -401Q270 -401 252.5 -371.5Q235 -342 235 -307V0Z M881 -540Q933 -540 965.5 -523Q998 -506 1014.5 -488.5Q1031 -471 1033 -467H1041V-530H1212V0H1041V-63H1033Q1031 -59 1014.5 -41Q998 -23 965.5 -6.5Q933 10 881 10Q823 10 780 -13.5Q737 -37 708 -76.5Q679 -116 665 -165Q651 -214 651 -265Q651 -316 665 -365Q679 -414 708 -453.5Q737 -493 780 -516.5Q823 -540 881 -540ZM935 -403Q898 -403 873 -382.5Q848 -362 836 -330.5Q824 -299 824 -265Q824 -231 836 -199.5Q848 -168 873 -147.5Q898 -127 935 -127Q972 -127 996.5 -147.5Q1021 -168 1033.5 -199.5Q1046 -231 1046 -265Q1046 -299 1033.5 -330.5Q1021 -362 996.5 -382.5Q972 -403 935 -403Z M1646 10Q1595 10 1562 -7Q1529 -24 1513 -41.5Q1497 -59 1495 -63H1487V0H1316V-760H1487V-467H1495Q1497 -471 1513 -489Q1529 -507 1562 -523.5Q1595 -540 1646 -540Q1705 -540 1748 -516.5Q1791 -493 1819.5 -453.5Q1848 -414 1862.5 -365Q1877 -316 1877 -265Q1877 -214 1862.5 -165Q1848 -116 1819.5 -76.5Q1791 -37 1748 -13.5Q1705 10 1646 10ZM1593 -127Q1630 -127 1655 -147.5Q1680 -168 1692 -199.5Q1704 -231 1704 -265Q1704 -299 1692 -330.5Q1680 -362 1655 -382.5Q1630 -403 1593 -403Q1556 -403 1531 -382.5Q1506 -362 1494 -330.5Q1482 -299 1482 -265Q1482 -231 1494 -199.5Q1506 -168 1531 -147.5Q1556 -127 1593 -127Z M1981 0V-530H2152V0Z M2516 10Q2448 10 2408.5 -11Q2369 -32 2351 -63.5Q2333 -95 2328 -127.5Q2323 -160 2323 -183V-394H2235V-530H2323V-661H2494V-530H2602V-394H2494V-188Q2494 -158 2510.5 -140.5Q2527 -123 2567 -123Q2584 -123 2597 -125.5Q2610 -128 2610 -128V0Q2610 0 2581.5 5Q2553 10 2516 10Z M2966 10Q2876 10 2813 -28Q2750 -66 2716.5 -129Q2683 -192 2683 -265Q2683 -338 2716.5 -401Q2750 -464 2813 -502Q2876 -540 2966 -540Q3057 -540 3120 -502Q3183 -464 3216.5 -401Q3250 -338 3250 -265Q3250 -192 3216.5 -129Q3183 -66 3120 -28Q3057 10 2966 10ZM2966 -128Q3019 -128 3048.5 -168.5Q3078 -209 3078 -265Q3078 -321 3048.5 -361.5Q3019 -402 2966 -402Q2914 -402 2884 -361.5Q2854 -321 2854 -265Q2854 -209 2884 -168.5Q2914 -128 2966 -128Z M3615 10Q3525 10 3462 -28Q3399 -66 3365.5 -129Q3332 -192 3332 -265Q3332 -338 3365.5 -401Q3399 -464 3462 -502Q3525 -540 3615 -540Q3706 -540 3769 -502Q3832 -464 3865.5 -401Q3899 -338 3899 -265Q3899 -192 3865.5 -129Q3832 -66 3769 -28Q3706 10 3615 10ZM3615 -128Q3668 -128 3697.5 -168.5Q3727 -209 3727 -265Q3727 -321 3697.5 -361.5Q3668 -402 3615 -402Q3563 -402 3533 -361.5Q3503 -321 3503 -265Q3503 -209 3533 -168.5Q3563 -128 3615 -128Z M3997 0V-760H4168V0Z"/><rect class="w-d" x="1963.9" y="-793.2" width="205.2" height="205.2" rx="65.7"/></g></symbol>
+<symbol id="lv" viewBox="0 0 223.6 160.9"><use href="#m" x="63.8" width="96" height="96"/><g transform="translate(0.0 159.9) scale(0.05283)"><path class="w-i" d="M64 0V-760H235V-455H240Q250 -471 267.5 -491Q285 -511 314.5 -525.5Q344 -540 388 -540Q452 -540 490.5 -511Q529 -482 546 -437.5Q563 -393 563 -346V0H392V-314Q392 -348 374 -374.5Q356 -401 315 -401Q270 -401 252.5 -371.5Q235 -342 235 -307V0Z M881 -540Q933 -540 965.5 -523Q998 -506 1014.5 -488.5Q1031 -471 1033 -467H1041V-530H1212V0H1041V-63H1033Q1031 -59 1014.5 -41Q998 -23 965.5 -6.5Q933 10 881 10Q823 10 780 -13.5Q737 -37 708 -76.5Q679 -116 665 -165Q651 -214 651 -265Q651 -316 665 -365Q679 -414 708 -453.5Q737 -493 780 -516.5Q823 -540 881 -540ZM935 -403Q898 -403 873 -382.5Q848 -362 836 -330.5Q824 -299 824 -265Q824 -231 836 -199.5Q848 -168 873 -147.5Q898 -127 935 -127Q972 -127 996.5 -147.5Q1021 -168 1033.5 -199.5Q1046 -231 1046 -265Q1046 -299 1033.5 -330.5Q1021 -362 996.5 -382.5Q972 -403 935 -403Z M1646 10Q1595 10 1562 -7Q1529 -24 1513 -41.5Q1497 -59 1495 -63H1487V0H1316V-760H1487V-467H1495Q1497 -471 1513 -489Q1529 -507 1562 -523.5Q1595 -540 1646 -540Q1705 -540 1748 -516.5Q1791 -493 1819.5 -453.5Q1848 -414 1862.5 -365Q1877 -316 1877 -265Q1877 -214 1862.5 -165Q1848 -116 1819.5 -76.5Q1791 -37 1748 -13.5Q1705 10 1646 10ZM1593 -127Q1630 -127 1655 -147.5Q1680 -168 1692 -199.5Q1704 -231 1704 -265Q1704 -299 1692 -330.5Q1680 -362 1655 -382.5Q1630 -403 1593 -403Q1556 -403 1531 -382.5Q1506 -362 1494 -330.5Q1482 -299 1482 -265Q1482 -231 1494 -199.5Q1506 -168 1531 -147.5Q1556 -127 1593 -127Z M1981 0V-530H2152V0Z M2516 10Q2448 10 2408.5 -11Q2369 -32 2351 -63.5Q2333 -95 2328 -127.5Q2323 -160 2323 -183V-394H2235V-530H2323V-661H2494V-530H2602V-394H2494V-188Q2494 -158 2510.5 -140.5Q2527 -123 2567 -123Q2584 -123 2597 -125.5Q2610 -128 2610 -128V0Q2610 0 2581.5 5Q2553 10 2516 10Z M2966 10Q2876 10 2813 -28Q2750 -66 2716.5 -129Q2683 -192 2683 -265Q2683 -338 2716.5 -401Q2750 -464 2813 -502Q2876 -540 2966 -540Q3057 -540 3120 -502Q3183 -464 3216.5 -401Q3250 -338 3250 -265Q3250 -192 3216.5 -129Q3183 -66 3120 -28Q3057 10 2966 10ZM2966 -128Q3019 -128 3048.5 -168.5Q3078 -209 3078 -265Q3078 -321 3048.5 -361.5Q3019 -402 2966 -402Q2914 -402 2884 -361.5Q2854 -321 2854 -265Q2854 -209 2884 -168.5Q2914 -128 2966 -128Z M3615 10Q3525 10 3462 -28Q3399 -66 3365.5 -129Q3332 -192 3332 -265Q3332 -338 3365.5 -401Q3399 -464 3462 -502Q3525 -540 3615 -540Q3706 -540 3769 -502Q3832 -464 3865.5 -401Q3899 -338 3899 -265Q3899 -192 3865.5 -129Q3832 -66 3769 -28Q3706 10 3615 10ZM3615 -128Q3668 -128 3697.5 -168.5Q3727 -209 3727 -265Q3727 -321 3697.5 -361.5Q3668 -402 3615 -402Q3563 -402 3533 -361.5Q3503 -321 3503 -265Q3503 -209 3533 -168.5Q3563 -128 3615 -128Z M3997 0V-760H4168V0Z"/><rect class="w-d" x="1963.9" y="-793.2" width="205.2" height="205.2" rx="65.7"/></g></symbol>
+</defs></svg>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <svg class="lock" viewBox="0 0 343.6 96" role="img" aria-label="Logo Habitool"><use href="#lh"/></svg>
+      <h1>Small tools for daily habits.</h1>
+      <p class="lede">Bộ nhận diện cho app gồm Lịch, Tasks, Tracking, Focus, Typing và Notes. Logo được ghép từ chính dải 7 ngày trên trang Tracking.</p>
+    </div>
+    <div>
+      <svg class="morph" id="morph" viewBox="0 0 232 122" role="img" aria-label="Bảy ô vuông tạo thành chữ H, có thể mở thành dải 7 ngày">
+        <g class="tile" style="--sx:-68px;--sy:34px"><rect class="t-a" x="68" width="28" height="28" rx="9"/></g>
+        <g class="tile" style="--sx:-34px;--sy:0px"><rect class="t-a" x="68" y="34" width="28" height="28" rx="9"/></g>
+        <g class="tile" style="--sx:0px;--sy:-34px"><rect class="t-a" x="68" y="68" width="28" height="28" rx="9"/></g>
+        <g class="tile" style="--sx:0px;--sy:0px"><rect class="t-a" x="102" y="34" width="28" height="28" rx="9"/><path class="t-c" d="M108.6 48.4 114 53.8 123.6 43"/></g>
+        <g class="tile" style="--sx:0px;--sy:34px"><rect class="t-b" x="136" width="28" height="28" rx="9"/></g>
+        <g class="tile" style="--sx:34px;--sy:0px"><rect class="t-b" x="136" y="34" width="28" height="28" rx="9"/></g>
+        <g class="tile" style="--sx:68px;--sy:-34px"><rect class="t-b" x="136" y="68" width="28" height="28" rx="9"/></g>
+        <text class="lbl" x="48" y="76">3 ngày trước</text><text class="lbl" x="116" y="76">Hôm nay</text><text class="lbl" x="184" y="76">3 ngày tới</text>
+      </svg>
+      <div class="morph-ui"><button class="btn" id="morphBtn" type="button" aria-pressed="false">Mở thành dải 7 ngày</button></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section><div class="wrap">
+  <div class="head"><h2>Một hình, ba ý nghĩa</h2></div>
+  <div class="idea">
+    <div><div class="num">7</div><h3>Bảy ô là một tuần</h3><p class="small">Chữ H trên lưới 3×3 cần đúng 7 ô, bằng số ngày trong tuần. Mục tiêu hằng ngày cũng cần đủ 7 ngày đó.</p></div>
+    <div><div class="num">1</div><h3>Ô giữa là hôm nay</h3><p class="small">Dải ngày trên Tracking đặt hôm nay ở giữa và chỉ hôm nay mới check-in được. Vì vậy, dấu tích chỉ nằm ở ô này.</p></div>
+    <div><div class="num">3×3</div><h3>Lưới ô là bộ công cụ</h3><p class="small">Các ô rời gợi một khay công cụ, nơi mỗi ô là một tính năng. Đây là phần "tool" trong tên Habitool.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><h2>Logo</h2><p class="lede">Dùng bản ngang ở hầu hết mọi nơi. Bản xếp dọc dành cho màn hình mở app, còn biểu tượng riêng dùng khi tên Habitool đã xuất hiện ở gần đó.</p></div>
+  <div class="grid2">
+    <figure><div class="plate on-light"><svg viewBox="0 0 343.6 96" role="img" aria-label="Logo ngang trên nền sáng"><use href="#lh"/></svg></div><figcaption>Bản ngang trên nền sáng</figcaption></figure>
+    <figure><div class="plate on-dark"><svg viewBox="0 0 343.6 96" role="img" aria-label="Logo ngang trên nền tối"><use href="#lh"/></svg></div><figcaption>Bản ngang trên nền tối, dùng màu nhấn của giao diện Tối</figcaption></figure>
+    <figure><div class="plate on-pastel"><svg viewBox="0 0 223.6 160.9" style="width:170px" role="img" aria-label="Logo xếp dọc trên nền pastel"><use href="#lv"/></svg></div><figcaption>Bản xếp dọc trên nền gradient của app</figcaption></figure>
+    <figure><div class="plate on-blue"><svg viewBox="0 0 343.6 96" role="img" aria-label="Logo ngang trên nền xanh"><use href="#lh"/></svg></div><figcaption>Trên nền xanh thương hiệu</figcaption></figure>
+  </div>
+  <div class="split">
+    <div class="stack">
+      <h3>Cỡ nhỏ nhất</h3>
+      <div class="ladder on-light" style="--a:#3D6DF2">
+        <div><svg width="96" height="96"><use href="#m"/></svg><span class="cap">96</span></div>
+        <div><svg width="48" height="48"><use href="#m"/></svg><span class="cap">48</span></div>
+        <div><svg width="28" height="28"><use href="#m"/></svg><span class="cap">28</span></div>
+        <span class="sep"></span>
+        <div><svg width="24" height="24"><use href="#mm"/></svg><span class="cap">24</span></div>
+        <div><svg width="16" height="16"><use href="#mm"/></svg><span class="cap">16</span></div>
+      </div>
+      <p class="small">Từ 28 px trở lên dùng logo đầy đủ. Dưới 28 px, dấu tích và hai tông màu không còn rõ, nên chuyển sang bản một màu không có dấu tích.</p>
+    </div>
+    <div class="stack">
+      <h3>Dựng hình và khoảng trống</h3>
+      <div class="guide on-light" style="background:#FCFAFF"><svg viewBox="-40 -46 423.6 192" role="img" aria-label="Sơ đồ dựng logo: chiều cao chữ thường bằng đúng ô hôm nay, khoảng trống xung quanh bằng một ô">
+        <rect class="g-line" x="-28" y="-28" width="399.6" height="152" rx="2"/>
+        <line class="g-line" x1="-28" y1="34" x2="371.6" y2="34"/><line class="g-line" x1="-28" y1="62" x2="371.6" y2="62"/>
+        <use href="#lh" width="343.6" height="96"/>
+        <text x="-28" y="-33" style="font:600 10px var(--display);fill:#3D6DF2">Khoảng trống tối thiểu: 1 ô</text>
+        <text x="-28" y="138" style="font:600 10px var(--display);fill:#3D6DF2">Chữ thường cao đúng 1 ô, chân chữ thẳng đáy ô hôm nay</text>
+      </svg></div>
+      <ul class="tight"><li>Mỗi ô 28 đơn vị, khe 6, bo góc 9. Toàn bộ logo rộng 96.</li><li>Dấu chấm chữ <b>i</b> là một ô thu nhỏ, luôn dùng màu nhấn.</li><li>Khi đổi kích thước, giữ nguyên tỉ lệ này.</li></ul>
+    </div>
+  </div>
+  <h3 style="margin-top:40px">Không nên</h3>
+  <div class="bad" style="margin-top:14px">
+    <figure><div class="box on-light"><svg viewBox="0 0 96 96" style="transform:rotate(25deg)"><use href="#m"/></svg></div><figcaption>Xoay logo</figcaption></figure>
+    <figure><div class="box on-light" style="--a:#EF5B78;--b:#F2A33A"><svg viewBox="0 0 96 96"><use href="#m"/></svg></div><figcaption>Đổi sang màu khác</figcaption></figure>
+    <figure><div class="box on-light"><svg viewBox="0 0 96 96" style="transform:scaleX(1.25) scaleY(.8)"><use href="#m"/></svg></div><figcaption>Kéo méo</figcaption></figure>
+    <figure><div class="box on-light"><svg viewBox="0 0 96 96" style="filter:drop-shadow(0 7px 5px rgba(23,20,43,.55))"><use href="#m"/></svg></div><figcaption>Đổ bóng</figcaption></figure>
+    <figure><div class="box" style="background:#94AFF9;--a:#3D6DF2;--b:#94AFF9;--c:#fff"><svg viewBox="0 0 96 96"><use href="#m"/></svg></div><figcaption>Nền làm mất cột phải</figcaption></figure>
+    <figure><div class="box on-light"><svg viewBox="0 0 96 96" style="max-width:18px"><use href="#m"/></svg></div><figcaption>Dùng bản đầy đủ ở cỡ nhỏ</figcaption></figure>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><h2>Biểu tượng app</h2><p class="lede">Biểu tượng chính dùng nền xanh vì nổi rõ trên cả hình nền tối lẫn sáng. Các file iOS và Android là ảnh vuông, hệ điều hành sẽ tự bo góc.</p></div>
+  <div class="icons">
+    <figure><div class="icon on-blue"><svg viewBox="0 0 96 96" aria-label="Icon nền xanh" role="img"><use href="#m"/></svg></div><figcaption>iOS Sáng, macOS, web</figcaption></figure>
+    <figure><div class="icon icon-dark"><svg viewBox="0 0 96 96" aria-label="Icon nền tối" role="img"><use href="#m"/></svg></div><figcaption>iOS Tối</figcaption></figure>
+    <figure><div class="icon icon-black"><svg viewBox="0 0 96 96" aria-label="Icon đơn sắc" role="img"><use href="#m"/></svg></div><figcaption>iOS Tinted</figcaption></figure>
+    <figure><div class="icon round on-blue"><svg viewBox="0 0 96 96" aria-label="Icon Android dạng tròn" role="img"><use href="#m"/></svg></div><figcaption>Android, lớp logo trong vùng an toàn</figcaption></figure>
+  </div>
+  <div class="walls">
+    <div class="wall wall-a">
+      <div class="hs"><div class="icon ph-i"></div><span>Photos</span></div>
+      <div class="hs"><div class="icon on-blue"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="#m"/></svg></div><span>Habitool</span></div>
+      <div class="hs"><div class="icon ph-i"></div><span>Maps</span></div>
+    </div>
+    <div class="wall wall-b">
+      <div class="hs"><div class="icon ph-i"></div><span>Photos</span></div>
+      <div class="hs"><div class="icon on-blue"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="#m"/></svg></div><span>Habitool</span></div>
+      <div class="hs"><div class="icon ph-i"></div><span>Maps</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><h2>Màu</h2><p class="lede">Bộ nhận diện dùng lại bảng màu đang có trong <code>AppColors</code>, nên chưa cần đổi màu trong app. Phần "Riêng cho logo và icon" là màu mới, không dùng cho giao diện. Bấm vào một ô để sao chép mã màu.</p></div>
+  <p class="sub">Giao diện Sáng</p>
+  <div class="swatches">
+    <button class="swatch" type="button" data-hex="#3D6DF2" style="background:#3D6DF2;color:#fff"><em>Chữ trắng 4,5:1</em><span><b>accent</b><span class="mono">#3D6DF2</span></span></button>
+    <button class="swatch" type="button" data-hex="#17142B" style="background:#17142B;color:#F3F0FF"><em>Chữ trắng 17,9:1</em><span><b>textPrimary</b><span class="mono">#17142B</span></span></button>
+    <button class="swatch" type="button" data-hex="#FCFAFF" style="background:#FCFAFF;color:#17142B"><em>Chữ chính 17,3:1</em><span><b>surface</b><span class="mono">#FCFAFF</span></span></button>
+    <button class="swatch" type="button" data-hex="#EEE8FC" style="background:#EEE8FC;color:#17142B"><em>Chữ chính 15,0:1</em><span><b>surfaceAlt</b><span class="mono">#EEE8FC</span></span></button>
+    <button class="swatch sw-wide" type="button" data-hex="#FBEAF6, #F0E8FD, #E6E2FC" style="background:linear-gradient(135deg,#FBEAF6,#F0E8FD,#E6E2FC);color:#17142B"><em>Nền mọi trang</em><span><b>backgroundGradient</b><span class="mono">#FBEAF6 → #F0E8FD → #E6E2FC</span></span></button>
+    <button class="swatch" type="button" data-hex="#4A4566" style="background:#4A4566;color:#fff"><em>Trên surface 8,7:1</em><span><b>textSecondary</b><span class="mono">#4A4566</span></span></button>
+    <button class="swatch" type="button" data-hex="#8A86A3" style="background:#8A86A3;color:#17142B"><em>Trên surface 3,4:1, chỉ hợp chữ lớn hoặc phụ</em><span><b>textMuted</b><span class="mono">#8A86A3</span></span></button>
+  </div>
+  <p class="sub">Giao diện Tối</p>
+  <div class="swatches">
+    <button class="swatch" type="button" data-hex="#7B9BFF" style="background:#7B9BFF;color:#121027"><em>Chữ tối 7,1:1</em><span><b>accent</b><span class="mono">#7B9BFF</span></span></button>
+    <button class="swatch" type="button" data-hex="#F3F0FF" style="background:#F3F0FF;color:#16122B"><em>Trên nền tối 16,2:1</em><span><b>textPrimary</b><span class="mono">#F3F0FF</span></span></button>
+    <button class="swatch" type="button" data-hex="#231E3D" style="background:#231E3D;color:#F3F0FF"><em>Chữ chính 14,1:1</em><span><b>surface</b><span class="mono">#231E3D</span></span></button>
+    <button class="swatch" type="button" data-hex="#16122B" style="background:#16122B;color:#F3F0FF"><em>Màu đặc thay gradient</em><span><b>background</b><span class="mono">#16122B</span></span></button>
+  </div>
+  <p class="sub">Riêng cho logo và icon</p>
+  <div class="swatches">
+    <button class="swatch" type="button" data-hex="#94AFF9" style="background:#94AFF9;color:#17142B"><em>Cột phải, nền sáng</em><span><b>Ngày tới</b><span class="mono">#94AFF9</span></span></button>
+    <button class="swatch" type="button" data-hex="#4A5FAF" style="background:#4A5FAF;color:#fff"><em>Cột phải, nền tối</em><span><b>Ngày tới</b><span class="mono">#4A5FAF</span></span></button>
+    <button class="swatch sw-wide" type="button" data-hex="#5B86F7, #2C53D8" style="background:linear-gradient(135deg,#5B86F7,#2C53D8);color:#fff"><em>Nền icon app</em><span><b>Xanh icon</b><span class="mono">#5B86F7 → #2C53D8</span></span></button>
+  </div>
+  <p class="cap" id="copied" role="status" style="margin-top:12px;min-height:20px"></p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><h2>Chữ</h2><p class="lede"><b>Be Vietnam Pro</b> được dùng cho toàn bộ nhận diện vì nét hình học mềm hợp với logo và dấu tiếng Việt được vẽ chuẩn. Font này không có số đều, nên đồng hồ và số liệu chạy dùng bản <b>Be Vietnam Pro Tabular</b> được tạo riêng từ chính font này.</p></div>
+  <div class="spec">
+    <div class="row"><span class="cap">Display · 800 · 44/48</span><span style="font-size:clamp(30px,5vw,44px);line-height:1.1;font-weight:800;letter-spacing:-.025em">Chuỗi 12 ngày liên tiếp</span></div>
+    <div class="row"><span class="cap">Title · 700 · 28/34</span><span style="font-size:clamp(23px,3.4vw,28px);line-height:1.2;font-weight:700;letter-spacing:-.015em">Hôm nay còn 2 mục tiêu</span></div>
+    <div class="row"><span class="cap">Heading · 600 · 20/28</span><span style="font-size:20px;line-height:1.4;font-weight:600">Đọc sách 20 phút mỗi tối</span></div>
+    <div class="row"><span class="cap">Body · 400 · 16/24</span><span>Đánh dấu hoàn thành ở Tasks thì Tracking cũng cập nhật ngay, bạn không phải nhập lại.</span></div>
+    <div class="row"><span class="cap">Caption · 500 · 13/18</span><span style="font-size:13px;line-height:1.4;font-weight:500">Từ Tasks · Thứ 2, 4, 6</span></div>
+    <div class="row"><span class="cap">Đồng hồ · 800 · Tabular</span><span class="timer" style="font-size:clamp(48px,9vw,76px);line-height:1;font-weight:800;letter-spacing:-.02em">24:59</span></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><h2>Tên và giọng điệu</h2><p class="lede">Trong câu văn viết <b>Habitool</b>, viết hoa chữ đầu. Dạng chữ thường chỉ dùng trong logo. Trên kho ứng dụng: tên <b>Habitool: Habit Tracker</b>, phụ đề <b>Focus, tasks &amp; daily streaks</b>.</p></div>
+  <div class="tag on-pastel"><strong>Small tools for daily habits.</strong><span>Công cụ nhỏ cho thói quen mỗi ngày.</span></div>
+  <div class="voice">
+    <div class="say"><h3>Nói cụ thể</h3><div class="yes"><span class="k">Nên</span>Còn 2 mục tiêu nữa là xong hôm nay.</div><div class="no"><span class="k">Tránh</span>Hãy tiếp tục cố gắng nhé!</div></div>
+    <div class="say"><h3>Động viên, không trách móc</h3><div class="yes"><span class="k">Nên</span>Hôm nay chưa xong, chuỗi 12 ngày vẫn còn.</div><div class="no"><span class="k">Tránh</span>Bạn sắp đánh mất chuỗi của mình!</div></div>
+    <div class="say"><h3>Ngắn như một dụng cụ</h3><div class="yes"><span class="k">Nên</span>Bắt đầu · Tạm dừng · Bỏ qua</div><div class="no"><span class="k">Tránh</span>Nhấn vào đây để bắt đầu phiên của bạn</div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><h2>Trong app</h2><p class="lede">Các màn hình dưới đây chỉ minh họa với dữ liệu mẫu, không phải ảnh chụp từ app.</p></div>
+  <div class="phones">
+    <div class="phone on-pastel" style="justify-content:center;align-items:center;text-align:center">
+      <svg viewBox="0 0 223.6 160.9" width="150" role="img" aria-label="Logo xếp dọc trên màn hình mở app"><use href="#lv"/></svg>
+      <span style="font-size:13px;font-weight:500;color:#4A4566;margin-top:6px">Small tools for daily habits.</span>
+    </div>
+    <div class="phone on-pastel">
+      <div class="statusbar"><span>9:41</span><span>5G</span></div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:19px;font-weight:800;letter-spacing:-.02em"><svg viewBox="0 0 96 96" width="24" aria-hidden="true"><use href="#mm"/></svg>Tracking</div>
+      <div class="card days">
+        <div class="day"><span>T6</span><b>30</b><i></i></div><div class="day"><span>T7</span><b>31</b><i></i></div><div class="day"><span>CN</span><b>1</b><i></i></div>
+        <div class="day on"><span>T2</span><b>2</b><i></i></div>
+        <div class="day none"><span>T3</span><b>3</b><i></i></div><div class="day none"><span>T4</span><b>4</b><i></i></div><div class="day none"><span>T5</span><b>5</b><i></i></div>
+      </div>
+      <div class="card" style="display:grid;gap:8px"><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700"><span>Hôm nay</span><span>3/5</span></div><div class="bar"><i></i></div></div>
+      <div class="card" style="display:grid;gap:11px">
+        <div class="goal"><span class="ck ok"><svg viewBox="0 0 16 16"><path d="M3.5 8.3 6.6 11.4 12.6 4.8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Đọc sách<span class="mini">Chuỗi 12</span></div>
+        <div class="goal"><span class="ck ok"><svg viewBox="0 0 16 16"><path d="M3.5 8.3 6.6 11.4 12.6 4.8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Chạy bộ<span class="mini">Chuỗi 5</span></div>
+        <div class="goal"><span class="ck ok"><svg viewBox="0 0 16 16"><path d="M3.5 8.3 6.6 11.4 12.6 4.8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Luyện gõ<span class="mini">Chuỗi 3</span></div>
+        <div class="goal"><span class="ck"></span>Thiền<span class="mini">Chuỗi 0</span></div>
+        <div class="goal"><span class="ck"></span>Viết nhật ký<span class="mini">Chuỗi 8</span></div>
+      </div>
+      <div aria-hidden="true" style="margin:auto 0 0 auto;width:42px;height:42px;border-radius:50%;background:#3D6DF2;color:#fff;display:grid;place-items:center;font-size:24px;line-height:1;font-weight:400">+</div>
+    </div>
+    <div class="phone" style="background:linear-gradient(160deg,#241A3D,#121027);color:#F3F0FF">
+      <div class="statusbar"><span>Thứ Hai</span><span>5G</span></div>
+      <div class="lockclock">20:00</div>
+      <div class="notif" style="margin-top:auto"><div class="icon on-blue"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="#mm"/></svg></div><div><b>Habitool</b><br>Đã xong 2/5 mục tiêu. Còn 3 mục tiêu nữa là xong hôm nay.</div></div>
+      <div class="notif"><div class="icon on-blue"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="#mm"/></svg></div><div><b>Hết phiên Focus</b><br>Bạn vừa tập trung 25 phút cho "Study".</div></div>
+    </div>
+  </div>
+  <div class="menubar" aria-label="Minh họa menu bar macOS"><span>Thứ Hai 2 thg 11</span><span class="it"><svg viewBox="0 0 96 96" style="--a:#17142B" aria-hidden="true"><use href="#mm"/></svg>24:59</span></div>
+  <p class="cap" style="margin-top:8px">Trên macOS, bản không dấu tích nằm cạnh đồng hồ Focus ở menu bar. File đơn sắc để hệ thống tự tô màu.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><h2>File bàn giao</h2><p class="lede">Mọi file nằm trong thư mục <code>branding/</code> của dự án. Chữ trong logo đã được chuyển thành nét vẽ, nên không cần cài font.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>File</th><th>Dùng cho</th></tr></thead>
+    <tbody>
+      <tr><td><code>logo/habitool-lockup-*.svg</code></td><td>Logo ngang và xếp dọc, bản sáng và tối</td></tr>
+      <tr><td><code>logo/habitool-mark*.svg</code></td><td>Biểu tượng riêng: màu, nền tối, nền xanh, đơn sắc, cỡ nhỏ</td></tr>
+      <tr><td><code>logo/habitool-wordmark*.svg</code></td><td>Chỉ phần chữ</td></tr>
+      <tr><td><code>app-icon/ios-{light,dark,tinted}-1024.png</code></td><td>Icon iOS, ảnh vuông không trong suốt</td></tr>
+      <tr><td><code>app-icon/android-{foreground,background,monochrome}-1024.png</code></td><td>Adaptive icon Android</td></tr>
+      <tr><td><code>app-icon/macos-1024.png</code></td><td>Icon macOS</td></tr>
+      <tr><td><code>app-icon/web-*.png</code>, <code>favicon-32.png</code></td><td>Web và tab trình duyệt</td></tr>
+      <tr><td><code>app-icon/tray-template-36.png</code></td><td>Icon menu bar macOS, cùng cỡ với <code>assets/tray/tray_icon.png</code></td></tr>
+      <tr><td><code>app-icon/source/*.svg</code></td><td>Bản gốc để xuất lại icon</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+</main>
+<footer><div class="wrap">Habitool · Bộ nhận diện bản 1 · Tháng 11, 2026</div></footer>
+
+<script>
+(function(){
+  var m=document.getElementById('morph'),b=document.getElementById('morphBtn');
+  b.addEventListener('click',function(){
+    var on=m.classList.toggle('strip');
+    b.setAttribute('aria-pressed',on?'true':'false');
+    b.textContent=on?'Gấp lại thành chữ H':'Mở thành dải 7 ngày';
+  });
+  var note=document.getElementById('copied');
+  document.querySelectorAll('.swatch').forEach(function(s){
+    s.addEventListener('click',function(){
+      var v=s.getAttribute('data-hex');
+      var done=function(){note.textContent='Đã sao chép '+v;};
+      var fail=function(){note.textContent='Không sao chép được. Mã màu: '+v;};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(done,fail);}else{fail();}
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

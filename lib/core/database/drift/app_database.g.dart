@@ -1413,6 +1413,3292 @@ class TaskCompletionTableCompanion
   }
 }
 
+class $PomodoroSessionTableTable extends PomodoroSessionTable
+    with TableInfo<$PomodoroSessionTableTable, PomodoroSessionTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PomodoroSessionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endedAtMeta = const VerificationMeta(
+    'endedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+    'ended_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _focusSecondsMeta = const VerificationMeta(
+    'focusSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> focusSeconds = GeneratedColumn<int>(
+    'focus_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _plannedSecondsMeta = const VerificationMeta(
+    'plannedSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> plannedSeconds = GeneratedColumn<int>(
+    'planned_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completedMeta = const VerificationMeta(
+    'completed',
+  );
+  @override
+  late final GeneratedColumn<bool> completed = GeneratedColumn<bool>(
+    'completed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("completed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _taskScheduleIdMeta = const VerificationMeta(
+    'taskScheduleId',
+  );
+  @override
+  late final GeneratedColumn<int> taskScheduleId = GeneratedColumn<int>(
+    'task_schedule_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _focusTagIdMeta = const VerificationMeta(
+    'focusTagId',
+  );
+  @override
+  late final GeneratedColumn<int> focusTagId = GeneratedColumn<int>(
+    'focus_tag_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    startedAt,
+    endedAt,
+    focusSeconds,
+    plannedSeconds,
+    completed,
+    label,
+    taskScheduleId,
+    focusTagId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pomodoro_session_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PomodoroSessionTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(
+        _endedAtMeta,
+        endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endedAtMeta);
+    }
+    if (data.containsKey('focus_seconds')) {
+      context.handle(
+        _focusSecondsMeta,
+        focusSeconds.isAcceptableOrUnknown(
+          data['focus_seconds']!,
+          _focusSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_focusSecondsMeta);
+    }
+    if (data.containsKey('planned_seconds')) {
+      context.handle(
+        _plannedSecondsMeta,
+        plannedSeconds.isAcceptableOrUnknown(
+          data['planned_seconds']!,
+          _plannedSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_plannedSecondsMeta);
+    }
+    if (data.containsKey('completed')) {
+      context.handle(
+        _completedMeta,
+        completed.isAcceptableOrUnknown(data['completed']!, _completedMeta),
+      );
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    }
+    if (data.containsKey('task_schedule_id')) {
+      context.handle(
+        _taskScheduleIdMeta,
+        taskScheduleId.isAcceptableOrUnknown(
+          data['task_schedule_id']!,
+          _taskScheduleIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('focus_tag_id')) {
+      context.handle(
+        _focusTagIdMeta,
+        focusTagId.isAcceptableOrUnknown(
+          data['focus_tag_id']!,
+          _focusTagIdMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PomodoroSessionTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PomodoroSessionTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      endedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ended_at'],
+      )!,
+      focusSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_seconds'],
+      )!,
+      plannedSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}planned_seconds'],
+      )!,
+      completed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}completed'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      ),
+      taskScheduleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}task_schedule_id'],
+      ),
+      focusTagId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_tag_id'],
+      ),
+    );
+  }
+
+  @override
+  $PomodoroSessionTableTable createAlias(String alias) {
+    return $PomodoroSessionTableTable(attachedDatabase, alias);
+  }
+}
+
+class PomodoroSessionTableData extends DataClass
+    implements Insertable<PomodoroSessionTableData> {
+  final int id;
+  final DateTime startedAt;
+  final DateTime endedAt;
+
+  /// Số giây thực sự đã tập trung (không tính lúc pause bị dừng sớm).
+  final int focusSeconds;
+
+  /// Độ dài phiên đã đặt (giây) — để biết phiên có chạy hết hay không.
+  final int plannedSeconds;
+
+  /// true = chạy hết phiên, false = dừng giữa chừng.
+  final bool completed;
+
+  /// Việc đang tập trung (tên task hoặc nhãn tự nhập).
+  final String? label;
+
+  /// Task liên kết (nếu chọn từ tab Công việc).
+  final int? taskScheduleId;
+
+  /// Tag tập trung đã chọn (nếu chọn từ danh sách tag) — dùng cho focus trend.
+  final int? focusTagId;
+  const PomodoroSessionTableData({
+    required this.id,
+    required this.startedAt,
+    required this.endedAt,
+    required this.focusSeconds,
+    required this.plannedSeconds,
+    required this.completed,
+    this.label,
+    this.taskScheduleId,
+    this.focusTagId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    map['ended_at'] = Variable<DateTime>(endedAt);
+    map['focus_seconds'] = Variable<int>(focusSeconds);
+    map['planned_seconds'] = Variable<int>(plannedSeconds);
+    map['completed'] = Variable<bool>(completed);
+    if (!nullToAbsent || label != null) {
+      map['label'] = Variable<String>(label);
+    }
+    if (!nullToAbsent || taskScheduleId != null) {
+      map['task_schedule_id'] = Variable<int>(taskScheduleId);
+    }
+    if (!nullToAbsent || focusTagId != null) {
+      map['focus_tag_id'] = Variable<int>(focusTagId);
+    }
+    return map;
+  }
+
+  PomodoroSessionTableCompanion toCompanion(bool nullToAbsent) {
+    return PomodoroSessionTableCompanion(
+      id: Value(id),
+      startedAt: Value(startedAt),
+      endedAt: Value(endedAt),
+      focusSeconds: Value(focusSeconds),
+      plannedSeconds: Value(plannedSeconds),
+      completed: Value(completed),
+      label: label == null && nullToAbsent
+          ? const Value.absent()
+          : Value(label),
+      taskScheduleId: taskScheduleId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(taskScheduleId),
+      focusTagId: focusTagId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusTagId),
+    );
+  }
+
+  factory PomodoroSessionTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PomodoroSessionTableData(
+      id: serializer.fromJson<int>(json['id']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      endedAt: serializer.fromJson<DateTime>(json['endedAt']),
+      focusSeconds: serializer.fromJson<int>(json['focusSeconds']),
+      plannedSeconds: serializer.fromJson<int>(json['plannedSeconds']),
+      completed: serializer.fromJson<bool>(json['completed']),
+      label: serializer.fromJson<String?>(json['label']),
+      taskScheduleId: serializer.fromJson<int?>(json['taskScheduleId']),
+      focusTagId: serializer.fromJson<int?>(json['focusTagId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'endedAt': serializer.toJson<DateTime>(endedAt),
+      'focusSeconds': serializer.toJson<int>(focusSeconds),
+      'plannedSeconds': serializer.toJson<int>(plannedSeconds),
+      'completed': serializer.toJson<bool>(completed),
+      'label': serializer.toJson<String?>(label),
+      'taskScheduleId': serializer.toJson<int?>(taskScheduleId),
+      'focusTagId': serializer.toJson<int?>(focusTagId),
+    };
+  }
+
+  PomodoroSessionTableData copyWith({
+    int? id,
+    DateTime? startedAt,
+    DateTime? endedAt,
+    int? focusSeconds,
+    int? plannedSeconds,
+    bool? completed,
+    Value<String?> label = const Value.absent(),
+    Value<int?> taskScheduleId = const Value.absent(),
+    Value<int?> focusTagId = const Value.absent(),
+  }) => PomodoroSessionTableData(
+    id: id ?? this.id,
+    startedAt: startedAt ?? this.startedAt,
+    endedAt: endedAt ?? this.endedAt,
+    focusSeconds: focusSeconds ?? this.focusSeconds,
+    plannedSeconds: plannedSeconds ?? this.plannedSeconds,
+    completed: completed ?? this.completed,
+    label: label.present ? label.value : this.label,
+    taskScheduleId: taskScheduleId.present
+        ? taskScheduleId.value
+        : this.taskScheduleId,
+    focusTagId: focusTagId.present ? focusTagId.value : this.focusTagId,
+  );
+  PomodoroSessionTableData copyWithCompanion(
+    PomodoroSessionTableCompanion data,
+  ) {
+    return PomodoroSessionTableData(
+      id: data.id.present ? data.id.value : this.id,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      focusSeconds: data.focusSeconds.present
+          ? data.focusSeconds.value
+          : this.focusSeconds,
+      plannedSeconds: data.plannedSeconds.present
+          ? data.plannedSeconds.value
+          : this.plannedSeconds,
+      completed: data.completed.present ? data.completed.value : this.completed,
+      label: data.label.present ? data.label.value : this.label,
+      taskScheduleId: data.taskScheduleId.present
+          ? data.taskScheduleId.value
+          : this.taskScheduleId,
+      focusTagId: data.focusTagId.present
+          ? data.focusTagId.value
+          : this.focusTagId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PomodoroSessionTableData(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('focusSeconds: $focusSeconds, ')
+          ..write('plannedSeconds: $plannedSeconds, ')
+          ..write('completed: $completed, ')
+          ..write('label: $label, ')
+          ..write('taskScheduleId: $taskScheduleId, ')
+          ..write('focusTagId: $focusTagId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    startedAt,
+    endedAt,
+    focusSeconds,
+    plannedSeconds,
+    completed,
+    label,
+    taskScheduleId,
+    focusTagId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PomodoroSessionTableData &&
+          other.id == this.id &&
+          other.startedAt == this.startedAt &&
+          other.endedAt == this.endedAt &&
+          other.focusSeconds == this.focusSeconds &&
+          other.plannedSeconds == this.plannedSeconds &&
+          other.completed == this.completed &&
+          other.label == this.label &&
+          other.taskScheduleId == this.taskScheduleId &&
+          other.focusTagId == this.focusTagId);
+}
+
+class PomodoroSessionTableCompanion
+    extends UpdateCompanion<PomodoroSessionTableData> {
+  final Value<int> id;
+  final Value<DateTime> startedAt;
+  final Value<DateTime> endedAt;
+  final Value<int> focusSeconds;
+  final Value<int> plannedSeconds;
+  final Value<bool> completed;
+  final Value<String?> label;
+  final Value<int?> taskScheduleId;
+  final Value<int?> focusTagId;
+  const PomodoroSessionTableCompanion({
+    this.id = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.focusSeconds = const Value.absent(),
+    this.plannedSeconds = const Value.absent(),
+    this.completed = const Value.absent(),
+    this.label = const Value.absent(),
+    this.taskScheduleId = const Value.absent(),
+    this.focusTagId = const Value.absent(),
+  });
+  PomodoroSessionTableCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime startedAt,
+    required DateTime endedAt,
+    required int focusSeconds,
+    required int plannedSeconds,
+    this.completed = const Value.absent(),
+    this.label = const Value.absent(),
+    this.taskScheduleId = const Value.absent(),
+    this.focusTagId = const Value.absent(),
+  }) : startedAt = Value(startedAt),
+       endedAt = Value(endedAt),
+       focusSeconds = Value(focusSeconds),
+       plannedSeconds = Value(plannedSeconds);
+  static Insertable<PomodoroSessionTableData> custom({
+    Expression<int>? id,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? endedAt,
+    Expression<int>? focusSeconds,
+    Expression<int>? plannedSeconds,
+    Expression<bool>? completed,
+    Expression<String>? label,
+    Expression<int>? taskScheduleId,
+    Expression<int>? focusTagId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (startedAt != null) 'started_at': startedAt,
+      if (endedAt != null) 'ended_at': endedAt,
+      if (focusSeconds != null) 'focus_seconds': focusSeconds,
+      if (plannedSeconds != null) 'planned_seconds': plannedSeconds,
+      if (completed != null) 'completed': completed,
+      if (label != null) 'label': label,
+      if (taskScheduleId != null) 'task_schedule_id': taskScheduleId,
+      if (focusTagId != null) 'focus_tag_id': focusTagId,
+    });
+  }
+
+  PomodoroSessionTableCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? startedAt,
+    Value<DateTime>? endedAt,
+    Value<int>? focusSeconds,
+    Value<int>? plannedSeconds,
+    Value<bool>? completed,
+    Value<String?>? label,
+    Value<int?>? taskScheduleId,
+    Value<int?>? focusTagId,
+  }) {
+    return PomodoroSessionTableCompanion(
+      id: id ?? this.id,
+      startedAt: startedAt ?? this.startedAt,
+      endedAt: endedAt ?? this.endedAt,
+      focusSeconds: focusSeconds ?? this.focusSeconds,
+      plannedSeconds: plannedSeconds ?? this.plannedSeconds,
+      completed: completed ?? this.completed,
+      label: label ?? this.label,
+      taskScheduleId: taskScheduleId ?? this.taskScheduleId,
+      focusTagId: focusTagId ?? this.focusTagId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    if (focusSeconds.present) {
+      map['focus_seconds'] = Variable<int>(focusSeconds.value);
+    }
+    if (plannedSeconds.present) {
+      map['planned_seconds'] = Variable<int>(plannedSeconds.value);
+    }
+    if (completed.present) {
+      map['completed'] = Variable<bool>(completed.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (taskScheduleId.present) {
+      map['task_schedule_id'] = Variable<int>(taskScheduleId.value);
+    }
+    if (focusTagId.present) {
+      map['focus_tag_id'] = Variable<int>(focusTagId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PomodoroSessionTableCompanion(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('focusSeconds: $focusSeconds, ')
+          ..write('plannedSeconds: $plannedSeconds, ')
+          ..write('completed: $completed, ')
+          ..write('label: $label, ')
+          ..write('taskScheduleId: $taskScheduleId, ')
+          ..write('focusTagId: $focusTagId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FocusTagTableTable extends FocusTagTable
+    with TableInfo<$FocusTagTableTable, FocusTagTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FocusTagTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 60,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _minutesMeta = const VerificationMeta(
+    'minutes',
+  );
+  @override
+  late final GeneratedColumn<int> minutes = GeneratedColumn<int>(
+    'minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0xFF00B3A6),
+  );
+  static const VerificationMeta _emojiMeta = const VerificationMeta('emoji');
+  @override
+  late final GeneratedColumn<String> emoji = GeneratedColumn<String>(
+    'emoji',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    title,
+    minutes,
+    color,
+    emoji,
+    sortOrder,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'focus_tag_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FocusTagTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('minutes')) {
+      context.handle(
+        _minutesMeta,
+        minutes.isAcceptableOrUnknown(data['minutes']!, _minutesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_minutesMeta);
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
+    if (data.containsKey('emoji')) {
+      context.handle(
+        _emojiMeta,
+        emoji.isAcceptableOrUnknown(data['emoji']!, _emojiMeta),
+      );
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FocusTagTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FocusTagTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      minutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}minutes'],
+      )!,
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}color'],
+      )!,
+      emoji: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}emoji'],
+      ),
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+    );
+  }
+
+  @override
+  $FocusTagTableTable createAlias(String alias) {
+    return $FocusTagTableTable(attachedDatabase, alias);
+  }
+}
+
+class FocusTagTableData extends DataClass
+    implements Insertable<FocusTagTableData> {
+  final int id;
+  final String title;
+
+  /// Độ dài phiên focus gợi ý (phút).
+  final int minutes;
+
+  /// Màu hiển thị (ARGB) — dùng cho chip và biểu đồ focus trend.
+  final int color;
+
+  /// Biểu tượng dạng emoji (không dùng IconData để không phá tree-shake icons).
+  final String? emoji;
+
+  /// Thứ tự hiển thị; nhỏ hơn đứng trước.
+  final int sortOrder;
+  const FocusTagTableData({
+    required this.id,
+    required this.title,
+    required this.minutes,
+    required this.color,
+    this.emoji,
+    required this.sortOrder,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['minutes'] = Variable<int>(minutes);
+    map['color'] = Variable<int>(color);
+    if (!nullToAbsent || emoji != null) {
+      map['emoji'] = Variable<String>(emoji);
+    }
+    map['sort_order'] = Variable<int>(sortOrder);
+    return map;
+  }
+
+  FocusTagTableCompanion toCompanion(bool nullToAbsent) {
+    return FocusTagTableCompanion(
+      id: Value(id),
+      title: Value(title),
+      minutes: Value(minutes),
+      color: Value(color),
+      emoji: emoji == null && nullToAbsent
+          ? const Value.absent()
+          : Value(emoji),
+      sortOrder: Value(sortOrder),
+    );
+  }
+
+  factory FocusTagTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FocusTagTableData(
+      id: serializer.fromJson<int>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      minutes: serializer.fromJson<int>(json['minutes']),
+      color: serializer.fromJson<int>(json['color']),
+      emoji: serializer.fromJson<String?>(json['emoji']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'title': serializer.toJson<String>(title),
+      'minutes': serializer.toJson<int>(minutes),
+      'color': serializer.toJson<int>(color),
+      'emoji': serializer.toJson<String?>(emoji),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+    };
+  }
+
+  FocusTagTableData copyWith({
+    int? id,
+    String? title,
+    int? minutes,
+    int? color,
+    Value<String?> emoji = const Value.absent(),
+    int? sortOrder,
+  }) => FocusTagTableData(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    minutes: minutes ?? this.minutes,
+    color: color ?? this.color,
+    emoji: emoji.present ? emoji.value : this.emoji,
+    sortOrder: sortOrder ?? this.sortOrder,
+  );
+  FocusTagTableData copyWithCompanion(FocusTagTableCompanion data) {
+    return FocusTagTableData(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      minutes: data.minutes.present ? data.minutes.value : this.minutes,
+      color: data.color.present ? data.color.value : this.color,
+      emoji: data.emoji.present ? data.emoji.value : this.emoji,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FocusTagTableData(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('minutes: $minutes, ')
+          ..write('color: $color, ')
+          ..write('emoji: $emoji, ')
+          ..write('sortOrder: $sortOrder')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, title, minutes, color, emoji, sortOrder);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FocusTagTableData &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.minutes == this.minutes &&
+          other.color == this.color &&
+          other.emoji == this.emoji &&
+          other.sortOrder == this.sortOrder);
+}
+
+class FocusTagTableCompanion extends UpdateCompanion<FocusTagTableData> {
+  final Value<int> id;
+  final Value<String> title;
+  final Value<int> minutes;
+  final Value<int> color;
+  final Value<String?> emoji;
+  final Value<int> sortOrder;
+  const FocusTagTableCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.minutes = const Value.absent(),
+    this.color = const Value.absent(),
+    this.emoji = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+  });
+  FocusTagTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    required int minutes,
+    this.color = const Value.absent(),
+    this.emoji = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+  }) : title = Value(title),
+       minutes = Value(minutes);
+  static Insertable<FocusTagTableData> custom({
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<int>? minutes,
+    Expression<int>? color,
+    Expression<String>? emoji,
+    Expression<int>? sortOrder,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (minutes != null) 'minutes': minutes,
+      if (color != null) 'color': color,
+      if (emoji != null) 'emoji': emoji,
+      if (sortOrder != null) 'sort_order': sortOrder,
+    });
+  }
+
+  FocusTagTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? title,
+    Value<int>? minutes,
+    Value<int>? color,
+    Value<String?>? emoji,
+    Value<int>? sortOrder,
+  }) {
+    return FocusTagTableCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      minutes: minutes ?? this.minutes,
+      color: color ?? this.color,
+      emoji: emoji ?? this.emoji,
+      sortOrder: sortOrder ?? this.sortOrder,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (minutes.present) {
+      map['minutes'] = Variable<int>(minutes.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
+    if (emoji.present) {
+      map['emoji'] = Variable<String>(emoji.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FocusTagTableCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('minutes: $minutes, ')
+          ..write('color: $color, ')
+          ..write('emoji: $emoji, ')
+          ..write('sortOrder: $sortOrder')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TypingResultTableTable extends TypingResultTable
+    with TableInfo<$TypingResultTableTable, TypingResultTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TypingResultTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _takenAtMeta = const VerificationMeta(
+    'takenAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> takenAt = GeneratedColumn<DateTime>(
+    'taken_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _languageMeta = const VerificationMeta(
+    'language',
+  );
+  @override
+  late final GeneratedColumn<String> language = GeneratedColumn<String>(
+    'language',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 2,
+      maxTextLength: 8,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modeMeta = const VerificationMeta('mode');
+  @override
+  late final GeneratedColumn<String> mode = GeneratedColumn<String>(
+    'mode',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 16,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
+    'durationSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+    'duration_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _elapsedSecondsMeta = const VerificationMeta(
+    'elapsedSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> elapsedSeconds = GeneratedColumn<int>(
+    'elapsed_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typedCharsMeta = const VerificationMeta(
+    'typedChars',
+  );
+  @override
+  late final GeneratedColumn<int> typedChars = GeneratedColumn<int>(
+    'typed_chars',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _correctCharsMeta = const VerificationMeta(
+    'correctChars',
+  );
+  @override
+  late final GeneratedColumn<int> correctChars = GeneratedColumn<int>(
+    'correct_chars',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _incorrectCharsMeta = const VerificationMeta(
+    'incorrectChars',
+  );
+  @override
+  late final GeneratedColumn<int> incorrectChars = GeneratedColumn<int>(
+    'incorrect_chars',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _correctWordsMeta = const VerificationMeta(
+    'correctWords',
+  );
+  @override
+  late final GeneratedColumn<int> correctWords = GeneratedColumn<int>(
+    'correct_words',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _wpmMeta = const VerificationMeta('wpm');
+  @override
+  late final GeneratedColumn<double> wpm = GeneratedColumn<double>(
+    'wpm',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _accuracyMeta = const VerificationMeta(
+    'accuracy',
+  );
+  @override
+  late final GeneratedColumn<double> accuracy = GeneratedColumn<double>(
+    'accuracy',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    takenAt,
+    language,
+    mode,
+    durationSeconds,
+    elapsedSeconds,
+    typedChars,
+    correctChars,
+    incorrectChars,
+    correctWords,
+    wpm,
+    accuracy,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'typing_result_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TypingResultTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('taken_at')) {
+      context.handle(
+        _takenAtMeta,
+        takenAt.isAcceptableOrUnknown(data['taken_at']!, _takenAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_takenAtMeta);
+    }
+    if (data.containsKey('language')) {
+      context.handle(
+        _languageMeta,
+        language.isAcceptableOrUnknown(data['language']!, _languageMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_languageMeta);
+    }
+    if (data.containsKey('mode')) {
+      context.handle(
+        _modeMeta,
+        mode.isAcceptableOrUnknown(data['mode']!, _modeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modeMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+        _durationSecondsMeta,
+        durationSeconds.isAcceptableOrUnknown(
+          data['duration_seconds']!,
+          _durationSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('elapsed_seconds')) {
+      context.handle(
+        _elapsedSecondsMeta,
+        elapsedSeconds.isAcceptableOrUnknown(
+          data['elapsed_seconds']!,
+          _elapsedSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_elapsedSecondsMeta);
+    }
+    if (data.containsKey('typed_chars')) {
+      context.handle(
+        _typedCharsMeta,
+        typedChars.isAcceptableOrUnknown(data['typed_chars']!, _typedCharsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typedCharsMeta);
+    }
+    if (data.containsKey('correct_chars')) {
+      context.handle(
+        _correctCharsMeta,
+        correctChars.isAcceptableOrUnknown(
+          data['correct_chars']!,
+          _correctCharsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_correctCharsMeta);
+    }
+    if (data.containsKey('incorrect_chars')) {
+      context.handle(
+        _incorrectCharsMeta,
+        incorrectChars.isAcceptableOrUnknown(
+          data['incorrect_chars']!,
+          _incorrectCharsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_incorrectCharsMeta);
+    }
+    if (data.containsKey('correct_words')) {
+      context.handle(
+        _correctWordsMeta,
+        correctWords.isAcceptableOrUnknown(
+          data['correct_words']!,
+          _correctWordsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_correctWordsMeta);
+    }
+    if (data.containsKey('wpm')) {
+      context.handle(
+        _wpmMeta,
+        wpm.isAcceptableOrUnknown(data['wpm']!, _wpmMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_wpmMeta);
+    }
+    if (data.containsKey('accuracy')) {
+      context.handle(
+        _accuracyMeta,
+        accuracy.isAcceptableOrUnknown(data['accuracy']!, _accuracyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_accuracyMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TypingResultTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TypingResultTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      takenAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}taken_at'],
+      )!,
+      language: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}language'],
+      )!,
+      mode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mode'],
+      )!,
+      durationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_seconds'],
+      )!,
+      elapsedSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}elapsed_seconds'],
+      )!,
+      typedChars: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}typed_chars'],
+      )!,
+      correctChars: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_chars'],
+      )!,
+      incorrectChars: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}incorrect_chars'],
+      )!,
+      correctWords: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_words'],
+      )!,
+      wpm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}wpm'],
+      )!,
+      accuracy: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}accuracy'],
+      )!,
+    );
+  }
+
+  @override
+  $TypingResultTableTable createAlias(String alias) {
+    return $TypingResultTableTable(attachedDatabase, alias);
+  }
+}
+
+class TypingResultTableData extends DataClass
+    implements Insertable<TypingResultTableData> {
+  final int id;
+
+  /// Thời điểm kết thúc bài test.
+  final DateTime takenAt;
+
+  /// Mã ngôn ngữ đã gõ: 'en' | 'vi'.
+  final String language;
+
+  /// Nguồn nội dung: 'words' (từ ngẫu nhiên) | 'paragraph' (đoạn văn).
+  final String mode;
+
+  /// Độ dài bài test đã chọn (giây).
+  final int durationSeconds;
+
+  /// Số giây thực sự đã gõ (gõ xong đề sớm thì nhỏ hơn [durationSeconds]).
+  final int elapsedSeconds;
+  final int typedChars;
+  final int correctChars;
+  final int incorrectChars;
+
+  /// Số từ gõ đúng trọn vẹn (khác với "từ" 5 ký tự dùng để tính WPM).
+  final int correctWords;
+
+  /// Tốc độ gõ (từ/phút; 1 từ = 5 ký tự ĐÚNG) và độ chính xác 0..1.
+  final double wpm;
+  final double accuracy;
+  const TypingResultTableData({
+    required this.id,
+    required this.takenAt,
+    required this.language,
+    required this.mode,
+    required this.durationSeconds,
+    required this.elapsedSeconds,
+    required this.typedChars,
+    required this.correctChars,
+    required this.incorrectChars,
+    required this.correctWords,
+    required this.wpm,
+    required this.accuracy,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['taken_at'] = Variable<DateTime>(takenAt);
+    map['language'] = Variable<String>(language);
+    map['mode'] = Variable<String>(mode);
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    map['elapsed_seconds'] = Variable<int>(elapsedSeconds);
+    map['typed_chars'] = Variable<int>(typedChars);
+    map['correct_chars'] = Variable<int>(correctChars);
+    map['incorrect_chars'] = Variable<int>(incorrectChars);
+    map['correct_words'] = Variable<int>(correctWords);
+    map['wpm'] = Variable<double>(wpm);
+    map['accuracy'] = Variable<double>(accuracy);
+    return map;
+  }
+
+  TypingResultTableCompanion toCompanion(bool nullToAbsent) {
+    return TypingResultTableCompanion(
+      id: Value(id),
+      takenAt: Value(takenAt),
+      language: Value(language),
+      mode: Value(mode),
+      durationSeconds: Value(durationSeconds),
+      elapsedSeconds: Value(elapsedSeconds),
+      typedChars: Value(typedChars),
+      correctChars: Value(correctChars),
+      incorrectChars: Value(incorrectChars),
+      correctWords: Value(correctWords),
+      wpm: Value(wpm),
+      accuracy: Value(accuracy),
+    );
+  }
+
+  factory TypingResultTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TypingResultTableData(
+      id: serializer.fromJson<int>(json['id']),
+      takenAt: serializer.fromJson<DateTime>(json['takenAt']),
+      language: serializer.fromJson<String>(json['language']),
+      mode: serializer.fromJson<String>(json['mode']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      elapsedSeconds: serializer.fromJson<int>(json['elapsedSeconds']),
+      typedChars: serializer.fromJson<int>(json['typedChars']),
+      correctChars: serializer.fromJson<int>(json['correctChars']),
+      incorrectChars: serializer.fromJson<int>(json['incorrectChars']),
+      correctWords: serializer.fromJson<int>(json['correctWords']),
+      wpm: serializer.fromJson<double>(json['wpm']),
+      accuracy: serializer.fromJson<double>(json['accuracy']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'takenAt': serializer.toJson<DateTime>(takenAt),
+      'language': serializer.toJson<String>(language),
+      'mode': serializer.toJson<String>(mode),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'elapsedSeconds': serializer.toJson<int>(elapsedSeconds),
+      'typedChars': serializer.toJson<int>(typedChars),
+      'correctChars': serializer.toJson<int>(correctChars),
+      'incorrectChars': serializer.toJson<int>(incorrectChars),
+      'correctWords': serializer.toJson<int>(correctWords),
+      'wpm': serializer.toJson<double>(wpm),
+      'accuracy': serializer.toJson<double>(accuracy),
+    };
+  }
+
+  TypingResultTableData copyWith({
+    int? id,
+    DateTime? takenAt,
+    String? language,
+    String? mode,
+    int? durationSeconds,
+    int? elapsedSeconds,
+    int? typedChars,
+    int? correctChars,
+    int? incorrectChars,
+    int? correctWords,
+    double? wpm,
+    double? accuracy,
+  }) => TypingResultTableData(
+    id: id ?? this.id,
+    takenAt: takenAt ?? this.takenAt,
+    language: language ?? this.language,
+    mode: mode ?? this.mode,
+    durationSeconds: durationSeconds ?? this.durationSeconds,
+    elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
+    typedChars: typedChars ?? this.typedChars,
+    correctChars: correctChars ?? this.correctChars,
+    incorrectChars: incorrectChars ?? this.incorrectChars,
+    correctWords: correctWords ?? this.correctWords,
+    wpm: wpm ?? this.wpm,
+    accuracy: accuracy ?? this.accuracy,
+  );
+  TypingResultTableData copyWithCompanion(TypingResultTableCompanion data) {
+    return TypingResultTableData(
+      id: data.id.present ? data.id.value : this.id,
+      takenAt: data.takenAt.present ? data.takenAt.value : this.takenAt,
+      language: data.language.present ? data.language.value : this.language,
+      mode: data.mode.present ? data.mode.value : this.mode,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      elapsedSeconds: data.elapsedSeconds.present
+          ? data.elapsedSeconds.value
+          : this.elapsedSeconds,
+      typedChars: data.typedChars.present
+          ? data.typedChars.value
+          : this.typedChars,
+      correctChars: data.correctChars.present
+          ? data.correctChars.value
+          : this.correctChars,
+      incorrectChars: data.incorrectChars.present
+          ? data.incorrectChars.value
+          : this.incorrectChars,
+      correctWords: data.correctWords.present
+          ? data.correctWords.value
+          : this.correctWords,
+      wpm: data.wpm.present ? data.wpm.value : this.wpm,
+      accuracy: data.accuracy.present ? data.accuracy.value : this.accuracy,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingResultTableData(')
+          ..write('id: $id, ')
+          ..write('takenAt: $takenAt, ')
+          ..write('language: $language, ')
+          ..write('mode: $mode, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('elapsedSeconds: $elapsedSeconds, ')
+          ..write('typedChars: $typedChars, ')
+          ..write('correctChars: $correctChars, ')
+          ..write('incorrectChars: $incorrectChars, ')
+          ..write('correctWords: $correctWords, ')
+          ..write('wpm: $wpm, ')
+          ..write('accuracy: $accuracy')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    takenAt,
+    language,
+    mode,
+    durationSeconds,
+    elapsedSeconds,
+    typedChars,
+    correctChars,
+    incorrectChars,
+    correctWords,
+    wpm,
+    accuracy,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TypingResultTableData &&
+          other.id == this.id &&
+          other.takenAt == this.takenAt &&
+          other.language == this.language &&
+          other.mode == this.mode &&
+          other.durationSeconds == this.durationSeconds &&
+          other.elapsedSeconds == this.elapsedSeconds &&
+          other.typedChars == this.typedChars &&
+          other.correctChars == this.correctChars &&
+          other.incorrectChars == this.incorrectChars &&
+          other.correctWords == this.correctWords &&
+          other.wpm == this.wpm &&
+          other.accuracy == this.accuracy);
+}
+
+class TypingResultTableCompanion
+    extends UpdateCompanion<TypingResultTableData> {
+  final Value<int> id;
+  final Value<DateTime> takenAt;
+  final Value<String> language;
+  final Value<String> mode;
+  final Value<int> durationSeconds;
+  final Value<int> elapsedSeconds;
+  final Value<int> typedChars;
+  final Value<int> correctChars;
+  final Value<int> incorrectChars;
+  final Value<int> correctWords;
+  final Value<double> wpm;
+  final Value<double> accuracy;
+  const TypingResultTableCompanion({
+    this.id = const Value.absent(),
+    this.takenAt = const Value.absent(),
+    this.language = const Value.absent(),
+    this.mode = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.elapsedSeconds = const Value.absent(),
+    this.typedChars = const Value.absent(),
+    this.correctChars = const Value.absent(),
+    this.incorrectChars = const Value.absent(),
+    this.correctWords = const Value.absent(),
+    this.wpm = const Value.absent(),
+    this.accuracy = const Value.absent(),
+  });
+  TypingResultTableCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime takenAt,
+    required String language,
+    required String mode,
+    required int durationSeconds,
+    required int elapsedSeconds,
+    required int typedChars,
+    required int correctChars,
+    required int incorrectChars,
+    required int correctWords,
+    required double wpm,
+    required double accuracy,
+  }) : takenAt = Value(takenAt),
+       language = Value(language),
+       mode = Value(mode),
+       durationSeconds = Value(durationSeconds),
+       elapsedSeconds = Value(elapsedSeconds),
+       typedChars = Value(typedChars),
+       correctChars = Value(correctChars),
+       incorrectChars = Value(incorrectChars),
+       correctWords = Value(correctWords),
+       wpm = Value(wpm),
+       accuracy = Value(accuracy);
+  static Insertable<TypingResultTableData> custom({
+    Expression<int>? id,
+    Expression<DateTime>? takenAt,
+    Expression<String>? language,
+    Expression<String>? mode,
+    Expression<int>? durationSeconds,
+    Expression<int>? elapsedSeconds,
+    Expression<int>? typedChars,
+    Expression<int>? correctChars,
+    Expression<int>? incorrectChars,
+    Expression<int>? correctWords,
+    Expression<double>? wpm,
+    Expression<double>? accuracy,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (takenAt != null) 'taken_at': takenAt,
+      if (language != null) 'language': language,
+      if (mode != null) 'mode': mode,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (elapsedSeconds != null) 'elapsed_seconds': elapsedSeconds,
+      if (typedChars != null) 'typed_chars': typedChars,
+      if (correctChars != null) 'correct_chars': correctChars,
+      if (incorrectChars != null) 'incorrect_chars': incorrectChars,
+      if (correctWords != null) 'correct_words': correctWords,
+      if (wpm != null) 'wpm': wpm,
+      if (accuracy != null) 'accuracy': accuracy,
+    });
+  }
+
+  TypingResultTableCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? takenAt,
+    Value<String>? language,
+    Value<String>? mode,
+    Value<int>? durationSeconds,
+    Value<int>? elapsedSeconds,
+    Value<int>? typedChars,
+    Value<int>? correctChars,
+    Value<int>? incorrectChars,
+    Value<int>? correctWords,
+    Value<double>? wpm,
+    Value<double>? accuracy,
+  }) {
+    return TypingResultTableCompanion(
+      id: id ?? this.id,
+      takenAt: takenAt ?? this.takenAt,
+      language: language ?? this.language,
+      mode: mode ?? this.mode,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
+      typedChars: typedChars ?? this.typedChars,
+      correctChars: correctChars ?? this.correctChars,
+      incorrectChars: incorrectChars ?? this.incorrectChars,
+      correctWords: correctWords ?? this.correctWords,
+      wpm: wpm ?? this.wpm,
+      accuracy: accuracy ?? this.accuracy,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (takenAt.present) {
+      map['taken_at'] = Variable<DateTime>(takenAt.value);
+    }
+    if (language.present) {
+      map['language'] = Variable<String>(language.value);
+    }
+    if (mode.present) {
+      map['mode'] = Variable<String>(mode.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (elapsedSeconds.present) {
+      map['elapsed_seconds'] = Variable<int>(elapsedSeconds.value);
+    }
+    if (typedChars.present) {
+      map['typed_chars'] = Variable<int>(typedChars.value);
+    }
+    if (correctChars.present) {
+      map['correct_chars'] = Variable<int>(correctChars.value);
+    }
+    if (incorrectChars.present) {
+      map['incorrect_chars'] = Variable<int>(incorrectChars.value);
+    }
+    if (correctWords.present) {
+      map['correct_words'] = Variable<int>(correctWords.value);
+    }
+    if (wpm.present) {
+      map['wpm'] = Variable<double>(wpm.value);
+    }
+    if (accuracy.present) {
+      map['accuracy'] = Variable<double>(accuracy.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingResultTableCompanion(')
+          ..write('id: $id, ')
+          ..write('takenAt: $takenAt, ')
+          ..write('language: $language, ')
+          ..write('mode: $mode, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('elapsedSeconds: $elapsedSeconds, ')
+          ..write('typedChars: $typedChars, ')
+          ..write('correctChars: $correctChars, ')
+          ..write('incorrectChars: $incorrectChars, ')
+          ..write('correctWords: $correctWords, ')
+          ..write('wpm: $wpm, ')
+          ..write('accuracy: $accuracy')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TypingContentPackTableTable extends TypingContentPackTable
+    with TableInfo<$TypingContentPackTableTable, TypingContentPackTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TypingContentPackTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 120,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _languageMeta = const VerificationMeta(
+    'language',
+  );
+  @override
+  late final GeneratedColumn<String> language = GeneratedColumn<String>(
+    'language',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 2,
+      maxTextLength: 8,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _wordsJsonMeta = const VerificationMeta(
+    'wordsJson',
+  );
+  @override
+  late final GeneratedColumn<String> wordsJson = GeneratedColumn<String>(
+    'words_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _paragraphsJsonMeta = const VerificationMeta(
+    'paragraphsJson',
+  );
+  @override
+  late final GeneratedColumn<String> paragraphsJson = GeneratedColumn<String>(
+    'paragraphs_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _addedAtMeta = const VerificationMeta(
+    'addedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> addedAt = GeneratedColumn<DateTime>(
+    'added_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    language,
+    wordsJson,
+    paragraphsJson,
+    addedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'typing_content_pack_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TypingContentPackTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('language')) {
+      context.handle(
+        _languageMeta,
+        language.isAcceptableOrUnknown(data['language']!, _languageMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_languageMeta);
+    }
+    if (data.containsKey('words_json')) {
+      context.handle(
+        _wordsJsonMeta,
+        wordsJson.isAcceptableOrUnknown(data['words_json']!, _wordsJsonMeta),
+      );
+    }
+    if (data.containsKey('paragraphs_json')) {
+      context.handle(
+        _paragraphsJsonMeta,
+        paragraphsJson.isAcceptableOrUnknown(
+          data['paragraphs_json']!,
+          _paragraphsJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('added_at')) {
+      context.handle(
+        _addedAtMeta,
+        addedAt.isAcceptableOrUnknown(data['added_at']!, _addedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_addedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TypingContentPackTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TypingContentPackTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      language: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}language'],
+      )!,
+      wordsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}words_json'],
+      )!,
+      paragraphsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}paragraphs_json'],
+      )!,
+      addedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}added_at'],
+      )!,
+    );
+  }
+
+  @override
+  $TypingContentPackTableTable createAlias(String alias) {
+    return $TypingContentPackTableTable(attachedDatabase, alias);
+  }
+}
+
+class TypingContentPackTableData extends DataClass
+    implements Insertable<TypingContentPackTableData> {
+  final int id;
+
+  /// Tên gói để nhận ra trong danh sách (thường là tên file).
+  final String name;
+
+  /// Mã ngôn ngữ gói này thuộc về: 'en' | 'vi'.
+  final String language;
+
+  /// Danh sách từ, lưu dạng chuỗi JSON (mảng chuỗi).
+  final String wordsJson;
+
+  /// Danh sách đoạn văn, lưu dạng chuỗi JSON (mảng chuỗi).
+  final String paragraphsJson;
+  final DateTime addedAt;
+  const TypingContentPackTableData({
+    required this.id,
+    required this.name,
+    required this.language,
+    required this.wordsJson,
+    required this.paragraphsJson,
+    required this.addedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['language'] = Variable<String>(language);
+    map['words_json'] = Variable<String>(wordsJson);
+    map['paragraphs_json'] = Variable<String>(paragraphsJson);
+    map['added_at'] = Variable<DateTime>(addedAt);
+    return map;
+  }
+
+  TypingContentPackTableCompanion toCompanion(bool nullToAbsent) {
+    return TypingContentPackTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      language: Value(language),
+      wordsJson: Value(wordsJson),
+      paragraphsJson: Value(paragraphsJson),
+      addedAt: Value(addedAt),
+    );
+  }
+
+  factory TypingContentPackTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TypingContentPackTableData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      language: serializer.fromJson<String>(json['language']),
+      wordsJson: serializer.fromJson<String>(json['wordsJson']),
+      paragraphsJson: serializer.fromJson<String>(json['paragraphsJson']),
+      addedAt: serializer.fromJson<DateTime>(json['addedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'language': serializer.toJson<String>(language),
+      'wordsJson': serializer.toJson<String>(wordsJson),
+      'paragraphsJson': serializer.toJson<String>(paragraphsJson),
+      'addedAt': serializer.toJson<DateTime>(addedAt),
+    };
+  }
+
+  TypingContentPackTableData copyWith({
+    int? id,
+    String? name,
+    String? language,
+    String? wordsJson,
+    String? paragraphsJson,
+    DateTime? addedAt,
+  }) => TypingContentPackTableData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    language: language ?? this.language,
+    wordsJson: wordsJson ?? this.wordsJson,
+    paragraphsJson: paragraphsJson ?? this.paragraphsJson,
+    addedAt: addedAt ?? this.addedAt,
+  );
+  TypingContentPackTableData copyWithCompanion(
+    TypingContentPackTableCompanion data,
+  ) {
+    return TypingContentPackTableData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      language: data.language.present ? data.language.value : this.language,
+      wordsJson: data.wordsJson.present ? data.wordsJson.value : this.wordsJson,
+      paragraphsJson: data.paragraphsJson.present
+          ? data.paragraphsJson.value
+          : this.paragraphsJson,
+      addedAt: data.addedAt.present ? data.addedAt.value : this.addedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingContentPackTableData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('language: $language, ')
+          ..write('wordsJson: $wordsJson, ')
+          ..write('paragraphsJson: $paragraphsJson, ')
+          ..write('addedAt: $addedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, name, language, wordsJson, paragraphsJson, addedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TypingContentPackTableData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.language == this.language &&
+          other.wordsJson == this.wordsJson &&
+          other.paragraphsJson == this.paragraphsJson &&
+          other.addedAt == this.addedAt);
+}
+
+class TypingContentPackTableCompanion
+    extends UpdateCompanion<TypingContentPackTableData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> language;
+  final Value<String> wordsJson;
+  final Value<String> paragraphsJson;
+  final Value<DateTime> addedAt;
+  const TypingContentPackTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.language = const Value.absent(),
+    this.wordsJson = const Value.absent(),
+    this.paragraphsJson = const Value.absent(),
+    this.addedAt = const Value.absent(),
+  });
+  TypingContentPackTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String language,
+    this.wordsJson = const Value.absent(),
+    this.paragraphsJson = const Value.absent(),
+    required DateTime addedAt,
+  }) : name = Value(name),
+       language = Value(language),
+       addedAt = Value(addedAt);
+  static Insertable<TypingContentPackTableData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? language,
+    Expression<String>? wordsJson,
+    Expression<String>? paragraphsJson,
+    Expression<DateTime>? addedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (language != null) 'language': language,
+      if (wordsJson != null) 'words_json': wordsJson,
+      if (paragraphsJson != null) 'paragraphs_json': paragraphsJson,
+      if (addedAt != null) 'added_at': addedAt,
+    });
+  }
+
+  TypingContentPackTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String>? language,
+    Value<String>? wordsJson,
+    Value<String>? paragraphsJson,
+    Value<DateTime>? addedAt,
+  }) {
+    return TypingContentPackTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      language: language ?? this.language,
+      wordsJson: wordsJson ?? this.wordsJson,
+      paragraphsJson: paragraphsJson ?? this.paragraphsJson,
+      addedAt: addedAt ?? this.addedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (language.present) {
+      map['language'] = Variable<String>(language.value);
+    }
+    if (wordsJson.present) {
+      map['words_json'] = Variable<String>(wordsJson.value);
+    }
+    if (paragraphsJson.present) {
+      map['paragraphs_json'] = Variable<String>(paragraphsJson.value);
+    }
+    if (addedAt.present) {
+      map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TypingContentPackTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('language: $language, ')
+          ..write('wordsJson: $wordsJson, ')
+          ..write('paragraphsJson: $paragraphsJson, ')
+          ..write('addedAt: $addedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RemoteDeviceTableTable extends RemoteDeviceTable
+    with TableInfo<$RemoteDeviceTableTable, RemoteDeviceEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RemoteDeviceTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 100,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name, type, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'remote_device_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RemoteDeviceEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RemoteDeviceEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RemoteDeviceEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $RemoteDeviceTableTable createAlias(String alias) {
+    return $RemoteDeviceTableTable(attachedDatabase, alias);
+  }
+}
+
+class RemoteDeviceEntry extends DataClass
+    implements Insertable<RemoteDeviceEntry> {
+  final int id;
+  final String name;
+  final String type;
+  final DateTime createdAt;
+  const RemoteDeviceEntry({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['type'] = Variable<String>(type);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  RemoteDeviceTableCompanion toCompanion(bool nullToAbsent) {
+    return RemoteDeviceTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      type: Value(type),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory RemoteDeviceEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RemoteDeviceEntry(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      type: serializer.fromJson<String>(json['type']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'type': serializer.toJson<String>(type),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  RemoteDeviceEntry copyWith({
+    int? id,
+    String? name,
+    String? type,
+    DateTime? createdAt,
+  }) => RemoteDeviceEntry(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    type: type ?? this.type,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  RemoteDeviceEntry copyWithCompanion(RemoteDeviceTableCompanion data) {
+    return RemoteDeviceEntry(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      type: data.type.present ? data.type.value : this.type,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RemoteDeviceEntry(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, type, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RemoteDeviceEntry &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.type == this.type &&
+          other.createdAt == this.createdAt);
+}
+
+class RemoteDeviceTableCompanion extends UpdateCompanion<RemoteDeviceEntry> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> type;
+  final Value<DateTime> createdAt;
+  const RemoteDeviceTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.type = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  RemoteDeviceTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String type,
+    this.createdAt = const Value.absent(),
+  }) : name = Value(name),
+       type = Value(type);
+  static Insertable<RemoteDeviceEntry> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? type,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (type != null) 'type': type,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  RemoteDeviceTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String>? type,
+    Value<DateTime>? createdAt,
+  }) {
+    return RemoteDeviceTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RemoteDeviceTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TrackingGoalTableTable extends TrackingGoalTable
+    with TableInfo<$TrackingGoalTableTable, TrackingGoalTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TrackingGoalTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 255,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0xFF3D6DF2),
+  );
+  static const VerificationMeta _weekdaysMaskMeta = const VerificationMeta(
+    'weekdaysMask',
+  );
+  @override
+  late final GeneratedColumn<int> weekdaysMask = GeneratedColumn<int>(
+    'weekdays_mask',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(127),
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+    'end_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _remindersCsvMeta = const VerificationMeta(
+    'remindersCsv',
+  );
+  @override
+  late final GeneratedColumn<String> remindersCsv = GeneratedColumn<String>(
+    'reminders_csv',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    description,
+    color,
+    weekdaysMask,
+    startDate,
+    endDate,
+    remindersCsv,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'tracking_goal_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TrackingGoalTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
+    if (data.containsKey('weekdays_mask')) {
+      context.handle(
+        _weekdaysMaskMeta,
+        weekdaysMask.isAcceptableOrUnknown(
+          data['weekdays_mask']!,
+          _weekdaysMaskMeta,
+        ),
+      );
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+      );
+    }
+    if (data.containsKey('reminders_csv')) {
+      context.handle(
+        _remindersCsvMeta,
+        remindersCsv.isAcceptableOrUnknown(
+          data['reminders_csv']!,
+          _remindersCsvMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TrackingGoalTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TrackingGoalTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}color'],
+      )!,
+      weekdaysMask: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}weekdays_mask'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_date'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_date'],
+      ),
+      remindersCsv: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reminders_csv'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $TrackingGoalTableTable createAlias(String alias) {
+    return $TrackingGoalTableTable(attachedDatabase, alias);
+  }
+}
+
+class TrackingGoalTableData extends DataClass
+    implements Insertable<TrackingGoalTableData> {
+  final int id;
+  final String name;
+
+  /// Mô tả (tuỳ chọn).
+  final String? description;
+
+  /// Màu do người dùng chọn (ARGB).
+  final int color;
+
+  /// Thứ áp dụng (bit weekday-1, Mon..Sun); 127 = hằng ngày.
+  final int weekdaysMask;
+  final DateTime startDate;
+  final DateTime? endDate;
+
+  /// Giờ nhắc (phút từ 0h) nối bằng ',' — null/rỗng = không nhắc.
+  final String? remindersCsv;
+  final DateTime createdAt;
+  const TrackingGoalTableData({
+    required this.id,
+    required this.name,
+    this.description,
+    required this.color,
+    required this.weekdaysMask,
+    required this.startDate,
+    this.endDate,
+    this.remindersCsv,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['color'] = Variable<int>(color);
+    map['weekdays_mask'] = Variable<int>(weekdaysMask);
+    map['start_date'] = Variable<DateTime>(startDate);
+    if (!nullToAbsent || endDate != null) {
+      map['end_date'] = Variable<DateTime>(endDate);
+    }
+    if (!nullToAbsent || remindersCsv != null) {
+      map['reminders_csv'] = Variable<String>(remindersCsv);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  TrackingGoalTableCompanion toCompanion(bool nullToAbsent) {
+    return TrackingGoalTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      color: Value(color),
+      weekdaysMask: Value(weekdaysMask),
+      startDate: Value(startDate),
+      endDate: endDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endDate),
+      remindersCsv: remindersCsv == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remindersCsv),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory TrackingGoalTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TrackingGoalTableData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String?>(json['description']),
+      color: serializer.fromJson<int>(json['color']),
+      weekdaysMask: serializer.fromJson<int>(json['weekdaysMask']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      endDate: serializer.fromJson<DateTime?>(json['endDate']),
+      remindersCsv: serializer.fromJson<String?>(json['remindersCsv']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String?>(description),
+      'color': serializer.toJson<int>(color),
+      'weekdaysMask': serializer.toJson<int>(weekdaysMask),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'endDate': serializer.toJson<DateTime?>(endDate),
+      'remindersCsv': serializer.toJson<String?>(remindersCsv),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  TrackingGoalTableData copyWith({
+    int? id,
+    String? name,
+    Value<String?> description = const Value.absent(),
+    int? color,
+    int? weekdaysMask,
+    DateTime? startDate,
+    Value<DateTime?> endDate = const Value.absent(),
+    Value<String?> remindersCsv = const Value.absent(),
+    DateTime? createdAt,
+  }) => TrackingGoalTableData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    description: description.present ? description.value : this.description,
+    color: color ?? this.color,
+    weekdaysMask: weekdaysMask ?? this.weekdaysMask,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate.present ? endDate.value : this.endDate,
+    remindersCsv: remindersCsv.present ? remindersCsv.value : this.remindersCsv,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  TrackingGoalTableData copyWithCompanion(TrackingGoalTableCompanion data) {
+    return TrackingGoalTableData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      color: data.color.present ? data.color.value : this.color,
+      weekdaysMask: data.weekdaysMask.present
+          ? data.weekdaysMask.value
+          : this.weekdaysMask,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      remindersCsv: data.remindersCsv.present
+          ? data.remindersCsv.value
+          : this.remindersCsv,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingGoalTableData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('color: $color, ')
+          ..write('weekdaysMask: $weekdaysMask, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('remindersCsv: $remindersCsv, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    description,
+    color,
+    weekdaysMask,
+    startDate,
+    endDate,
+    remindersCsv,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TrackingGoalTableData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.description == this.description &&
+          other.color == this.color &&
+          other.weekdaysMask == this.weekdaysMask &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.remindersCsv == this.remindersCsv &&
+          other.createdAt == this.createdAt);
+}
+
+class TrackingGoalTableCompanion
+    extends UpdateCompanion<TrackingGoalTableData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> description;
+  final Value<int> color;
+  final Value<int> weekdaysMask;
+  final Value<DateTime> startDate;
+  final Value<DateTime?> endDate;
+  final Value<String?> remindersCsv;
+  final Value<DateTime> createdAt;
+  const TrackingGoalTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.color = const Value.absent(),
+    this.weekdaysMask = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.remindersCsv = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  TrackingGoalTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.description = const Value.absent(),
+    this.color = const Value.absent(),
+    this.weekdaysMask = const Value.absent(),
+    required DateTime startDate,
+    this.endDate = const Value.absent(),
+    this.remindersCsv = const Value.absent(),
+    required DateTime createdAt,
+  }) : name = Value(name),
+       startDate = Value(startDate),
+       createdAt = Value(createdAt);
+  static Insertable<TrackingGoalTableData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? description,
+    Expression<int>? color,
+    Expression<int>? weekdaysMask,
+    Expression<DateTime>? startDate,
+    Expression<DateTime>? endDate,
+    Expression<String>? remindersCsv,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (color != null) 'color': color,
+      if (weekdaysMask != null) 'weekdays_mask': weekdaysMask,
+      if (startDate != null) 'start_date': startDate,
+      if (endDate != null) 'end_date': endDate,
+      if (remindersCsv != null) 'reminders_csv': remindersCsv,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  TrackingGoalTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String?>? description,
+    Value<int>? color,
+    Value<int>? weekdaysMask,
+    Value<DateTime>? startDate,
+    Value<DateTime?>? endDate,
+    Value<String?>? remindersCsv,
+    Value<DateTime>? createdAt,
+  }) {
+    return TrackingGoalTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      color: color ?? this.color,
+      weekdaysMask: weekdaysMask ?? this.weekdaysMask,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      remindersCsv: remindersCsv ?? this.remindersCsv,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
+    if (weekdaysMask.present) {
+      map['weekdays_mask'] = Variable<int>(weekdaysMask.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
+    }
+    if (remindersCsv.present) {
+      map['reminders_csv'] = Variable<String>(remindersCsv.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingGoalTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('color: $color, ')
+          ..write('weekdaysMask: $weekdaysMask, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('remindersCsv: $remindersCsv, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TrackingCheckinTableTable extends TrackingCheckinTable
+    with TableInfo<$TrackingCheckinTableTable, TrackingCheckinTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TrackingCheckinTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _goalIdMeta = const VerificationMeta('goalId');
+  @override
+  late final GeneratedColumn<int> goalId = GeneratedColumn<int>(
+    'goal_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, goalId, date];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'tracking_checkin_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TrackingCheckinTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('goal_id')) {
+      context.handle(
+        _goalIdMeta,
+        goalId.isAcceptableOrUnknown(data['goal_id']!, _goalIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_goalIdMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TrackingCheckinTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TrackingCheckinTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      goalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}goal_id'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+    );
+  }
+
+  @override
+  $TrackingCheckinTableTable createAlias(String alias) {
+    return $TrackingCheckinTableTable(attachedDatabase, alias);
+  }
+}
+
+class TrackingCheckinTableData extends DataClass
+    implements Insertable<TrackingCheckinTableData> {
+  final int id;
+  final int goalId;
+  final DateTime date;
+  const TrackingCheckinTableData({
+    required this.id,
+    required this.goalId,
+    required this.date,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['goal_id'] = Variable<int>(goalId);
+    map['date'] = Variable<DateTime>(date);
+    return map;
+  }
+
+  TrackingCheckinTableCompanion toCompanion(bool nullToAbsent) {
+    return TrackingCheckinTableCompanion(
+      id: Value(id),
+      goalId: Value(goalId),
+      date: Value(date),
+    );
+  }
+
+  factory TrackingCheckinTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TrackingCheckinTableData(
+      id: serializer.fromJson<int>(json['id']),
+      goalId: serializer.fromJson<int>(json['goalId']),
+      date: serializer.fromJson<DateTime>(json['date']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'goalId': serializer.toJson<int>(goalId),
+      'date': serializer.toJson<DateTime>(date),
+    };
+  }
+
+  TrackingCheckinTableData copyWith({int? id, int? goalId, DateTime? date}) =>
+      TrackingCheckinTableData(
+        id: id ?? this.id,
+        goalId: goalId ?? this.goalId,
+        date: date ?? this.date,
+      );
+  TrackingCheckinTableData copyWithCompanion(
+    TrackingCheckinTableCompanion data,
+  ) {
+    return TrackingCheckinTableData(
+      id: data.id.present ? data.id.value : this.id,
+      goalId: data.goalId.present ? data.goalId.value : this.goalId,
+      date: data.date.present ? data.date.value : this.date,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingCheckinTableData(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, goalId, date);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TrackingCheckinTableData &&
+          other.id == this.id &&
+          other.goalId == this.goalId &&
+          other.date == this.date);
+}
+
+class TrackingCheckinTableCompanion
+    extends UpdateCompanion<TrackingCheckinTableData> {
+  final Value<int> id;
+  final Value<int> goalId;
+  final Value<DateTime> date;
+  const TrackingCheckinTableCompanion({
+    this.id = const Value.absent(),
+    this.goalId = const Value.absent(),
+    this.date = const Value.absent(),
+  });
+  TrackingCheckinTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int goalId,
+    required DateTime date,
+  }) : goalId = Value(goalId),
+       date = Value(date);
+  static Insertable<TrackingCheckinTableData> custom({
+    Expression<int>? id,
+    Expression<int>? goalId,
+    Expression<DateTime>? date,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (goalId != null) 'goal_id': goalId,
+      if (date != null) 'date': date,
+    });
+  }
+
+  TrackingCheckinTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? goalId,
+    Value<DateTime>? date,
+  }) {
+    return TrackingCheckinTableCompanion(
+      id: id ?? this.id,
+      goalId: goalId ?? this.goalId,
+      date: date ?? this.date,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (goalId.present) {
+      map['goal_id'] = Variable<int>(goalId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrackingCheckinTableCompanion(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1421,8 +4707,31 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $TaskScheduleTableTable(this);
   late final $TaskCompletionTableTable taskCompletionTable =
       $TaskCompletionTableTable(this);
+  late final $PomodoroSessionTableTable pomodoroSessionTable =
+      $PomodoroSessionTableTable(this);
+  late final $FocusTagTableTable focusTagTable = $FocusTagTableTable(this);
+  late final $TypingResultTableTable typingResultTable =
+      $TypingResultTableTable(this);
+  late final $TypingContentPackTableTable typingContentPackTable =
+      $TypingContentPackTableTable(this);
+  late final $RemoteDeviceTableTable remoteDeviceTable =
+      $RemoteDeviceTableTable(this);
+  late final $TrackingGoalTableTable trackingGoalTable =
+      $TrackingGoalTableTable(this);
+  late final $TrackingCheckinTableTable trackingCheckinTable =
+      $TrackingCheckinTableTable(this);
   late final EventDao eventDao = EventDao(this as AppDatabase);
   late final TaskDao taskDao = TaskDao(this as AppDatabase);
+  late final PomodoroDao pomodoroDao = PomodoroDao(this as AppDatabase);
+  late final FocusTagDao focusTagDao = FocusTagDao(this as AppDatabase);
+  late final TypingDao typingDao = TypingDao(this as AppDatabase);
+  late final TypingContentDao typingContentDao = TypingContentDao(
+    this as AppDatabase,
+  );
+  late final RemoteDeviceDao remoteDeviceDao = RemoteDeviceDao(
+    this as AppDatabase,
+  );
+  late final TrackingDao trackingDao = TrackingDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1431,6 +4740,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     eventTable,
     taskScheduleTable,
     taskCompletionTable,
+    pomodoroSessionTable,
+    focusTagTable,
+    typingResultTable,
+    typingContentPackTable,
+    remoteDeviceTable,
+    trackingGoalTable,
+    trackingCheckinTable,
   ];
 }
 
@@ -2186,6 +5502,1752 @@ typedef $$TaskCompletionTableTableProcessedTableManager =
       TaskCompletionTableData,
       PrefetchHooks Function()
     >;
+typedef $$PomodoroSessionTableTableCreateCompanionBuilder =
+    PomodoroSessionTableCompanion Function({
+      Value<int> id,
+      required DateTime startedAt,
+      required DateTime endedAt,
+      required int focusSeconds,
+      required int plannedSeconds,
+      Value<bool> completed,
+      Value<String?> label,
+      Value<int?> taskScheduleId,
+      Value<int?> focusTagId,
+    });
+typedef $$PomodoroSessionTableTableUpdateCompanionBuilder =
+    PomodoroSessionTableCompanion Function({
+      Value<int> id,
+      Value<DateTime> startedAt,
+      Value<DateTime> endedAt,
+      Value<int> focusSeconds,
+      Value<int> plannedSeconds,
+      Value<bool> completed,
+      Value<String?> label,
+      Value<int?> taskScheduleId,
+      Value<int?> focusTagId,
+    });
+
+class $$PomodoroSessionTableTableFilterComposer
+    extends Composer<_$AppDatabase, $PomodoroSessionTableTable> {
+  $$PomodoroSessionTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusSeconds => $composableBuilder(
+    column: $table.focusSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get plannedSeconds => $composableBuilder(
+    column: $table.plannedSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get completed => $composableBuilder(
+    column: $table.completed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get taskScheduleId => $composableBuilder(
+    column: $table.taskScheduleId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusTagId => $composableBuilder(
+    column: $table.focusTagId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PomodoroSessionTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $PomodoroSessionTableTable> {
+  $$PomodoroSessionTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get focusSeconds => $composableBuilder(
+    column: $table.focusSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get plannedSeconds => $composableBuilder(
+    column: $table.plannedSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get completed => $composableBuilder(
+    column: $table.completed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get taskScheduleId => $composableBuilder(
+    column: $table.taskScheduleId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get focusTagId => $composableBuilder(
+    column: $table.focusTagId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PomodoroSessionTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PomodoroSessionTableTable> {
+  $$PomodoroSessionTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get focusSeconds => $composableBuilder(
+    column: $table.focusSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get plannedSeconds => $composableBuilder(
+    column: $table.plannedSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get completed =>
+      $composableBuilder(column: $table.completed, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get taskScheduleId => $composableBuilder(
+    column: $table.taskScheduleId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get focusTagId => $composableBuilder(
+    column: $table.focusTagId,
+    builder: (column) => column,
+  );
+}
+
+class $$PomodoroSessionTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PomodoroSessionTableTable,
+          PomodoroSessionTableData,
+          $$PomodoroSessionTableTableFilterComposer,
+          $$PomodoroSessionTableTableOrderingComposer,
+          $$PomodoroSessionTableTableAnnotationComposer,
+          $$PomodoroSessionTableTableCreateCompanionBuilder,
+          $$PomodoroSessionTableTableUpdateCompanionBuilder,
+          (
+            PomodoroSessionTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $PomodoroSessionTableTable,
+              PomodoroSessionTableData
+            >,
+          ),
+          PomodoroSessionTableData,
+          PrefetchHooks Function()
+        > {
+  $$PomodoroSessionTableTableTableManager(
+    _$AppDatabase db,
+    $PomodoroSessionTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PomodoroSessionTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PomodoroSessionTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$PomodoroSessionTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime> endedAt = const Value.absent(),
+                Value<int> focusSeconds = const Value.absent(),
+                Value<int> plannedSeconds = const Value.absent(),
+                Value<bool> completed = const Value.absent(),
+                Value<String?> label = const Value.absent(),
+                Value<int?> taskScheduleId = const Value.absent(),
+                Value<int?> focusTagId = const Value.absent(),
+              }) => PomodoroSessionTableCompanion(
+                id: id,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                focusSeconds: focusSeconds,
+                plannedSeconds: plannedSeconds,
+                completed: completed,
+                label: label,
+                taskScheduleId: taskScheduleId,
+                focusTagId: focusTagId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime startedAt,
+                required DateTime endedAt,
+                required int focusSeconds,
+                required int plannedSeconds,
+                Value<bool> completed = const Value.absent(),
+                Value<String?> label = const Value.absent(),
+                Value<int?> taskScheduleId = const Value.absent(),
+                Value<int?> focusTagId = const Value.absent(),
+              }) => PomodoroSessionTableCompanion.insert(
+                id: id,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                focusSeconds: focusSeconds,
+                plannedSeconds: plannedSeconds,
+                completed: completed,
+                label: label,
+                taskScheduleId: taskScheduleId,
+                focusTagId: focusTagId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PomodoroSessionTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PomodoroSessionTableTable,
+      PomodoroSessionTableData,
+      $$PomodoroSessionTableTableFilterComposer,
+      $$PomodoroSessionTableTableOrderingComposer,
+      $$PomodoroSessionTableTableAnnotationComposer,
+      $$PomodoroSessionTableTableCreateCompanionBuilder,
+      $$PomodoroSessionTableTableUpdateCompanionBuilder,
+      (
+        PomodoroSessionTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $PomodoroSessionTableTable,
+          PomodoroSessionTableData
+        >,
+      ),
+      PomodoroSessionTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$FocusTagTableTableCreateCompanionBuilder =
+    FocusTagTableCompanion Function({
+      Value<int> id,
+      required String title,
+      required int minutes,
+      Value<int> color,
+      Value<String?> emoji,
+      Value<int> sortOrder,
+    });
+typedef $$FocusTagTableTableUpdateCompanionBuilder =
+    FocusTagTableCompanion Function({
+      Value<int> id,
+      Value<String> title,
+      Value<int> minutes,
+      Value<int> color,
+      Value<String?> emoji,
+      Value<int> sortOrder,
+    });
+
+class $$FocusTagTableTableFilterComposer
+    extends Composer<_$AppDatabase, $FocusTagTableTable> {
+  $$FocusTagTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get emoji => $composableBuilder(
+    column: $table.emoji,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FocusTagTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FocusTagTableTable> {
+  $$FocusTagTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get emoji => $composableBuilder(
+    column: $table.emoji,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FocusTagTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FocusTagTableTable> {
+  $$FocusTagTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<int> get minutes =>
+      $composableBuilder(column: $table.minutes, builder: (column) => column);
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get emoji =>
+      $composableBuilder(column: $table.emoji, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+}
+
+class $$FocusTagTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FocusTagTableTable,
+          FocusTagTableData,
+          $$FocusTagTableTableFilterComposer,
+          $$FocusTagTableTableOrderingComposer,
+          $$FocusTagTableTableAnnotationComposer,
+          $$FocusTagTableTableCreateCompanionBuilder,
+          $$FocusTagTableTableUpdateCompanionBuilder,
+          (
+            FocusTagTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $FocusTagTableTable,
+              FocusTagTableData
+            >,
+          ),
+          FocusTagTableData,
+          PrefetchHooks Function()
+        > {
+  $$FocusTagTableTableTableManager(_$AppDatabase db, $FocusTagTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FocusTagTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FocusTagTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FocusTagTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<int> minutes = const Value.absent(),
+                Value<int> color = const Value.absent(),
+                Value<String?> emoji = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+              }) => FocusTagTableCompanion(
+                id: id,
+                title: title,
+                minutes: minutes,
+                color: color,
+                emoji: emoji,
+                sortOrder: sortOrder,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String title,
+                required int minutes,
+                Value<int> color = const Value.absent(),
+                Value<String?> emoji = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+              }) => FocusTagTableCompanion.insert(
+                id: id,
+                title: title,
+                minutes: minutes,
+                color: color,
+                emoji: emoji,
+                sortOrder: sortOrder,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FocusTagTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FocusTagTableTable,
+      FocusTagTableData,
+      $$FocusTagTableTableFilterComposer,
+      $$FocusTagTableTableOrderingComposer,
+      $$FocusTagTableTableAnnotationComposer,
+      $$FocusTagTableTableCreateCompanionBuilder,
+      $$FocusTagTableTableUpdateCompanionBuilder,
+      (
+        FocusTagTableData,
+        BaseReferences<_$AppDatabase, $FocusTagTableTable, FocusTagTableData>,
+      ),
+      FocusTagTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$TypingResultTableTableCreateCompanionBuilder =
+    TypingResultTableCompanion Function({
+      Value<int> id,
+      required DateTime takenAt,
+      required String language,
+      required String mode,
+      required int durationSeconds,
+      required int elapsedSeconds,
+      required int typedChars,
+      required int correctChars,
+      required int incorrectChars,
+      required int correctWords,
+      required double wpm,
+      required double accuracy,
+    });
+typedef $$TypingResultTableTableUpdateCompanionBuilder =
+    TypingResultTableCompanion Function({
+      Value<int> id,
+      Value<DateTime> takenAt,
+      Value<String> language,
+      Value<String> mode,
+      Value<int> durationSeconds,
+      Value<int> elapsedSeconds,
+      Value<int> typedChars,
+      Value<int> correctChars,
+      Value<int> incorrectChars,
+      Value<int> correctWords,
+      Value<double> wpm,
+      Value<double> accuracy,
+    });
+
+class $$TypingResultTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TypingResultTableTable> {
+  $$TypingResultTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get takenAt => $composableBuilder(
+    column: $table.takenAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get typedChars => $composableBuilder(
+    column: $table.typedChars,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctChars => $composableBuilder(
+    column: $table.correctChars,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get incorrectChars => $composableBuilder(
+    column: $table.incorrectChars,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctWords => $composableBuilder(
+    column: $table.correctWords,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get wpm => $composableBuilder(
+    column: $table.wpm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get accuracy => $composableBuilder(
+    column: $table.accuracy,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TypingResultTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TypingResultTableTable> {
+  $$TypingResultTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get takenAt => $composableBuilder(
+    column: $table.takenAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get typedChars => $composableBuilder(
+    column: $table.typedChars,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctChars => $composableBuilder(
+    column: $table.correctChars,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get incorrectChars => $composableBuilder(
+    column: $table.incorrectChars,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctWords => $composableBuilder(
+    column: $table.correctWords,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get wpm => $composableBuilder(
+    column: $table.wpm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get accuracy => $composableBuilder(
+    column: $table.accuracy,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TypingResultTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TypingResultTableTable> {
+  $$TypingResultTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get takenAt =>
+      $composableBuilder(column: $table.takenAt, builder: (column) => column);
+
+  GeneratedColumn<String> get language =>
+      $composableBuilder(column: $table.language, builder: (column) => column);
+
+  GeneratedColumn<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get typedChars => $composableBuilder(
+    column: $table.typedChars,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctChars => $composableBuilder(
+    column: $table.correctChars,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get incorrectChars => $composableBuilder(
+    column: $table.incorrectChars,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctWords => $composableBuilder(
+    column: $table.correctWords,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get wpm =>
+      $composableBuilder(column: $table.wpm, builder: (column) => column);
+
+  GeneratedColumn<double> get accuracy =>
+      $composableBuilder(column: $table.accuracy, builder: (column) => column);
+}
+
+class $$TypingResultTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TypingResultTableTable,
+          TypingResultTableData,
+          $$TypingResultTableTableFilterComposer,
+          $$TypingResultTableTableOrderingComposer,
+          $$TypingResultTableTableAnnotationComposer,
+          $$TypingResultTableTableCreateCompanionBuilder,
+          $$TypingResultTableTableUpdateCompanionBuilder,
+          (
+            TypingResultTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TypingResultTableTable,
+              TypingResultTableData
+            >,
+          ),
+          TypingResultTableData,
+          PrefetchHooks Function()
+        > {
+  $$TypingResultTableTableTableManager(
+    _$AppDatabase db,
+    $TypingResultTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TypingResultTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TypingResultTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TypingResultTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> takenAt = const Value.absent(),
+                Value<String> language = const Value.absent(),
+                Value<String> mode = const Value.absent(),
+                Value<int> durationSeconds = const Value.absent(),
+                Value<int> elapsedSeconds = const Value.absent(),
+                Value<int> typedChars = const Value.absent(),
+                Value<int> correctChars = const Value.absent(),
+                Value<int> incorrectChars = const Value.absent(),
+                Value<int> correctWords = const Value.absent(),
+                Value<double> wpm = const Value.absent(),
+                Value<double> accuracy = const Value.absent(),
+              }) => TypingResultTableCompanion(
+                id: id,
+                takenAt: takenAt,
+                language: language,
+                mode: mode,
+                durationSeconds: durationSeconds,
+                elapsedSeconds: elapsedSeconds,
+                typedChars: typedChars,
+                correctChars: correctChars,
+                incorrectChars: incorrectChars,
+                correctWords: correctWords,
+                wpm: wpm,
+                accuracy: accuracy,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime takenAt,
+                required String language,
+                required String mode,
+                required int durationSeconds,
+                required int elapsedSeconds,
+                required int typedChars,
+                required int correctChars,
+                required int incorrectChars,
+                required int correctWords,
+                required double wpm,
+                required double accuracy,
+              }) => TypingResultTableCompanion.insert(
+                id: id,
+                takenAt: takenAt,
+                language: language,
+                mode: mode,
+                durationSeconds: durationSeconds,
+                elapsedSeconds: elapsedSeconds,
+                typedChars: typedChars,
+                correctChars: correctChars,
+                incorrectChars: incorrectChars,
+                correctWords: correctWords,
+                wpm: wpm,
+                accuracy: accuracy,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TypingResultTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TypingResultTableTable,
+      TypingResultTableData,
+      $$TypingResultTableTableFilterComposer,
+      $$TypingResultTableTableOrderingComposer,
+      $$TypingResultTableTableAnnotationComposer,
+      $$TypingResultTableTableCreateCompanionBuilder,
+      $$TypingResultTableTableUpdateCompanionBuilder,
+      (
+        TypingResultTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TypingResultTableTable,
+          TypingResultTableData
+        >,
+      ),
+      TypingResultTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$TypingContentPackTableTableCreateCompanionBuilder =
+    TypingContentPackTableCompanion Function({
+      Value<int> id,
+      required String name,
+      required String language,
+      Value<String> wordsJson,
+      Value<String> paragraphsJson,
+      required DateTime addedAt,
+    });
+typedef $$TypingContentPackTableTableUpdateCompanionBuilder =
+    TypingContentPackTableCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String> language,
+      Value<String> wordsJson,
+      Value<String> paragraphsJson,
+      Value<DateTime> addedAt,
+    });
+
+class $$TypingContentPackTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TypingContentPackTableTable> {
+  $$TypingContentPackTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get wordsJson => $composableBuilder(
+    column: $table.wordsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get paragraphsJson => $composableBuilder(
+    column: $table.paragraphsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get addedAt => $composableBuilder(
+    column: $table.addedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TypingContentPackTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TypingContentPackTableTable> {
+  $$TypingContentPackTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get language => $composableBuilder(
+    column: $table.language,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get wordsJson => $composableBuilder(
+    column: $table.wordsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get paragraphsJson => $composableBuilder(
+    column: $table.paragraphsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get addedAt => $composableBuilder(
+    column: $table.addedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TypingContentPackTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TypingContentPackTableTable> {
+  $$TypingContentPackTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get language =>
+      $composableBuilder(column: $table.language, builder: (column) => column);
+
+  GeneratedColumn<String> get wordsJson =>
+      $composableBuilder(column: $table.wordsJson, builder: (column) => column);
+
+  GeneratedColumn<String> get paragraphsJson => $composableBuilder(
+    column: $table.paragraphsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get addedAt =>
+      $composableBuilder(column: $table.addedAt, builder: (column) => column);
+}
+
+class $$TypingContentPackTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TypingContentPackTableTable,
+          TypingContentPackTableData,
+          $$TypingContentPackTableTableFilterComposer,
+          $$TypingContentPackTableTableOrderingComposer,
+          $$TypingContentPackTableTableAnnotationComposer,
+          $$TypingContentPackTableTableCreateCompanionBuilder,
+          $$TypingContentPackTableTableUpdateCompanionBuilder,
+          (
+            TypingContentPackTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TypingContentPackTableTable,
+              TypingContentPackTableData
+            >,
+          ),
+          TypingContentPackTableData,
+          PrefetchHooks Function()
+        > {
+  $$TypingContentPackTableTableTableManager(
+    _$AppDatabase db,
+    $TypingContentPackTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TypingContentPackTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$TypingContentPackTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$TypingContentPackTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> language = const Value.absent(),
+                Value<String> wordsJson = const Value.absent(),
+                Value<String> paragraphsJson = const Value.absent(),
+                Value<DateTime> addedAt = const Value.absent(),
+              }) => TypingContentPackTableCompanion(
+                id: id,
+                name: name,
+                language: language,
+                wordsJson: wordsJson,
+                paragraphsJson: paragraphsJson,
+                addedAt: addedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                required String language,
+                Value<String> wordsJson = const Value.absent(),
+                Value<String> paragraphsJson = const Value.absent(),
+                required DateTime addedAt,
+              }) => TypingContentPackTableCompanion.insert(
+                id: id,
+                name: name,
+                language: language,
+                wordsJson: wordsJson,
+                paragraphsJson: paragraphsJson,
+                addedAt: addedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TypingContentPackTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TypingContentPackTableTable,
+      TypingContentPackTableData,
+      $$TypingContentPackTableTableFilterComposer,
+      $$TypingContentPackTableTableOrderingComposer,
+      $$TypingContentPackTableTableAnnotationComposer,
+      $$TypingContentPackTableTableCreateCompanionBuilder,
+      $$TypingContentPackTableTableUpdateCompanionBuilder,
+      (
+        TypingContentPackTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TypingContentPackTableTable,
+          TypingContentPackTableData
+        >,
+      ),
+      TypingContentPackTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$RemoteDeviceTableTableCreateCompanionBuilder =
+    RemoteDeviceTableCompanion Function({
+      Value<int> id,
+      required String name,
+      required String type,
+      Value<DateTime> createdAt,
+    });
+typedef $$RemoteDeviceTableTableUpdateCompanionBuilder =
+    RemoteDeviceTableCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String> type,
+      Value<DateTime> createdAt,
+    });
+
+class $$RemoteDeviceTableTableFilterComposer
+    extends Composer<_$AppDatabase, $RemoteDeviceTableTable> {
+  $$RemoteDeviceTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$RemoteDeviceTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $RemoteDeviceTableTable> {
+  $$RemoteDeviceTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$RemoteDeviceTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RemoteDeviceTableTable> {
+  $$RemoteDeviceTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$RemoteDeviceTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RemoteDeviceTableTable,
+          RemoteDeviceEntry,
+          $$RemoteDeviceTableTableFilterComposer,
+          $$RemoteDeviceTableTableOrderingComposer,
+          $$RemoteDeviceTableTableAnnotationComposer,
+          $$RemoteDeviceTableTableCreateCompanionBuilder,
+          $$RemoteDeviceTableTableUpdateCompanionBuilder,
+          (
+            RemoteDeviceEntry,
+            BaseReferences<
+              _$AppDatabase,
+              $RemoteDeviceTableTable,
+              RemoteDeviceEntry
+            >,
+          ),
+          RemoteDeviceEntry,
+          PrefetchHooks Function()
+        > {
+  $$RemoteDeviceTableTableTableManager(
+    _$AppDatabase db,
+    $RemoteDeviceTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RemoteDeviceTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RemoteDeviceTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RemoteDeviceTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => RemoteDeviceTableCompanion(
+                id: id,
+                name: name,
+                type: type,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                required String type,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => RemoteDeviceTableCompanion.insert(
+                id: id,
+                name: name,
+                type: type,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$RemoteDeviceTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RemoteDeviceTableTable,
+      RemoteDeviceEntry,
+      $$RemoteDeviceTableTableFilterComposer,
+      $$RemoteDeviceTableTableOrderingComposer,
+      $$RemoteDeviceTableTableAnnotationComposer,
+      $$RemoteDeviceTableTableCreateCompanionBuilder,
+      $$RemoteDeviceTableTableUpdateCompanionBuilder,
+      (
+        RemoteDeviceEntry,
+        BaseReferences<
+          _$AppDatabase,
+          $RemoteDeviceTableTable,
+          RemoteDeviceEntry
+        >,
+      ),
+      RemoteDeviceEntry,
+      PrefetchHooks Function()
+    >;
+typedef $$TrackingGoalTableTableCreateCompanionBuilder =
+    TrackingGoalTableCompanion Function({
+      Value<int> id,
+      required String name,
+      Value<String?> description,
+      Value<int> color,
+      Value<int> weekdaysMask,
+      required DateTime startDate,
+      Value<DateTime?> endDate,
+      Value<String?> remindersCsv,
+      required DateTime createdAt,
+    });
+typedef $$TrackingGoalTableTableUpdateCompanionBuilder =
+    TrackingGoalTableCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String?> description,
+      Value<int> color,
+      Value<int> weekdaysMask,
+      Value<DateTime> startDate,
+      Value<DateTime?> endDate,
+      Value<String?> remindersCsv,
+      Value<DateTime> createdAt,
+    });
+
+class $$TrackingGoalTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TrackingGoalTableTable> {
+  $$TrackingGoalTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get weekdaysMask => $composableBuilder(
+    column: $table.weekdaysMask,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remindersCsv => $composableBuilder(
+    column: $table.remindersCsv,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TrackingGoalTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TrackingGoalTableTable> {
+  $$TrackingGoalTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get weekdaysMask => $composableBuilder(
+    column: $table.weekdaysMask,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remindersCsv => $composableBuilder(
+    column: $table.remindersCsv,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TrackingGoalTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TrackingGoalTableTable> {
+  $$TrackingGoalTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<int> get weekdaysMask => $composableBuilder(
+    column: $table.weekdaysMask,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<String> get remindersCsv => $composableBuilder(
+    column: $table.remindersCsv,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$TrackingGoalTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TrackingGoalTableTable,
+          TrackingGoalTableData,
+          $$TrackingGoalTableTableFilterComposer,
+          $$TrackingGoalTableTableOrderingComposer,
+          $$TrackingGoalTableTableAnnotationComposer,
+          $$TrackingGoalTableTableCreateCompanionBuilder,
+          $$TrackingGoalTableTableUpdateCompanionBuilder,
+          (
+            TrackingGoalTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TrackingGoalTableTable,
+              TrackingGoalTableData
+            >,
+          ),
+          TrackingGoalTableData,
+          PrefetchHooks Function()
+        > {
+  $$TrackingGoalTableTableTableManager(
+    _$AppDatabase db,
+    $TrackingGoalTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TrackingGoalTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TrackingGoalTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TrackingGoalTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<int> color = const Value.absent(),
+                Value<int> weekdaysMask = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<String?> remindersCsv = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => TrackingGoalTableCompanion(
+                id: id,
+                name: name,
+                description: description,
+                color: color,
+                weekdaysMask: weekdaysMask,
+                startDate: startDate,
+                endDate: endDate,
+                remindersCsv: remindersCsv,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                Value<String?> description = const Value.absent(),
+                Value<int> color = const Value.absent(),
+                Value<int> weekdaysMask = const Value.absent(),
+                required DateTime startDate,
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<String?> remindersCsv = const Value.absent(),
+                required DateTime createdAt,
+              }) => TrackingGoalTableCompanion.insert(
+                id: id,
+                name: name,
+                description: description,
+                color: color,
+                weekdaysMask: weekdaysMask,
+                startDate: startDate,
+                endDate: endDate,
+                remindersCsv: remindersCsv,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TrackingGoalTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TrackingGoalTableTable,
+      TrackingGoalTableData,
+      $$TrackingGoalTableTableFilterComposer,
+      $$TrackingGoalTableTableOrderingComposer,
+      $$TrackingGoalTableTableAnnotationComposer,
+      $$TrackingGoalTableTableCreateCompanionBuilder,
+      $$TrackingGoalTableTableUpdateCompanionBuilder,
+      (
+        TrackingGoalTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TrackingGoalTableTable,
+          TrackingGoalTableData
+        >,
+      ),
+      TrackingGoalTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$TrackingCheckinTableTableCreateCompanionBuilder =
+    TrackingCheckinTableCompanion Function({
+      Value<int> id,
+      required int goalId,
+      required DateTime date,
+    });
+typedef $$TrackingCheckinTableTableUpdateCompanionBuilder =
+    TrackingCheckinTableCompanion Function({
+      Value<int> id,
+      Value<int> goalId,
+      Value<DateTime> date,
+    });
+
+class $$TrackingCheckinTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TrackingCheckinTableTable> {
+  $$TrackingCheckinTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get goalId => $composableBuilder(
+    column: $table.goalId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TrackingCheckinTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TrackingCheckinTableTable> {
+  $$TrackingCheckinTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get goalId => $composableBuilder(
+    column: $table.goalId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TrackingCheckinTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TrackingCheckinTableTable> {
+  $$TrackingCheckinTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get goalId =>
+      $composableBuilder(column: $table.goalId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+}
+
+class $$TrackingCheckinTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TrackingCheckinTableTable,
+          TrackingCheckinTableData,
+          $$TrackingCheckinTableTableFilterComposer,
+          $$TrackingCheckinTableTableOrderingComposer,
+          $$TrackingCheckinTableTableAnnotationComposer,
+          $$TrackingCheckinTableTableCreateCompanionBuilder,
+          $$TrackingCheckinTableTableUpdateCompanionBuilder,
+          (
+            TrackingCheckinTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $TrackingCheckinTableTable,
+              TrackingCheckinTableData
+            >,
+          ),
+          TrackingCheckinTableData,
+          PrefetchHooks Function()
+        > {
+  $$TrackingCheckinTableTableTableManager(
+    _$AppDatabase db,
+    $TrackingCheckinTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TrackingCheckinTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TrackingCheckinTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$TrackingCheckinTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> goalId = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+              }) => TrackingCheckinTableCompanion(
+                id: id,
+                goalId: goalId,
+                date: date,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int goalId,
+                required DateTime date,
+              }) => TrackingCheckinTableCompanion.insert(
+                id: id,
+                goalId: goalId,
+                date: date,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TrackingCheckinTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TrackingCheckinTableTable,
+      TrackingCheckinTableData,
+      $$TrackingCheckinTableTableFilterComposer,
+      $$TrackingCheckinTableTableOrderingComposer,
+      $$TrackingCheckinTableTableAnnotationComposer,
+      $$TrackingCheckinTableTableCreateCompanionBuilder,
+      $$TrackingCheckinTableTableUpdateCompanionBuilder,
+      (
+        TrackingCheckinTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $TrackingCheckinTableTable,
+          TrackingCheckinTableData
+        >,
+      ),
+      TrackingCheckinTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2196,4 +7258,21 @@ class $AppDatabaseManager {
       $$TaskScheduleTableTableTableManager(_db, _db.taskScheduleTable);
   $$TaskCompletionTableTableTableManager get taskCompletionTable =>
       $$TaskCompletionTableTableTableManager(_db, _db.taskCompletionTable);
+  $$PomodoroSessionTableTableTableManager get pomodoroSessionTable =>
+      $$PomodoroSessionTableTableTableManager(_db, _db.pomodoroSessionTable);
+  $$FocusTagTableTableTableManager get focusTagTable =>
+      $$FocusTagTableTableTableManager(_db, _db.focusTagTable);
+  $$TypingResultTableTableTableManager get typingResultTable =>
+      $$TypingResultTableTableTableManager(_db, _db.typingResultTable);
+  $$TypingContentPackTableTableTableManager get typingContentPackTable =>
+      $$TypingContentPackTableTableTableManager(
+        _db,
+        _db.typingContentPackTable,
+      );
+  $$RemoteDeviceTableTableTableManager get remoteDeviceTable =>
+      $$RemoteDeviceTableTableTableManager(_db, _db.remoteDeviceTable);
+  $$TrackingGoalTableTableTableManager get trackingGoalTable =>
+      $$TrackingGoalTableTableTableManager(_db, _db.trackingGoalTable);
+  $$TrackingCheckinTableTableTableManager get trackingCheckinTable =>
+      $$TrackingCheckinTableTableTableManager(_db, _db.trackingCheckinTable);
 }

@@ -4,5 +4,8 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
+	<!-- Đọc file JSON/CSV người dùng tự chọn khi import từ vựng gõ phím -->
+	<key>com.apple.security.files.user-selected.read-only</key>
+	<true/>
 </dict>
 </plist>

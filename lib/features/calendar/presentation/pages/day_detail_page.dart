@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/domain/index.dart';
+import '../../../../core/theme/index.dart';
 import '../../../../core/utils/index.dart';
 import '../cubit/calendar_cubit.dart';
 import '../widgets/add_event_sheet.dart';
@@ -55,25 +56,24 @@ class DayDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lunar = solarToLunar(day);
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F2),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFDF7F2),
         elevation: 0,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '${_weekdays[day.weekday - 1]}, ${day.day}/${day.month}/${day.year}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1C1C1E),
+                color: colors.textPrimary,
               ),
             ),
             Text(
               '${lunar.day}/${lunar.month} âm lịch',
-              style: const TextStyle(fontSize: 12, color: Color(0xFF8E8E93)),
+              style: TextStyle(fontSize: 12, color: colors.textMuted),
             ),
           ],
         ),
@@ -82,11 +82,11 @@ class DayDetailPage extends StatelessWidget {
         builder: (context, state) {
           final events = state.eventsOf(day);
           if (events.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'Chưa có sự kiện nào.\nNhấn + để thêm.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF8E8E93)),
+                style: TextStyle(color: colors.textMuted),
               ),
             );
           }
@@ -101,7 +101,7 @@ class DayDetailPage extends StatelessWidget {
                 key: ValueKey(e.id ?? i),
                 direction: DismissDirection.endToStart,
                 background: Container(
-                  color: Colors.red,
+                  color: colors.danger,
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
                   child: const Icon(Icons.delete, color: Colors.white),
@@ -137,8 +137,8 @@ class DayDetailPage extends StatelessWidget {
                             e.description!,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 12, color: Color(0xFF8E8E93)),
+                            style: TextStyle(
+                                fontSize: 12, color: colors.textMuted),
                           ),
                         ),
                     ],
@@ -156,10 +156,8 @@ class DayDetailPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        shape: const CircleBorder(),
         onPressed: () => _add(context),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add),
       ),
     );
   }

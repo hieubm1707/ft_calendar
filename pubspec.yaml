@@ -1,5 +1,5 @@
 name: example_app
-description: "A new Flutter project."
+description: "Habitool: small tools for daily habits."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -61,6 +61,14 @@ dependencies:
   # Widget home/lock screen (render UI Dart → ảnh, hiển thị ở native widget)
   home_widget: ^0.7.0
   shared_preferences: ^2.3.2
+  tray_manager: ^0.5.3
+  window_manager: ^0.5.2
+
+  # Chọn file JSON/CSV để import từ vựng cho bài test gõ phím
+  file_selector: ^1.0.3
+
+  # Giữ màn hình sáng khi đồng hồ tập trung ở chế độ toàn màn hình
+  wakelock_plus: ^1.6.1
 
 dev_dependencies:
   flutter_test:
@@ -84,10 +92,33 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    # Icon template cho menu bar macOS (đơn sắc, macOS tự tô màu theo theme).
+    - assets/tray/tray_icon.png
+    # Nội dung bài test gõ phím. Khai báo cả THƯ MỤC: thả thêm file .json vào
+    # đây là app tự nạp, không phải sửa pubspec (xem assets/typing/README.md).
+    - assets/typing/en/
+    - assets/typing/vi/
+
+  # Be Vietnam Pro (giấy phép ở assets/fonts/OFL.txt). Bản Tabular là số đều, sinh
+  # bằng branding/tools/make_tabular_font.py.
+  fonts:
+    - family: BeVietnamPro
+      fonts:
+        - asset: assets/fonts/BeVietnamPro-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/BeVietnamPro-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/BeVietnamPro-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/BeVietnamPro-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/BeVietnamPro-ExtraBold.ttf
+          weight: 800
+    - family: BeVietnamProTabular
+      fonts:
+        - asset: assets/fonts/BeVietnamProTabular-ExtraBold.ttf
+          weight: 800
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

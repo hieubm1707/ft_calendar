@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/index.dart';
 import '../../domain/index.dart';
 
 const kTaskColors = <int>[
@@ -15,7 +16,6 @@ Future<TaskSchedule?> showAddTaskSheet(BuildContext context) {
   return showModalBottomSheet<TaskSchedule>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -115,6 +115,7 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final colors = context.colors;
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 16, 20, 16 + bottomInset),
       child: SingleChildScrollView(
@@ -163,7 +164,7 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
             // Giờ tuỳ chọn
             Row(
               children: [
-                const Icon(Icons.schedule, size: 20, color: Color(0xFF8E8E93)),
+                Icon(Icons.schedule, size: 20, color: colors.textMuted),
                 const SizedBox(width: 8),
                 if (_time == null)
                   ActionChip(
@@ -195,11 +196,11 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
               ],
             ),
             const SizedBox(height: 16),
-            const Row(
+            Row(
               children: [
-                Icon(Icons.flag, size: 16, color: Color(0xFF8E8E93)),
-                SizedBox(width: 6),
-                Text('Cờ ưu tiên', style: TextStyle(color: Color(0xFF8E8E93))),
+                Icon(Icons.flag, size: 16, color: colors.textMuted),
+                const SizedBox(width: 6),
+                Text('Cờ ưu tiên', style: TextStyle(color: colors.textMuted)),
               ],
             ),
             const SizedBox(height: 8),
@@ -217,7 +218,7 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
                       color: Color(c),
                       shape: BoxShape.circle,
                       border: selected
-                          ? Border.all(color: Colors.black87, width: 2)
+                          ? Border.all(color: colors.textPrimary, width: 2)
                           : null,
                     ),
                     child: selected
@@ -239,6 +240,7 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
   }
 
   Widget _modeSection() {
+    final colors = context.colors;
     switch (_mode) {
       case _Mode.one:
         return InkWell(
@@ -248,7 +250,7 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
           },
           child: Row(
             children: [
-              const Icon(Icons.event, size: 20, color: Color(0xFF8E8E93)),
+              Icon(Icons.event, size: 20, color: colors.textMuted),
               const SizedBox(width: 8),
               Text(_fmt(_oneDate), style: const TextStyle(fontSize: 15)),
             ],
@@ -310,7 +312,7 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
               },
               child: Row(
                 children: [
-                  const Icon(Icons.event, size: 20, color: Color(0xFF8E8E93)),
+                  Icon(Icons.event, size: 20, color: colors.textMuted),
                   const SizedBox(width: 8),
                   Text('Bắt đầu ${_fmt(_weeklyStart)}',
                       style: const TextStyle(fontSize: 15)),

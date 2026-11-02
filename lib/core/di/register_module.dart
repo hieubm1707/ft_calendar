@@ -13,4 +13,23 @@ abstract class RegisterModule {
 
   @lazySingleton
   TaskDao taskDao(AppDatabase db) => db.taskDao;
+
+  @lazySingleton
+  PomodoroDao pomodoroDao(AppDatabase db) => db.pomodoroDao;
+
+  @lazySingleton
+  FocusTagDao focusTagDao(AppDatabase db) => db.focusTagDao;
+
+  @lazySingleton
+  TypingDao typingDao(AppDatabase db) => db.typingDao;
+
+  @lazySingleton
+  TypingContentDao typingContentDao(AppDatabase db) => db.typingContentDao;
+
+  @lazySingleton
+  RemoteDeviceDao remoteDeviceDao(AppDatabase db) => db.remoteDeviceDao;
+
+  @lazySingleton
+  TrackingDao trackingDao(AppDatabase db) => db.trackingDao;
 }
+

@@ -12,6 +12,8 @@ const kEventColors = <int>[
   0xFFEC407A, // hồng
 ];
 
-/// Màu chữ dễ đọc (đậm hơn) suy ra từ màu nền của sự kiện.
-Color readableOn(Color base) =>
-    HSLColor.fromColor(base).withLightness(0.34).toColor();
+/// Màu chữ dễ đọc suy ra từ màu sự kiện, đặt trên nền nhạt của chính màu đó:
+/// chế độ Sáng → đậm hơn, chế độ Tối → sáng hơn.
+Color readableOn(Color base, Brightness brightness) => HSLColor.fromColor(base)
+    .withLightness(brightness == Brightness.dark ? 0.78 : 0.34)
+    .toColor();

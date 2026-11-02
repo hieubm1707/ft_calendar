@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../domain/index.dart';
+import '../theme/index.dart';
 
 /// 3 cỡ widget: day = 1 ngày (agenda), week = 1 tuần, month = 1 tháng.
 enum WidgetMode { day, week, month }
@@ -57,7 +58,7 @@ class WidgetCalendarView extends StatelessWidget {
   static const _bg = Color(0xE6121212);
   static const _white = Color(0xFFFFFFFF);
   static const _faint = Color(0x99FFFFFF);
-  static const _accent = Color(0xFF00B3A6);
+  static final _accent = AppColors.dark.accent;
 
   DateTime _dayOnly(DateTime d) => DateTime(d.year, d.month, d.day);
   DateTime get _startOfWeek {
@@ -77,17 +78,21 @@ class WidgetCalendarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.ltr,
-      child: SizedBox(
-        width: size.width,
-        height: size.height,
-        child: Container(
-          decoration: BoxDecoration(
-            color: _bg,
-            borderRadius: BorderRadius.circular(20),
+      // Render ngoài MaterialApp nên không nhận font từ theme.
+      child: DefaultTextStyle(
+        style: const TextStyle(fontFamily: AppFonts.primary),
+        child: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Container(
+            decoration: BoxDecoration(
+              color: _bg,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: EdgeInsets.fromLTRB(
+                11, 11, 11, mode == WidgetMode.month ? 9 : 11),
+            child: mode == WidgetMode.day ? _buildDay() : _buildGrid(),
           ),
-          padding: EdgeInsets.fromLTRB(
-              11, 11, 11, mode == WidgetMode.month ? 9 : 11),
-          child: mode == WidgetMode.day ? _buildDay() : _buildGrid(),
         ),
       ),
     );
@@ -245,7 +250,7 @@ class _DayCell extends StatelessWidget {
     required this.style,
   });
 
-  static const _accent = Color(0xFF00B3A6);
+  static final _accent = AppColors.dark.accent;
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +269,7 @@ class _DayCell extends StatelessWidget {
               height: style.circle,
               alignment: Alignment.center,
               decoration: isToday
-                  ? const BoxDecoration(color: _accent, shape: BoxShape.circle)
+                  ? BoxDecoration(color: _accent, shape: BoxShape.circle)
                   : null,
               child: Text('${date.day}',
                   style: TextStyle(

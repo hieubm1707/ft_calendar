@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:injectable/injectable.dart';
@@ -18,12 +21,19 @@ class HomeWidgetService {
   static const _androidProvider =
       'com.example.example_app.CalendarWidgetProvider';
 
+  /// Widget home/lock screen chỉ có trên iOS/Android. Trên macOS/desktop bỏ qua:
+  /// plugin home_widget không có bản macOS, và App Group (bắt buộc cho widget)
+  /// cần tài khoản Apple Developer trả phí để ký.
+  bool get _supported => !kIsWeb && (Platform.isIOS || Platform.isAndroid);
+
   Future<void> init() async {
+    if (!_supported) return;
     await HomeWidget.setAppGroupId(_appGroupId);
   }
 
   /// Render lại cả 3 cỡ rồi yêu cầu native cập nhật. Best-effort (nuốt lỗi).
   Future<void> refreshAll() async {
+    if (!_supported) return;
     final today = DateTime.now();
     try {
       // Render ĐÚNG kích thước point thật của từng family iOS (không scale
