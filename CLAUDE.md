@@ -115,7 +115,7 @@ Mỗi barrel là public API của **một tầng**. Không gom nhiều tầng v�
 
 1. **File KHÔNG import barrel của chính tầng nó** (tránh import vòng). Dùng đường dẫn tương đối cho file sibling.
    - VD: `event_repository_impl.dart` import `../datasources/event_local_datasource.dart`, KHÔNG import `../index.dart`.
-2. **Xuyên feature chỉ được qua `features/<feature>/domain/index.dart`.** Cấm import `data/` hay `presentation/` của feature khác.
+2. **Xuyên feature chỉ được qua `features/<feature>/domain/index.dart`.** Cấm import `data/` hay `presentation/` của feature khác. **Ngoại lệ duy nhất:** tầng ghép trang `lib/app.dart` và `features/home/` được import `presentation/` của feature khác để mở trang.
 3. **`core/database/drift/index.dart` (Drift) chỉ tầng data import.** KHÔNG bao giờ re-export nó qua `core/domain` — nếu không domain sẽ chạm được Drift và mất ranh giới tầng.
 4. `core/domain/index.dart` và `core/error/index.dart` an toàn để import ở bất kỳ đâu.
 5. File generated (`*.g.dart`, `injection.config.dart`) tham chiếu file cụ thể, không qua barrel — đúng hành vi generator, đừng sửa.
@@ -199,7 +199,7 @@ Tab "Tasks" quản lý công việc theo ngày, tách biệt với sự kiện l
 - **Mô hình**: `TaskScheduleTable` (loại `dates` = 1/nhiều ngày cụ thể qua `datesCsv`; loại `weekly` = lặp theo `weekdaysMask` từ `startDate`, cờ `active` để huỷ lặp; `note` = mô tả, `minutesOfDay` = giờ tuỳ chọn, `color` = cờ ưu tiên) + `TaskCompletionTable` (đánh dấu hoàn thành theo từng ngày). DB **schemaVersion 4** (v3 tạo 2 bảng; v4 thêm `note` + `minutesOfDay`). Event cũng có `description` (nhập ở add_event_sheet, hiện ở DayDetailPage).
 - **Instance sinh ảo**: `expandTaskInstances()` (hàm thuần ở `features/tasks/domain/task_recurrence.dart`, có unit test) sinh task cho từng ngày trong khoảng — task lặp tự "xuất hiện" đến khi huỷ, KHÔNG lưu sẵn từng ngày.
 - **Tầng**: nhân theo pattern `events` (data/domain/presentation); entity + `TaskRepository` đặt ở `features/tasks/domain` (feature độc lập, không dùng chung).
-- **Điều hướng**: `features/shell/presentation/main_shell.dart` (IndexedStack + `AppBottomNav` chuyển tab Typing/Calendar/Tasks/Focus/Notes). `app.dart` → `MainShell`. Các page (TypingPage, CalendarPage, TasksPage) là Scaffold riêng, KHÔNG tự chứa bottom nav.
+- **Điều hướng**: `app.dart` → `features/home/presentation/home.dart` (`IndexedStack` + `AppBottomNav` chuyển Trang chủ/Cài đặt). `HomePage` là lưới các tính năng theo `AppTab`, bấm vào thì mở trang. Các page (CalendarPage, TasksPage, TrackingPage…) là Scaffold riêng, KHÔNG tự chứa bottom nav.
 
 ## Feature Tracking (`features/tracking/`) — ô "Tracking" ở Trang chủ
 
@@ -245,7 +245,7 @@ Trên macOS pomodoro chạy như một app menu bar, đồng hồ không phụ t
 - **`PomodoroCubit` là `@lazySingleton`**, cung cấp ở gốc `app.dart` bằng `BlocProvider.value` → đổi tab / ẩn cửa sổ không reset phiên. Trang Focus chỉ hiển thị, KHÔNG tự tạo cubit.
 - **`DesktopWindowService`** (`core/desktop/`, dùng `window_manager`): `init()` phải gọi **trước `runApp`**; đặt cỡ cửa sổ (thường 520×780, mini 280×330), ghim trên cùng, ẩn/hiện. Bấm nút đóng chỉ ẩn (`setPreventClose(true)` + `AppDelegate.applicationShouldTerminateAfterLastWindowClosed = false`) → thoát hẳn bằng menu "Thoát" ở menu bar. Mọi hàm no-op trên iOS/Android nên UI gọi thẳng, không rải `Platform.isMacOS`.
 - **`PomodoroTrayController`** (`features/pomodoro/presentation/desktop/`, dùng `tray_manager`): nghe `PomodoroCubit.stream`, `setTitle` mm:ss mỗi giây; **menu chỉ dựng lại khi phase/runStatus/label/miniMode đổi**, không dựng mỗi tick. `start()` gọi sau frame đầu vì `setIcon` đọc asset qua rootBundle. `tray_manager` chỉ tạo status item khi `setIcon` được gọi → luôn setIcon trước setTitle. Icon: `assets/tray/tray_icon.png` (template đơn sắc, macOS tự tô màu).
-- **Cửa sổ nổi nhỏ**: `DesktopWindowService.miniMode` → `MainShell` đổi sang `PomodoroMiniView` (bỏ bottom nav) + cửa sổ thu nhỏ và ghim trên cùng.
+- **Cửa sổ nổi nhỏ**: `DesktopWindowService.miniMode` → `Home` đổi sang `PomodoroMiniView` (bỏ bottom nav) + cửa sổ thu nhỏ và ghim trên cùng.
 - **Thông báo**: macOS có implementation riêng — phải xin quyền qua `MacOSFlutterLocalNotificationsPlugin` (resolve theo `IOSFlutterLocalNotificationsPlugin` trả null → thông báo im lặng).
 - **Verify trên macOS**: terminal thường không có quyền Screen Recording nên `screencapture` chỉ chụp được hình nền. Kiểm tra bằng `CGWindowListCopyWindowInfo` (script Swift): cửa sổ chính = layer 0, ghim trên cùng = layer 3, status item menu bar = layer 25 (bề rộng item tăng khi có title mm:ss).
 
