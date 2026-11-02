@@ -18,7 +18,7 @@ class TaskSourceChip extends StatelessWidget {
       child: Text(
         'Từ Tasks',
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: FontWeight.w600,
           color: colors.textSecondary,
         ),

@@ -24,7 +24,13 @@ class TrackingRing extends StatelessWidget {
       height: size,
       child: CustomPaint(
         painter: _RingPainter(progress: progress, color: color),
-        child: Center(child: child),
+        // Cỡ chữ hệ thống lớn: thu nội dung lại cho nằm gọn trong vòng.
+        child: Padding(
+          padding: const EdgeInsets.all(_RingPainter._stroke + 8),
+          child: Center(
+            child: FittedBox(fit: BoxFit.scaleDown, child: child),
+          ),
+        ),
       ),
     );
   }
