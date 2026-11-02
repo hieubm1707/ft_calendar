@@ -21,14 +21,15 @@ dart run build_runner build --force-jit
 flutter analyze        # phải "No issues found!"
 flutter test           # tất cả test pass
 ```
-Rồi **kiểm thử trên máy ảo iOS — iPhone 16e (KHÔNG dùng Android để verify)**:
+Rồi **kiểm thử trên 1 trong 2 nền tảng, ưu tiên iOS**:
 ```bash
-flutter run -d 3E46A6BE-AF54-4F4A-8530-A908B29B6E33   # iPhone 16e simulator
+flutter run -d 3E46A6BE-AF54-4F4A-8530-A908B29B6E33   # iOS: iPhone 16e simulator (ưu tiên)
+flutter run -d emulator-5554                          # Android: khi iOS không dùng được, hoặc thay đổi chỉ thuộc native Android
 ```
-Thao tác/chụp màn hình bằng **idb** (xem cách dùng ở memory `ios-ui-testing-with-idb`):
-`idb ui tap X Y` (X,Y là point = pixel/3), `idb screenshot`, `idb launch com.example.exampleApp`.
-Xác nhận feature chạy đúng trên iPhone 16e (không crash) rồi mới sang bước 5.
-> ⚠️ Yêu cầu của người dùng: **luôn verify trên iOS (iPhone 16e)**, không kiểm thử trên Android nữa.
+- **iOS**: thao tác/chụp bằng **idb** (xem memory `ios-ui-testing-with-idb`): `idb ui tap X Y` (X,Y là point = pixel/3), `idb screenshot`, `idb launch com.example.exampleApp`.
+- **Android**: thao tác/chụp bằng **adb**: `adb shell input tap X Y` (X,Y là pixel), `adb exec-out screencap -p > x.png`, bundle id `com.example.example_app`.
+
+Xác nhận feature chạy đúng (không crash) rồi mới sang bước 5. Khi báo cáo, ghi rõ đã verify trên nền tảng nào. Thay đổi native chỉ thuộc một nền tảng thì phải verify trên đúng nền tảng đó.
 
 **5. Commit** — chỉ commit khi bước 4 đã pass.
 ```bash
@@ -41,6 +42,20 @@ git add -A && git commit -m "<type>: <mô tả ngắn>"   # feat/fix/refactor/ch
 Commit message viết theo Conventional Commits; một task = một nhánh.
 
 **Sau khi merge vào master:** LUÔN xoá nhánh vừa merge (`git branch -d <branch>`).
+
+## Sub agent (`.claude/agents/`)
+
+| Agent | Dùng khi | Quyền |
+|---|---|---|
+| `drift-data-specialist` | Đổi table, DAO, migration (chạy trước feature) | Sửa tầng DB |
+| `flutter-feature-dev` | Viết feature theo plan đã chốt | Sửa code feature |
+| `native-platform-specialist` | Đụng `ios/`, `android/`, `macos/`, `web/`, widget OS | Sửa native |
+| `flutter-test-writer` | Tăng độ phủ test, khoá hành vi trước refactor | Chỉ sửa `test/` |
+| `architecture-reviewer` | Review ranh giới tầng, barrel, `Either` trước Verify | Chỉ đọc |
+| `ui-ux-reviewer` | Review khi đổi UI, trước Verify | Chỉ đọc |
+| `verifier` | Bước 4, trên iOS hoặc Android (ưu tiên iOS) | Chạy lệnh, không sửa code |
+
+Việc nhỏ thì phiên chính tự làm, không gọi agent. Không agent nào được commit; phiên chính commit khi người dùng yêu cầu.
 
 ## Code generation
 
@@ -75,7 +90,13 @@ lib/
 │   ├── error/               # Failure (domain) + Exception (data)
 │   ├── usecase/             # abstract UseCase<T, Params>
 │   ├── database/drift/      # ⚠️ infrastructure: AppDatabase (1 DB), tables, DAOs
-│   └── di/                  # get_it + injectable
+│   ├── di/                  # get_it + injectable
+│   ├── theme/               # AppColors, AppTheme, font (chỉ tầng presentation import)
+│   ├── notifications/       # NotificationService: thông báo cục bộ
+│   ├── home_widget/         # render + cập nhật widget OS
+│   ├── desktop/             # cửa sổ macOS, no-op trên nền tảng khác
+│   ├── hardware/            # IrService: phát hồng ngoại
+│   └── utils/               # tiện ích thuần, vd. âm lịch
 └── features/<feature>/
     ├── data/                # datasource (Drift) + model/mapper + repository impl
     ├── domain/              # usecases (interface repo nằm ở core/domain nếu dùng chung)
@@ -85,7 +106,7 @@ lib/
 Luồng phụ thuộc (chỉ hướng vào trong): `Page → Bloc → UseCase → Repository(interface) ← RepositoryImpl → DataSource → DAO → Drift`.
 
 - `core/domain` và `features/*/domain` là **thuần Dart** — KHÔNG import Flutter/Drift.
-- Bloc chỉ gọi `UseCase`, không đụng Repository/DataSource.
+- Bloc lấy và ghi dữ liệu qua `UseCase`, không đụng Repository/DataSource. **Được gọi trực tiếp service hạ tầng** không chứa dữ liệu nghiệp vụ (vd. `NotificationService`, `HomeWidgetService`, `TrackingReminderSync`).
 - Tầng data bắt `Exception` → trả về `Failure`; tầng trên không thấy exception.
 
 ## Quy tắc barrel file (`index.dart`) — barrel-theo-tầng
