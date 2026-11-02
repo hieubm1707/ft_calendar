@@ -177,7 +177,8 @@ class _CalendarViewState extends State<_CalendarView> {
           children: [
             Expanded(
               child: BlocConsumer<CalendarCubit, CalendarState>(
-                listenWhen: (p, c) => c.status == CalendarStatus.failure,
+                listenWhen: (p, c) =>
+                    c.errorMessage != null && p.errorMessage != c.errorMessage,
                 listener: (context, state) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.errorMessage ?? 'Lỗi')),

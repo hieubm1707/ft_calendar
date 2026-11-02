@@ -23,10 +23,13 @@ class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
         .write(TaskScheduleTableCompanion(active: Value(active)));
   }
 
-  Future<void> deleteSchedule(int id) async {
-    await (delete(taskCompletionTable)..where((t) => t.scheduleId.equals(id)))
-        .go();
-    await (delete(taskScheduleTable)..where((t) => t.id.equals(id))).go();
+  Future<void> deleteSchedule(int id) {
+    return transaction(() async {
+      await (delete(taskCompletionTable)
+            ..where((t) => t.scheduleId.equals(id)))
+          .go();
+      await (delete(taskScheduleTable)..where((t) => t.id.equals(id))).go();
+    });
   }
 
   Future<List<TaskCompletionTableData>> getCompletions() {
@@ -34,16 +37,19 @@ class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
   }
 
   /// Upsert trạng thái hoàn thành cho (scheduleId, date).
-  Future<void> setDone(int scheduleId, DateTime date, bool done) async {
-    await (delete(taskCompletionTable)
-          ..where((t) => t.scheduleId.equals(scheduleId) & t.date.equals(date)))
-        .go();
-    await into(taskCompletionTable).insert(
-      TaskCompletionTableCompanion.insert(
-        scheduleId: scheduleId,
-        date: date,
-        done: Value(done),
-      ),
-    );
+  Future<void> setDone(int scheduleId, DateTime date, bool done) {
+    return transaction(() async {
+      await (delete(taskCompletionTable)
+            ..where(
+                (t) => t.scheduleId.equals(scheduleId) & t.date.equals(date)))
+          .go();
+      await into(taskCompletionTable).insert(
+        TaskCompletionTableCompanion.insert(
+          scheduleId: scheduleId,
+          date: date,
+          done: Value(done),
+        ),
+      );
+    });
   }
 }

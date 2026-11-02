@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -105,7 +106,7 @@ class TrackingCubit extends Cubit<TrackingState> {
   Future<void> deleteGoal(TrackingGoal goal) async {
     final id = goal.id;
     if (id == null || goal.isFromTask) return;
-    await _notifications.cancelMany(_reminderIds(id));
+    await _cancelReminders(id);
     await _mutate(_deleteGoal(id));
   }
 
@@ -143,10 +144,21 @@ class TrackingCubit extends Cubit<TrackingState> {
   bool _ended(TrackingGoal goal) =>
       goal.endDate != null && goal.endDate!.isBefore(_today());
 
+  /// Lỗi plugin chỉ log, không chặn thao tác dữ liệu. Khi [kShowGoalReminders]
+  /// tắt, nhắc còn sót được [TrackingReminderSync] dọn ở lần đồng bộ sau; khi
+  /// bật thì chưa có gì dọn nhắc của mục tiêu đã xoá.
+  Future<void> _cancelReminders(int goalId) async {
+    try {
+      await _notifications.cancelMany(_reminderIds(goalId));
+    } catch (e) {
+      debugPrint('TrackingCubit: $e');
+    }
+  }
+
   Future<void> _rescheduleReminders(TrackingGoal goal) async {
     final id = goal.id;
     if (id == null || goal.isFromTask) return;
-    await _notifications.cancelMany(_reminderIds(id));
+    await _cancelReminders(id);
     if (_ended(goal)) return;
 
     final daily = goal.frequency == TrackingFrequency.daily;
@@ -172,7 +184,7 @@ class TrackingCubit extends Cubit<TrackingState> {
           g.id != null &&
           g.reminders.isNotEmpty &&
           _ended(g)) {
-        await _notifications.cancelMany(_reminderIds(g.id!));
+        await _cancelReminders(g.id!);
       }
     }
   }

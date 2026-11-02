@@ -48,6 +48,10 @@ extension TrackingGoalEntityMapper on TrackingGoal {
     endDate: Value(endDate == null ? null : _dayOnly(endDate!)),
     remindersCsv: Value(reminders.isEmpty ? null : reminders.join(',')),
   );
+
+  /// Bản để thêm mới: `createdAt` là cột bắt buộc, chỉ đặt 1 lần lúc tạo.
+  TrackingGoalTableCompanion toInsertCompanion(DateTime createdAt) =>
+      toCompanion().copyWith(createdAt: Value(createdAt));
 }
 
 extension TrackingCheckinRowMapper on TrackingCheckinTableData {

@@ -72,7 +72,8 @@ class _SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     return BlocConsumer<TrackingReminderCubit, TrackingReminderState>(
-      listenWhen: (p, c) => c.status == TrackingReminderStatus.failure,
+      listenWhen: (p, c) =>
+          c.errorMessage != null && p.errorMessage != c.errorMessage,
       listener: (context, state) => ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(state.errorMessage ?? 'Lỗi'))),

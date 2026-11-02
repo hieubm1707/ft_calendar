@@ -62,7 +62,8 @@ class _ReportView extends StatelessWidget {
                 fontWeight: FontWeight.w800, color: colors.textPrimary)),
       ),
       body: BlocConsumer<PomodoroReportCubit, PomodoroReportState>(
-        listenWhen: (p, c) => c.status == PomodoroReportStatus.failure,
+        listenWhen: (p, c) =>
+            c.errorMessage != null && p.errorMessage != c.errorMessage,
         listener: (context, state) => ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(state.errorMessage ?? 'Lỗi'))),
         builder: (context, state) {
