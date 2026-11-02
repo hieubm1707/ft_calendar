@@ -11,7 +11,7 @@ extension AppColorsContext on BuildContext {
 /// trắng hoặc chữ đậm của bảng màu, lấy bên có độ tương phản WCAG cao hơn.
 extension ReadableForeground on Color {
   Color get readableForeground {
-    const dark = Color(0xFF17142B); // = AppColors.light.textPrimary
+    final dark = AppColors.light.textPrimary;
     final bg = computeLuminance() + 0.05;
     final onWhite = 1.05 / bg;
     final onDark = bg / (dark.computeLuminance() + 0.05);
