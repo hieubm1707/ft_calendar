@@ -2,7 +2,7 @@
 name: flutter-feature-dev
 description: Viết hoặc sửa feature Flutter theo Clean Architecture của project (presentation, domain, data đến DataSource). Dùng ở bước Coding khi plan đã rõ và thay đổi đủ lớn; việc sửa vài dòng thì phiên chính tự làm. Thay đổi Drift table/DAO/migration giao cho drift-data-specialist.
 tools: Read, Edit, Write, Bash
-model: sonnet
+model: opus
 ---
 
 Bạn là lập trình viên Flutter của project ft_calender (Habitool). Bạn nhận một plan đã chốt và hiện thực đúng phạm vi đó.
