@@ -21,14 +21,15 @@ dart run build_runner build --force-jit
 flutter analyze        # phải "No issues found!"
 flutter test           # tất cả test pass
 ```
-Rồi **kiểm thử trên máy ảo iOS — iPhone 16e (KHÔNG dùng Android để verify)**:
+Rồi **kiểm thử trên 1 trong 2 nền tảng, ưu tiên iOS**:
 ```bash
-flutter run -d 3E46A6BE-AF54-4F4A-8530-A908B29B6E33   # iPhone 16e simulator
+flutter run -d 3E46A6BE-AF54-4F4A-8530-A908B29B6E33   # iOS: iPhone 16e simulator (ưu tiên)
+flutter run -d emulator-5554                          # Android: khi iOS không dùng được, hoặc thay đổi chỉ thuộc native Android
 ```
-Thao tác/chụp màn hình bằng **idb** (xem cách dùng ở memory `ios-ui-testing-with-idb`):
-`idb ui tap X Y` (X,Y là point = pixel/3), `idb screenshot`, `idb launch com.example.exampleApp`.
-Xác nhận feature chạy đúng trên iPhone 16e (không crash) rồi mới sang bước 5.
-> ⚠️ Yêu cầu của người dùng: **luôn verify trên iOS (iPhone 16e)**, không kiểm thử trên Android nữa.
+- **iOS**: thao tác/chụp bằng **idb** (xem memory `ios-ui-testing-with-idb`): `idb ui tap X Y` (X,Y là point = pixel/3), `idb screenshot`, `idb launch com.example.exampleApp`.
+- **Android**: thao tác/chụp bằng **adb**: `adb shell input tap X Y` (X,Y là pixel), `adb exec-out screencap -p > x.png`, bundle id `com.example.example_app`.
+
+Xác nhận feature chạy đúng (không crash) rồi mới sang bước 5. Khi báo cáo, ghi rõ đã verify trên nền tảng nào. Thay đổi native chỉ thuộc một nền tảng thì phải verify trên đúng nền tảng đó.
 
 **5. Commit** — chỉ commit khi bước 4 đã pass.
 ```bash
@@ -41,6 +42,20 @@ git add -A && git commit -m "<type>: <mô tả ngắn>"   # feat/fix/refactor/ch
 Commit message viết theo Conventional Commits; một task = một nhánh.
 
 **Sau khi merge vào master:** LUÔN xoá nhánh vừa merge (`git branch -d <branch>`).
+
+## Sub agent (`.claude/agents/`)
+
+| Agent | Dùng khi | Quyền |
+|---|---|---|
+| `drift-data-specialist` | Đổi table, DAO, migration (chạy trước feature) | Sửa tầng DB |
+| `flutter-feature-dev` | Viết feature theo plan đã chốt | Sửa code feature |
+| `native-platform-specialist` | Đụng `ios/`, `android/`, `macos/`, `web/`, widget OS | Sửa native |
+| `flutter-test-writer` | Tăng độ phủ test, khoá hành vi trước refactor | Chỉ sửa `test/` |
+| `architecture-reviewer` | Review ranh giới tầng, barrel, `Either` trước Verify | Chỉ đọc |
+| `ui-ux-reviewer` | Review khi đổi UI, trước Verify | Chỉ đọc |
+| `verifier` | Bước 4, trên iOS hoặc Android (ưu tiên iOS) | Chạy lệnh, không sửa code |
+
+Việc nhỏ thì phiên chính tự làm, không gọi agent. Không agent nào được commit; phiên chính commit khi người dùng yêu cầu.
 
 ## Code generation
 
@@ -75,7 +90,13 @@ lib/
 │   ├── error/               # Failure (domain) + Exception (data)
 │   ├── usecase/             # abstract UseCase<T, Params>
 │   ├── database/drift/      # ⚠️ infrastructure: AppDatabase (1 DB), tables, DAOs
-│   └── di/                  # get_it + injectable
+│   ├── di/                  # get_it + injectable
+│   ├── theme/               # AppColors, AppTheme, font (chỉ tầng presentation import)
+│   ├── notifications/       # NotificationService: thông báo cục bộ
+│   ├── home_widget/         # render + cập nhật widget OS
+│   ├── desktop/             # cửa sổ macOS, no-op trên nền tảng khác
+│   ├── hardware/            # IrService: phát hồng ngoại
+│   └── utils/               # tiện ích thuần, vd. âm lịch
 └── features/<feature>/
     ├── data/                # datasource (Drift) + model/mapper + repository impl
     ├── domain/              # usecases (interface repo nằm ở core/domain nếu dùng chung)
@@ -85,7 +106,7 @@ lib/
 Luồng phụ thuộc (chỉ hướng vào trong): `Page → Bloc → UseCase → Repository(interface) ← RepositoryImpl → DataSource → DAO → Drift`.
 
 - `core/domain` và `features/*/domain` là **thuần Dart** — KHÔNG import Flutter/Drift.
-- Bloc chỉ gọi `UseCase`, không đụng Repository/DataSource.
+- Bloc lấy và ghi dữ liệu qua `UseCase`, không đụng Repository/DataSource. **Được gọi trực tiếp service hạ tầng** không chứa dữ liệu nghiệp vụ (vd. `NotificationService`, `HomeWidgetService`, `TrackingReminderSync`).
 - Tầng data bắt `Exception` → trả về `Failure`; tầng trên không thấy exception.
 
 ## Quy tắc barrel file (`index.dart`) — barrel-theo-tầng
@@ -94,7 +115,7 @@ Mỗi barrel là public API của **một tầng**. Không gom nhiều tầng v�
 
 1. **File KHÔNG import barrel của chính tầng nó** (tránh import vòng). Dùng đường dẫn tương đối cho file sibling.
    - VD: `event_repository_impl.dart` import `../datasources/event_local_datasource.dart`, KHÔNG import `../index.dart`.
-2. **Xuyên feature chỉ được qua `features/<feature>/domain/index.dart`.** Cấm import `data/` hay `presentation/` của feature khác.
+2. **Xuyên feature chỉ được qua `features/<feature>/domain/index.dart`.** Cấm import `data/` hay `presentation/` của feature khác. **Ngoại lệ duy nhất:** tầng ghép trang `lib/app.dart` và `features/home/` được import `presentation/` của feature khác để mở trang.
 3. **`core/database/drift/index.dart` (Drift) chỉ tầng data import.** KHÔNG bao giờ re-export nó qua `core/domain` — nếu không domain sẽ chạm được Drift và mất ranh giới tầng.
 4. `core/domain/index.dart` và `core/error/index.dart` an toàn để import ở bất kỳ đâu.
 5. File generated (`*.g.dart`, `injection.config.dart`) tham chiếu file cụ thể, không qua barrel — đúng hành vi generator, đừng sửa.
@@ -178,7 +199,7 @@ Tab "Tasks" quản lý công việc theo ngày, tách biệt với sự kiện l
 - **Mô hình**: `TaskScheduleTable` (loại `dates` = 1/nhiều ngày cụ thể qua `datesCsv`; loại `weekly` = lặp theo `weekdaysMask` từ `startDate`, cờ `active` để huỷ lặp; `note` = mô tả, `minutesOfDay` = giờ tuỳ chọn, `color` = cờ ưu tiên) + `TaskCompletionTable` (đánh dấu hoàn thành theo từng ngày). DB **schemaVersion 4** (v3 tạo 2 bảng; v4 thêm `note` + `minutesOfDay`). Event cũng có `description` (nhập ở add_event_sheet, hiện ở DayDetailPage).
 - **Instance sinh ảo**: `expandTaskInstances()` (hàm thuần ở `features/tasks/domain/task_recurrence.dart`, có unit test) sinh task cho từng ngày trong khoảng — task lặp tự "xuất hiện" đến khi huỷ, KHÔNG lưu sẵn từng ngày.
 - **Tầng**: nhân theo pattern `events` (data/domain/presentation); entity + `TaskRepository` đặt ở `features/tasks/domain` (feature độc lập, không dùng chung).
-- **Điều hướng**: `features/shell/presentation/main_shell.dart` (IndexedStack + `AppBottomNav` chuyển tab Typing/Calendar/Tasks/Focus/Notes). `app.dart` → `MainShell`. Các page (TypingPage, CalendarPage, TasksPage) là Scaffold riêng, KHÔNG tự chứa bottom nav.
+- **Điều hướng**: `app.dart` → `features/home/presentation/home.dart` (`IndexedStack` + `AppBottomNav` chuyển Trang chủ/Cài đặt). `HomePage` là lưới các tính năng theo `AppTab`, bấm vào thì mở trang. Các page (CalendarPage, TasksPage, TrackingPage…) là Scaffold riêng, KHÔNG tự chứa bottom nav.
 
 ## Feature Tracking (`features/tracking/`) — ô "Tracking" ở Trang chủ
 
@@ -224,7 +245,7 @@ Trên macOS pomodoro chạy như một app menu bar, đồng hồ không phụ t
 - **`PomodoroCubit` là `@lazySingleton`**, cung cấp ở gốc `app.dart` bằng `BlocProvider.value` → đổi tab / ẩn cửa sổ không reset phiên. Trang Focus chỉ hiển thị, KHÔNG tự tạo cubit.
 - **`DesktopWindowService`** (`core/desktop/`, dùng `window_manager`): `init()` phải gọi **trước `runApp`**; đặt cỡ cửa sổ (thường 520×780, mini 280×330), ghim trên cùng, ẩn/hiện. Bấm nút đóng chỉ ẩn (`setPreventClose(true)` + `AppDelegate.applicationShouldTerminateAfterLastWindowClosed = false`) → thoát hẳn bằng menu "Thoát" ở menu bar. Mọi hàm no-op trên iOS/Android nên UI gọi thẳng, không rải `Platform.isMacOS`.
 - **`PomodoroTrayController`** (`features/pomodoro/presentation/desktop/`, dùng `tray_manager`): nghe `PomodoroCubit.stream`, `setTitle` mm:ss mỗi giây; **menu chỉ dựng lại khi phase/runStatus/label/miniMode đổi**, không dựng mỗi tick. `start()` gọi sau frame đầu vì `setIcon` đọc asset qua rootBundle. `tray_manager` chỉ tạo status item khi `setIcon` được gọi → luôn setIcon trước setTitle. Icon: `assets/tray/tray_icon.png` (template đơn sắc, macOS tự tô màu).
-- **Cửa sổ nổi nhỏ**: `DesktopWindowService.miniMode` → `MainShell` đổi sang `PomodoroMiniView` (bỏ bottom nav) + cửa sổ thu nhỏ và ghim trên cùng.
+- **Cửa sổ nổi nhỏ**: `DesktopWindowService.miniMode` → `Home` đổi sang `PomodoroMiniView` (bỏ bottom nav) + cửa sổ thu nhỏ và ghim trên cùng.
 - **Thông báo**: macOS có implementation riêng — phải xin quyền qua `MacOSFlutterLocalNotificationsPlugin` (resolve theo `IOSFlutterLocalNotificationsPlugin` trả null → thông báo im lặng).
 - **Verify trên macOS**: terminal thường không có quyền Screen Recording nên `screencapture` chỉ chụp được hình nền. Kiểm tra bằng `CGWindowListCopyWindowInfo` (script Swift): cửa sổ chính = layer 0, ghim trên cùng = layer 3, status item menu bar = layer 25 (bề rộng item tăng khi có title mm:ss).
 
