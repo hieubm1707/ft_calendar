@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/index.dart';
@@ -130,7 +131,7 @@ class _TrackingView extends StatelessWidget {
                             ? 'Chưa có mục tiêu nào.\nNhấn + để tạo mới.'
                             : 'Không có mục tiêu nào vào ngày này.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: colors.textMuted),
+                        style: TextStyle(color: colors.textSecondary),
                       ),
                     ),
                   )
@@ -153,9 +154,12 @@ class _TrackingView extends StatelessWidget {
                           ).currentStreak,
                           canToggle: isToday,
                           onToggle: isToday
-                              ? () => context.read<TrackingCubit>().toggleToday(
-                                  goal,
-                                )
+                              ? () {
+                                  HapticFeedback.lightImpact();
+                                  context.read<TrackingCubit>().toggleToday(
+                                    goal,
+                                  );
+                                }
                               : () => _showViewOnly(context),
                           onTap: () => _openDetail(context, goal),
                         );
@@ -191,7 +195,7 @@ class _WeekStrip extends StatelessWidget {
     // PageView cần chiều cao cố định → tính theo cỡ chữ hệ thống để ô không bị
     // cắt: 2 dòng chữ + padding/khoảng cách/chấm (33) + viền hôm nay (3) + dư.
     final scaler = MediaQuery.textScalerOf(context);
-    final height = scaler.scale(11) * 1.4 + scaler.scale(16) * 1.4 + 40;
+    final height = scaler.scale(12) * 1.4 + scaler.scale(16) * 1.4 + 40;
     return SizedBox(
       height: height,
       // reverse: trang 0 = tuần hiện tại ở mép phải, trang `i` = lùi `i` tuần.
@@ -243,64 +247,85 @@ class _DayCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final onAccent = colors.accent.readableForeground;
     final fg = selected
-        ? Colors.white
+        ? onAccent
         : enabled
         ? colors.textPrimary
         : colors.textDisabled;
+    final label = [
+      '${kWeekdayLong[day.weekday - 1]}, ${day.day}/${day.month}',
+      if (isToday) 'hôm nay',
+      if (allDone) 'đã xong hết mục tiêu',
+    ].join(', ');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
-      child: InkWell(
+      child: Semantics(
+        container: true,
+        button: true,
+        enabled: enabled,
+        selected: selected,
+        label: label,
         onTap: enabled ? onTap : null,
-        borderRadius: BorderRadius.circular(16),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: selected ? colors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
-            border: isToday && !selected
-                ? Border.all(color: colors.accent, width: 1.5)
-                : null,
-          ),
-          child: Column(
-            children: [
-              Text(
-                kWeekdayShort[day.weekday - 1],
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: selected
-                      ? Colors.white70
-                      : enabled
-                      ? colors.textMuted
-                      : colors.textDisabled,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: enabled ? onTap : null,
+          borderRadius: BorderRadius.circular(16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: selected ? colors.accent : Colors.transparent,
+              borderRadius: BorderRadius.circular(16),
+              border: isToday && !selected
+                  ? Border.all(color: colors.accent, width: 1.5)
+                  : null,
+            ),
+            child: Column(
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    kWeekdayShort[day.weekday - 1],
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: selected
+                          ? onAccent
+                          : enabled
+                          ? colors.textSecondary
+                          : colors.textDisabled,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '${day.day}',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: fg,
+                const SizedBox(height: 4),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '${day.day}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: fg,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              // Chấm = đã hoàn thành hết mục tiêu của ngày đó.
-              Container(
-                width: 5,
-                height: 5,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: !allDone
-                      ? Colors.transparent
-                      : selected
-                      ? Colors.white
-                      : colors.success,
+                const SizedBox(height: 4),
+                // Chấm = đã hoàn thành hết mục tiêu của ngày đó.
+                Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: !allDone
+                        ? Colors.transparent
+                        : selected
+                        ? onAccent
+                        : colors.accent,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -324,7 +349,8 @@ class _ProgressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final progress = total == 0 ? 0.0 : done / total;
-    return Container(
+    final percent = (progress * 100).round();
+    final card = Container(
       padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
       decoration: BoxDecoration(
         color: colors.surface,
@@ -340,11 +366,16 @@ class _ProgressCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Column(
+          // Wrap: cỡ chữ thường thì % nằm bên phải; chữ quá lớn thì % xuống dòng
+          // thay vì ép tiêu đề vào cột hẹp làm gãy giữa từ.
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.end,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -365,16 +396,16 @@ class _ProgressCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              Text(
-                '${(progress * 100).round()}%',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: colors.accent,
+                Text(
+                  '$percent%',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    color: colors.accent,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 14),
           ClipRRect(
@@ -384,7 +415,9 @@ class _ProgressCard extends StatelessWidget {
               color: colors.accent.withValues(alpha: 0.15),
               alignment: Alignment.centerLeft,
               child: AnimatedFractionallySizedBox(
-                duration: const Duration(milliseconds: 300),
+                duration: MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : const Duration(milliseconds: 300),
                 curve: Curves.easeOut,
                 widthFactor: progress,
                 heightFactor: 1,
@@ -399,6 +432,14 @@ class _ProgressCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+    // Đọc thành 1 câu, thay vì "0/1" và thanh ngang rời rạc.
+    return Semantics(
+      container: true,
+      label:
+          '$title: $done trên $total mục tiêu hoàn thành, $percent phần trăm',
+      excludeSemantics: true,
+      child: card,
     );
   }
 }
@@ -434,20 +475,23 @@ class _GoalTile extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
           child: Row(
             children: [
-              Container(
-                width: 42,
-                height: 42,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  goal.name.characters.first.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: color,
+              // Chữ cái đầu chỉ để trang trí, tên đã có ngay bên cạnh.
+              ExcludeSemantics(
+                child: Container(
+                  width: 42,
+                  height: 42,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    goal.name.characters.first.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: color,
+                    ),
                   ),
                 ),
               ),
@@ -458,7 +502,7 @@ class _GoalTile extends StatelessWidget {
                   children: [
                     Text(
                       goal.name,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 15,
@@ -478,16 +522,31 @@ class _GoalTile extends StatelessWidget {
                           frequencyLabel(goal),
                           style: TextStyle(
                             fontSize: 12,
-                            color: colors.textMuted,
+                            color: colors.textSecondary,
                           ),
                         ),
                         if (streak > 0)
-                          Text(
-                            '🔥 $streak',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: colors.warning,
+                          Semantics(
+                            label: 'Chuỗi $streak ngày',
+                            excludeSemantics: true,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.local_fire_department_rounded,
+                                  size: 14,
+                                  color: colors.warning,
+                                ),
+                                const SizedBox(width: 2),
+                                Text(
+                                  '$streak',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: colors.textSecondary,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         if (goal.isFromTask) const TaskSourceChip(),
@@ -497,6 +556,7 @@ class _GoalTile extends StatelessWidget {
                 ),
               ),
               _CheckButton(
+                goalName: goal.name,
                 done: done,
                 color: color,
                 enabled: canToggle,
@@ -512,12 +572,14 @@ class _GoalTile extends StatelessWidget {
 
 /// Nút tròn hoàn thành. Ngày quá khứ ([enabled] = false) vẽ mờ, chỉ hiện trạng thái.
 class _CheckButton extends StatelessWidget {
+  final String goalName;
   final bool done;
   final Color color;
   final bool enabled;
   final VoidCallback onPressed;
 
   const _CheckButton({
+    required this.goalName,
     required this.done,
     required this.color,
     required this.enabled,
@@ -528,21 +590,39 @@ class _CheckButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final ring = enabled ? color : colors.textDisabled;
-    return IconButton(
-      tooltip: enabled ? (done ? 'Bỏ hoàn thành' : 'Hoàn thành') : null,
-      onPressed: onPressed,
-      icon: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 34,
-        height: 34,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: done ? color : Colors.transparent,
-          border: done ? null : Border.all(color: ring, width: 2),
+    // Có tên mục tiêu + trạng thái: danh sách nhiều nút "Hoàn thành" giống hệt
+    // nhau thì trình đọc màn hình không phân biệt được.
+    return Semantics(
+      container: true,
+      button: true,
+      checked: done,
+      label: enabled
+          ? 'Hoàn thành $goalName'
+          : '$goalName, chỉ đánh dấu được hôm nay',
+      onTap: onPressed,
+      excludeSemantics: true,
+      child: IconButton(
+        tooltip: enabled
+            ? (done ? 'Bỏ hoàn thành' : 'Hoàn thành')
+            : 'Chỉ đánh dấu được hôm nay',
+        onPressed: onPressed,
+        icon: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: done ? color : Colors.transparent,
+            border: done ? null : Border.all(color: ring, width: 2),
+          ),
+          child: done
+              ? Icon(
+                  Icons.check_rounded,
+                  size: 20,
+                  color: color.readableForeground,
+                )
+              : null,
         ),
-        child: done
-            ? const Icon(Icons.check_rounded, size: 20, color: Colors.white)
-            : null,
       ),
     );
   }

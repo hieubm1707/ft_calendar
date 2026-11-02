@@ -2,6 +2,17 @@ import '../../domain/index.dart';
 
 const kWeekdayShort = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
+/// Tên thứ đầy đủ — cho trình đọc màn hình (đọc "T2" không rõ nghĩa).
+const kWeekdayLong = [
+  'Thứ Hai',
+  'Thứ Ba',
+  'Thứ Tư',
+  'Thứ Năm',
+  'Thứ Sáu',
+  'Thứ Bảy',
+  'Chủ Nhật',
+];
+
 /// Bảng màu chọn cho mục tiêu (dữ liệu người dùng nên giữ hex). Mặc định = màu nhấn.
 const kTrackingColors = <int>[
   TrackingGoal.defaultColor,

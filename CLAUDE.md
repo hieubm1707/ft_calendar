@@ -151,7 +151,12 @@ Cài đặt → **GIAO DIỆN** chọn **Sáng / Tối**. Toàn app lấy màu t
 - **Nền gradient**: Scaffold **trong suốt**; `AppTheme` bọc mọi hiệu ứng chuyển trang (`_BackgroundTransitionsBuilder`) bằng `AppBackground` → mỗi route tự mang gradient, trượt vào không lộ trang cũ. Route tự dựng bằng `PageRouteBuilder` phải tự tô nền (hoặc bọc `AppBackground`). AppBar trong suốt, thanh trạng thái trong suốt; nút + (FAB) tròn màu `accent` lấy từ theme — trang KHÔNG tự set màu FAB/AppBar.
 - **`AppTheme.light()/dark()`** dựng `ThemeData` từ token (seed + `primary` = `accent`, `onPrimary` trắng → widget mặc định cũng ra màu nhấn; bo góc thẻ/sheet/dialog 24–28) và đã đặt sẵn nền Scaffold, AppBar, NavigationBar, sheet, dialog, ô nhập… → trang mới KHÔNG tự set `backgroundColor: Colors.white`/`surfaceTintColor`. Thêm màu mới: thêm token vào `AppColors` (cả `light` + `dark` + `copyWith` + `lerp`), đừng rải hex.
 - **Ngoại lệ được giữ hex**: màu là *dữ liệu người dùng* (màu sự kiện, tag, cờ ưu tiên, bảng chọn màu); chữ/icon trắng trên nút màu; `WidgetCalendarView` (ảnh PNG cho widget OS) không theo chế độ đang chọn mà lấy cố định `AppColors.dark.*`.
+- **Chữ/icon trên nền màu**: dùng `<màu nền>.readableForeground` (`core/theme/app_colors_context.dart`) → chọn trắng hoặc chữ đậm theo độ tương phản. Nền `accent` Tối (`#7B9BFF`) với chữ trắng chỉ đạt 2,63:1. Hiện mới áp dụng ở Tracking.
 - **Lưu lựa chọn**: feature `settings` theo Clean Architecture — `AppThemeMode` + `AppearanceRepository` (domain) → `AppearanceLocalDataSource` (SharedPreferences, key `app_theme_mode`, lỗi → `CacheException`/`CacheFailure`) → `AppearanceCubit` (`@lazySingleton`, cung cấp ở gốc `app.dart`, `MaterialApp.themeMode` theo state). `main.dart` gọi `AppearanceCubit.load()` **trước `runApp`** để không chớp nền sáng. Test: `test/features/settings/appearance_repository_impl_test.dart`.
+
+## Review UI/UX (`ui-ux-pro-max`)
+
+Trước khi xong việc UI, rà `references/pro-rules.md` của skill `ui-ux-pro-max` (phần Pre-Delivery Checklist); bỏ qua luật chỉ dành cho web. KHÔNG dùng `--design-system`/`--persist`: màu, font, style theo `core/theme/` và mục "Giao diện" ở trên; các quyết định đã chốt trong repo được ưu tiên hơn skill.
 
 ## Thương hiệu Habitool (`branding/`) + font
 

@@ -44,6 +44,7 @@ class _TrackingGoalDetailPageState extends State<TrackingGoalDetailPage> {
   Future<void> _delete(TrackingGoal goal) async {
     final cubit = context.read<TrackingCubit>();
     final navigator = Navigator.of(context);
+    final danger = context.colors.danger;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -55,6 +56,10 @@ class _TrackingGoalDetailPageState extends State<TrackingGoalDetailPage> {
             child: const Text('Huỷ'),
           ),
           FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: danger,
+              foregroundColor: danger.readableForeground,
+            ),
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text('Xoá'),
           ),
@@ -136,37 +141,47 @@ class _TrackingGoalDetailPageState extends State<TrackingGoalDetailPage> {
                 _Card(
                   child: Column(
                     children: [
-                      TrackingRing(
-                        progress: stats.completionRate,
-                        color: color,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              '${stats.completedDays}/${stats.scheduledDays}',
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.w800,
-                                color: colors.textPrimary,
+                      Semantics(
+                        container: true,
+                        label:
+                            '${stats.completedDays} trên '
+                            '${stats.scheduledDays} ngày hoàn thành, '
+                            '${(stats.completionRate * 100).round()} phần trăm',
+                        excludeSemantics: true,
+                        child: TrackingRing(
+                          progress: stats.completionRate,
+                          color: color,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${stats.completedDays}/${stats.scheduledDays}',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w800,
+                                  color: colors.textPrimary,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'ngày hoàn thành',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: colors.textMuted,
+                              Text(
+                                'ngày hoàn thành',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: colors.textSecondary,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              '${(stats.completionRate * 100).round()}%',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: color,
+                              const SizedBox(height: 2),
+                              // Màu mục tiêu là dữ liệu người dùng, không đảm
+                              // bảo đọc được ở cỡ chữ nhỏ → dùng token chữ.
+                              Text(
+                                '${(stats.completionRate * 100).round()}%',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: colors.textSecondary,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -265,7 +280,7 @@ class _Info extends StatelessWidget {
               const TaskSourceChip(),
               Text(
                 'Sửa ở trang Tasks',
-                style: TextStyle(fontSize: 12, color: colors.textMuted),
+                style: TextStyle(fontSize: 12, color: colors.textSecondary),
               ),
             ],
           ],
@@ -354,25 +369,29 @@ class _MonthCalendar extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              visualDensity: VisualDensity.compact,
               tooltip: 'Tháng trước',
               icon: const Icon(Icons.chevron_left),
               color: colors.textSecondary,
               onPressed: onPrev,
             ),
             Expanded(
-              child: Text(
-                'Tháng ${month.month}, ${month.year}',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: colors.textPrimary,
+              // liveRegion: đổi tháng thì trình đọc màn hình đọc tháng mới.
+              child: Semantics(
+                container: true,
+                header: true,
+                liveRegion: true,
+                child: Text(
+                  'Tháng ${month.month}, ${month.year}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: colors.textPrimary,
+                  ),
                 ),
               ),
             ),
             IconButton(
-              visualDensity: VisualDensity.compact,
               tooltip: 'Tháng sau',
               icon: const Icon(Icons.chevron_right),
               color: colors.textSecondary,
@@ -382,21 +401,26 @@ class _MonthCalendar extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            for (final w in kWeekdayShort)
-              Expanded(
-                child: Text(
-                  w,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: colors.textMuted,
+        // Mỗi ô ngày đã đọc đủ thứ + ngày → bỏ hàng tiêu đề khỏi trình đọc.
+        ExcludeSemantics(
+          child: Row(
+            children: [
+              for (final w in kWeekdayShort)
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      w,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: colors.textSecondary,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 6),
         GridView.builder(
@@ -415,7 +439,7 @@ class _MonthCalendar extends StatelessWidget {
             }
             final day = DateTime(month.year, month.month, dayIndex + 1);
             return _DayDot(
-              day: day.day,
+              date: day,
               status: statuses[dayIndex],
               color: color,
               isToday: day == today,
@@ -423,15 +447,19 @@ class _MonthCalendar extends StatelessWidget {
           },
         ),
         const SizedBox(height: 10),
-        Wrap(
-          spacing: 14,
-          runSpacing: 6,
-          alignment: WrapAlignment.center,
-          children: [
-            _Legend(fill: color, label: 'Hoàn thành'),
-            _Legend(border: colors.danger, label: 'Chưa hoàn thành'),
-            _Legend(border: colors.border, label: 'Không phải làm'),
-          ],
+        // Mỗi ô ngày đã đọc trạng thái bằng chữ → chú thích chỉ dành cho mắt nhìn.
+        ExcludeSemantics(
+          child: Wrap(
+            spacing: 14,
+            runSpacing: 6,
+            alignment: WrapAlignment.center,
+            children: [
+              _Legend(fill: color, label: 'Hoàn thành'),
+              _Legend(border: colors.danger, label: 'Chưa hoàn thành'),
+              _Legend(border: colors.accent, label: 'Cần làm hôm nay'),
+              const _Legend(label: 'Không phải làm'),
+            ],
+          ),
         ),
       ],
     );
@@ -439,13 +467,13 @@ class _MonthCalendar extends StatelessWidget {
 }
 
 class _DayDot extends StatelessWidget {
-  final int day;
+  final DateTime date;
   final TrackingDayStatus status;
   final Color color;
   final bool isToday;
 
   const _DayDot({
-    required this.day,
+    required this.date,
     required this.status,
     required this.color,
     required this.isToday,
@@ -455,32 +483,50 @@ class _DayDot extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final (Color? fill, Color? border, Color text) = switch (status) {
-      TrackingDayStatus.done => (color, null, Colors.white),
-      TrackingDayStatus.missed => (null, colors.danger, colors.danger),
+      TrackingDayStatus.done => (color, null, color.readableForeground),
+      // Vòng đỏ đã báo trạng thái; số giữ màu chữ để đủ tương phản ở Sáng.
+      TrackingDayStatus.missed => (null, colors.danger, colors.textPrimary),
       TrackingDayStatus.pending => (null, colors.accent, colors.textPrimary),
-      TrackingDayStatus.notDue => (null, null, colors.textMuted),
+      TrackingDayStatus.notDue => (null, null, colors.textSecondary),
       TrackingDayStatus.future => (null, null, colors.textDisabled),
     };
-    return Center(
-      child: Container(
-        width: 34,
-        height: 34,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: fill,
-          border: border != null
-              ? Border.all(color: border, width: 1.5)
-              : isToday
-              ? Border.all(color: colors.accent, width: 1.5)
-              : null,
-        ),
-        child: Text(
-          '$day',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
-            color: text,
+    final statusLabel = switch (status) {
+      TrackingDayStatus.done => 'đã hoàn thành',
+      TrackingDayStatus.missed => 'chưa hoàn thành',
+      TrackingDayStatus.pending => 'cần làm hôm nay',
+      TrackingDayStatus.notDue => 'không phải làm',
+      TrackingDayStatus.future => 'chưa tới',
+    };
+    return Semantics(
+      container: true,
+      label:
+          '${kWeekdayLong[date.weekday - 1]}, ${date.day}/${date.month}, '
+          '$statusLabel',
+      excludeSemantics: true,
+      child: Center(
+        child: Container(
+          width: 34,
+          height: 34,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: fill,
+            border: border != null
+                ? Border.all(color: border, width: 1.5)
+                : isToday
+                ? Border.all(color: colors.accent, width: 1.5)
+                : null,
+          ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '${date.day}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
+                color: text,
+              ),
+            ),
           ),
         ),
       ),
@@ -504,6 +550,7 @@ class _Legend extends StatelessWidget {
         Container(
           width: 12,
           height: 12,
+          alignment: Alignment.center,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: fill,
@@ -511,9 +558,24 @@ class _Legend extends StatelessWidget {
                 ? null
                 : Border.all(color: border!, width: 1.5),
           ),
+          // Không nền, không viền: vẽ đúng như ô ngày thật (chỉ có con số).
+          child: fill == null && border == null
+              ? FittedBox(
+                  child: Text(
+                    '1',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: colors.textSecondary,
+                    ),
+                  ),
+                )
+              : null,
         ),
         const SizedBox(width: 5),
-        Text(label, style: TextStyle(fontSize: 12, color: colors.textMuted)),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: colors.textSecondary),
+        ),
       ],
     );
   }
@@ -553,37 +615,44 @@ class _Stat extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: colors.surfaceAlt,
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: iconColor, size: 26),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    value,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: colors.textPrimary,
+      child: Semantics(
+        container: true,
+        label: '$label: $value',
+        excludeSemantics: true,
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: colors.surfaceAlt,
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: iconColor, size: 26),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: colors.textPrimary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    label,
-                    maxLines: 2,
-                    style: TextStyle(fontSize: 11.5, color: colors.textMuted),
-                  ),
-                ],
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
