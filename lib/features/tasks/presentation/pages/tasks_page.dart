@@ -87,7 +87,8 @@ class _TasksView extends StatelessWidget {
           children: [
             Expanded(
               child: BlocConsumer<TaskCubit, TaskState>(
-                listenWhen: (p, c) => c.status == TaskStatus.failure,
+                listenWhen: (p, c) =>
+                    c.errorMessage != null && p.errorMessage != c.errorMessage,
                 listener: (context, state) => ScaffoldMessenger.of(context)
                     .showSnackBar(
                         SnackBar(content: Text(state.errorMessage ?? 'Lỗi'))),

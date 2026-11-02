@@ -108,6 +108,8 @@ Luồng phụ thuộc (chỉ hướng vào trong): `Page → Bloc → UseCase �
 - `core/domain` và `features/*/domain` là **thuần Dart** — KHÔNG import Flutter/Drift.
 - Bloc lấy và ghi dữ liệu qua `UseCase`, không đụng Repository/DataSource. **Được gọi trực tiếp service hạ tầng** không chứa dữ liệu nghiệp vụ (vd. `NotificationService`, `HomeWidgetService`, `TrackingReminderSync`).
 - Tầng data bắt `Exception` → trả về `Failure`; tầng trên không thấy exception.
+- Lỗi của service hạ tầng (vd. plugin thông báo) chỉ log, KHÔNG được làm hỏng thao tác dữ liệu.
+- DAO có nhiều câu lệnh ghi liên quan (vd. xoá rồi thêm) phải bọc trong `transaction`.
 
 ## Quy tắc barrel file (`index.dart`) — barrel-theo-tầng
 
@@ -163,6 +165,7 @@ result.fold(
 **Quy ước phụ đi kèm:**
 - Thao tác "không có giá trị trả" (delete...) dùng `Either<Failure, Unit>` + `return const Right(unit)` (dartz `Unit`), KHÔNG dùng `void`.
 - `copyWith` của state để `errorMessage` **không** null-coalesce (`errorMessage: errorMessage`) → cho phép xoá lỗi cũ khi chuyển sang success/loading.
+- Snackbar báo lỗi dùng `listenWhen: (p, c) => c.errorMessage != null && p.errorMessage != c.errorMessage`, KHÔNG dùng `c.status == failure`: state vẫn giữ status lỗi khi đổi trường khác (vd. chọn ngày) nên sẽ hiện lại snackbar.
 - Mapping Drift ↔ entity chỉ đặt ở `data/models/*_mapper.dart` dưới dạng extension (`toEntity()` / `toCompanion()`); KHÔNG map rải rác trong repository hay bloc.
 
 ## Giao diện Sáng/Tối + bảng màu (`core/theme/`)

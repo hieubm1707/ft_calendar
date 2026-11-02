@@ -61,7 +61,8 @@ class _HistoryView extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.w800, color: colors.textPrimary)),
       ),
       body: BlocConsumer<TypingHistoryCubit, TypingHistoryState>(
-        listenWhen: (p, c) => c.status == TypingHistoryStatus.failure,
+        listenWhen: (p, c) =>
+            c.errorMessage != null && p.errorMessage != c.errorMessage,
         listener: (context, state) => ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(state.errorMessage ?? 'Lỗi'))),
         builder: (context, state) {

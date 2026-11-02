@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/index.dart';
@@ -48,9 +47,7 @@ class TrackingRepositoryImpl implements TrackingRepository {
       final id = goal.id;
       if (id == null) {
         return Right(
-          await _local.insertGoal(
-            goal.toCompanion().copyWith(createdAt: Value(DateTime.now())),
-          ),
+          await _local.insertGoal(goal.toInsertCompanion(DateTime.now())),
         );
       }
       await _local.updateGoal(id, goal.toCompanion());

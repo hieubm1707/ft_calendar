@@ -21,11 +21,13 @@ class TrackingDao extends DatabaseAccessor<AppDatabase>
     )..where((t) => t.id.equals(id))).write(goal);
   }
 
-  Future<void> deleteGoal(int id) async {
-    await (delete(
-      trackingCheckinTable,
-    )..where((t) => t.goalId.equals(id))).go();
-    await (delete(trackingGoalTable)..where((t) => t.id.equals(id))).go();
+  Future<void> deleteGoal(int id) {
+    return transaction(() async {
+      await (delete(
+        trackingCheckinTable,
+      )..where((t) => t.goalId.equals(id))).go();
+      await (delete(trackingGoalTable)..where((t) => t.id.equals(id))).go();
+    });
   }
 
   Future<List<TrackingGoalTableData>> getGoals() {
@@ -39,13 +41,15 @@ class TrackingDao extends DatabaseAccessor<AppDatabase>
   }
 
   /// Đặt/bỏ hoàn thành cho (goalId, date): xoá dòng cũ rồi thêm nếu [done].
-  Future<void> setCheckin(int goalId, DateTime date, bool done) async {
-    await (delete(
-      trackingCheckinTable,
-    )..where((t) => t.goalId.equals(goalId) & t.date.equals(date))).go();
-    if (!done) return;
-    await into(
-      trackingCheckinTable,
-    ).insert(TrackingCheckinTableCompanion.insert(goalId: goalId, date: date));
+  Future<void> setCheckin(int goalId, DateTime date, bool done) {
+    return transaction(() async {
+      await (delete(
+        trackingCheckinTable,
+      )..where((t) => t.goalId.equals(goalId) & t.date.equals(date))).go();
+      if (!done) return;
+      await into(trackingCheckinTable).insert(
+        TrackingCheckinTableCompanion.insert(goalId: goalId, date: date),
+      );
+    });
   }
 }
