@@ -6,6 +6,7 @@ import '../../remote/presentation/pages/remote_control_page.dart';
 import '../../tasks/presentation/index.dart';
 import '../../tracking/presentation/index.dart';
 import '../../typing/presentation/index.dart';
+import '../../upload_test/presentation/index.dart';
 import 'app_tab.dart';
 
 /// Trang Home chứa GridView 3 cột hiển thị các tính năng theo Nền tảng
@@ -26,6 +27,8 @@ class HomePage extends StatelessWidget {
         return const PomodoroPage();
       case AppTab.remote:
         return const RemoteControlPage();
+      case AppTab.upload:
+        return const UploadTestPage();
     }
   }
 

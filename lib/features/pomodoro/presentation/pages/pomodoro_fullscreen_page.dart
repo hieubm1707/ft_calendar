@@ -10,6 +10,7 @@ import '../../../../core/desktop/index.dart';
 import '../../../../core/di/index.dart';
 import '../../../../core/theme/index.dart';
 import '../cubit/pomodoro_cubit.dart';
+import '../widgets/whale_swimmer.dart';
 
 const _kSideGutter = 16.0;
 
@@ -20,7 +21,8 @@ const _kSideGutter = 16.0;
 /// màn hình sáng, macOS thì phóng cửa sổ ra toàn màn hình. Nút điều khiển gom
 /// lên góc trên bên phải để số đếm chiếm gần hết màn hình; khi đồng hồ đang
 /// chạy chúng tự ẩn sau vài giây — chạm vào màn hình để hiện lại. Cubit vẫn là
-/// singleton nên thoát ra không ảnh hưởng phiên đang chạy.
+/// singleton nên thoát ra không ảnh hưởng phiên đang chạy. Cá voi 52Hz chỉ bơi ở
+/// trang này, đè lên đồng hồ nhưng không chặn thao tác chạm.
 class PomodoroFullscreenPage extends StatefulWidget {
   const PomodoroFullscreenPage({super.key});
 
@@ -95,50 +97,63 @@ class _PomodoroFullscreenPageState extends State<PomodoroFullscreenPage> {
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: _onTap,
-          child: SafeArea(
-            child: BlocConsumer<PomodoroCubit, PomodoroState>(
-              // Chạy → hẹn giờ ẩn nút; dừng/tạm dừng/hết giờ → hiện nút ngay.
-              listenWhen: (p, c) => p.runStatus != c.runStatus,
-              listener: (context, state) =>
-                  _showControls(autoHide: state.isRunning),
-              builder: (context, state) {
-                final color = state.isFocus ? colors.accent : colors.breakTime;
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(_kSideGutter, 4, 4, 0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _PhaseLabel(state: state, color: color),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              SafeArea(
+                child: BlocConsumer<PomodoroCubit, PomodoroState>(
+                  // Chạy → hẹn giờ ẩn nút; dừng/tạm dừng/hết giờ → hiện nút ngay.
+                  listenWhen: (p, c) => p.runStatus != c.runStatus,
+                  listener: (context, state) =>
+                      _showControls(autoHide: state.isRunning),
+                  builder: (context, state) {
+                    final color = state.isFocus
+                        ? colors.accent
+                        : colors.breakTime;
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            _kSideGutter,
+                            4,
+                            4,
+                            0,
                           ),
-                          _Fade(
-                            visible: _controlsVisible,
-                            child: _Controls(state: state, color: color),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _PhaseLabel(state: state, color: color),
+                              ),
+                              _Fade(
+                                visible: _controlsVisible,
+                                child: _Controls(state: state, color: color),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) => Center(
-                          child: _Clock(
-                            state: state,
-                            color: color,
-                            width: constraints.maxWidth - 2 * _kSideGutter,
-                            // Chừa chỗ cho thanh tiến độ bên dưới.
-                            maxTimerHeight: math.max(
-                              0,
-                              constraints.maxHeight - _Clock.chromeHeight,
+                        ),
+                        Expanded(
+                          child: LayoutBuilder(
+                            builder: (context, constraints) => Center(
+                              child: _Clock(
+                                state: state,
+                                color: color,
+                                width: constraints.maxWidth - 2 * _kSideGutter,
+                                // Chừa chỗ cho thanh tiến độ bên dưới.
+                                maxTimerHeight: math.max(
+                                  0,
+                                  constraints.maxHeight - _Clock.chromeHeight,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              const WhaleSwimmer(),
+            ],
           ),
         ),
       ),

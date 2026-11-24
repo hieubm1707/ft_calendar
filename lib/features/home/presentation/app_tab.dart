@@ -7,7 +7,8 @@ enum AppTab {
   tasks,
   tracking,
   focus,
-  remote;
+  remote,
+  upload;
 
   String get label {
     switch (this) {
@@ -23,6 +24,8 @@ enum AppTab {
         return 'Focus';
       case AppTab.remote:
         return 'Remote';
+      case AppTab.upload:
+        return 'Upload test';
     }
   }
 
@@ -40,6 +43,8 @@ enum AppTab {
         return Icons.timer_outlined;
       case AppTab.remote:
         return Icons.settings_remote_outlined;
+      case AppTab.upload:
+        return Icons.cloud_upload_outlined;
     }
   }
 
@@ -66,6 +71,7 @@ enum AppTab {
           AppTab.tracking,
           AppTab.focus,
           AppTab.remote,
+          if (kDebugMode) AppTab.upload,
         ];
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
@@ -77,6 +83,7 @@ enum AppTab {
           AppTab.tasks,
           AppTab.tracking,
           AppTab.focus,
+          if (kDebugMode) AppTab.upload,
         ];
     }
   }

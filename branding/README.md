@@ -19,6 +19,7 @@ Chữ H ghép từ 7 ô trên lưới 3×3, tương ứng dải 7 ngày của tr
 | `logo/` | Logo ngang, xếp dọc, biểu tượng và phần chữ (SVG) |
 | `app-icon/` | Icon đã xuất cho iOS, Android, macOS, web và menu bar (PNG) |
 | `app-icon/source/` | Bản gốc của icon (SVG) |
+| `mascot/` | Ảnh gốc của cá voi 52Hz. Sprite trong app sinh bằng `tools/make_whale_sprite.py` |
 
 ## Màu
 

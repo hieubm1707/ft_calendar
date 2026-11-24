@@ -95,6 +95,9 @@ flutter:
   assets:
     # Icon template cho menu bar macOS (đơn sắc, macOS tự tô màu theo theme).
     - assets/tray/tray_icon.png
+    # Cá voi 52Hz bơi ở màn Focus toàn màn hình. Sinh bằng
+    # branding/tools/make_whale_sprite.py, không sửa tay.
+    - assets/mascot/52hz_swim.png
     # Nội dung bài test gõ phím. Khai báo cả THƯ MỤC: thả thêm file .json vào
     # đây là app tự nạp, không phải sửa pubspec (xem assets/typing/README.md).
     - assets/typing/en/
